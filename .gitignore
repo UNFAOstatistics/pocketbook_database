@@ -2,6 +2,6 @@
 .Rhistory
 .RData
 syb_database.Rproj
-data_processed/
+data/processed/
 raw_data/
 explorer/FAOmetaTable.RData
