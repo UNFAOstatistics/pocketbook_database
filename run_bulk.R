@@ -4,6 +4,7 @@ library(tidyr)
 library(stringr)
 
 
+if (!file.exists("./data_raw")) dir.create("./data_raw")
 # Bulk download FAOSTAT
 download.file("http://faostat3.fao.org/ftp-faostat/Bulk/FAOSTAT.zip", destfile = "data_raw/faostat_bulk.zip")
 # Unzip FAOSTAT
@@ -21,6 +22,7 @@ file_names <- str_replace_all(list.files("data_raw/faostat", pattern = ".csv", f
 # 
 fao_raw <- data.frame()
 fao_meta <- data.frame()
+if (!file.exists("./data_processed")) dir.create("./data_processed")
 for(i in 1:length(csv_files)){
   df <- read_csv(csv_files[i])
   df$file_name <- paste0(file_names[i],".RData")
@@ -34,6 +36,19 @@ for(i in 1:length(csv_files)){
 }
 file.remove(csv_files) # remove massive csv's
 save(fao_meta, file="data_processed/fao_meta.RData")
+
+
+get_fao_bulk <- function(ItemCode = 1931,
+                         ElementCode = 5141){
+  
+  key <- fao_meta[fao_meta$ItemCode %in% ItemCode & fao_meta$ElementCode %in% ElementCode, ]
+  print(key)
+  
+}
+
+
+
+
 
 
 #############################################################33

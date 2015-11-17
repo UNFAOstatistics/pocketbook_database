@@ -403,9 +403,15 @@ source("./code/FAOSTAT_functions/chgr.R")
 #              baseYear = 2000)
 
 preConstr.df <- filter(preConstr.df, FAOST_CODE <= 351)
+preConstr.df <- filter(preConstr.df, Year >= 1990)
+preConstr.df <- filter(preConstr.df, Year <= 2015)
 preConstr.df <- preConstr.df[!duplicated(preConstr.df[c("FAOST_CODE","Year")]),]
-preConstr.df$Year <- as.numeric(preConstr.df$Year)
-preConstr.df$FAOST_CODE <- as.numeric(preConstr.df$FAOST_CODE)
+# preConstr.df$Year <- as.numeric(preConstr.df$Year)
+# preConstr.df$FAOST_CODE <- as.numeric(preConstr.df$FAOST_CODE)
+
+fc <- data.frame(FAOST_CODE = unique(preConstr.df$FAOST_CODE))
+fc <- left_join(fc,FAOcountryProfile[c("FAOST_CODE","FAO_TABLE_NAME")]) 
+
 
 source("./code/read_functions/ReadConstruction.R")
 con.df <- ReadConstruction(file = "./data/Construction2015.csv", encoding = "UTF-8", nrows = 665)
