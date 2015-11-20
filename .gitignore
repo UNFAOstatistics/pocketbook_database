@@ -5,3 +5,4 @@ syb_database.Rproj
 data/processed/
 raw_data/
 explorer/FAOmetaTable.RData
+output_data/
