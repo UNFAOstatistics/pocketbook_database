@@ -232,7 +232,7 @@ if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_dat
 # Download variables from FAOSTAT, parameters -----------------------------
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
-dwnldOA <- FALSE # Population
+dwnldOA <- TRUE # Population
 dwnldRL <- TRUE # Resources, Resources - Land
 dwnldRF <- TRUE # Resources - Fertilizers
 dwnldRP <- TRUE # Resources - Pesticides
@@ -257,7 +257,7 @@ dwnldCOF <- TRUE # Coffeebook indicators
 downloadWB <- TRUE; CheckLogical(downloadWB)
 
 
-replication_date <- "2015-11-18"
+# replication_date <- "2015-11-18"
 
 
 date <- Sys.Date()
@@ -327,7 +327,7 @@ if (dwnldRF) {
 
 if (dwnldRP) {
   ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "RP",],
+  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] %in% c("RP","EP"),],
                   getFAOtoSYB(name = STS_ID,
                               domainCode = SQL_DOMAIN_CODE,
                               elementCode = SQL_ELEMENT_CODE,
