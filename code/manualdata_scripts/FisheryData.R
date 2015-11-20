@@ -18,7 +18,7 @@
 # FI.PRD.AQ.TN.NO ---------------------------------------------------------
 
 aquaProdTot.df <- 
-    read.csv(file = "./Data/Raw/AquacultureProduction.csv", 
+    read.csv(file = "./input_data/raw/FisheryData/AquacultureProduction.csv", 
              header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 colnames(aquaProdTot.df)[1] <- "UN_CODE"
 aquaProdTot.df <- 
@@ -38,7 +38,7 @@ aquaProdTot.df[, "Year"] <-
 # FI.PRD.CAPT.TN.NO -------------------------------------------------------
 
 captProdTot.df <- 
-  read.csv(file = "./Data/Raw/CaptureProduction.csv", 
+  read.csv(file = "./input_data/raw/FisheryData/CaptureProduction.csv", 
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 colnames(captProdTot.df)[1] <- "UN_CODE"
 captProdTot.df <- 
@@ -58,7 +58,7 @@ captProdTot.df[, "Year"] <-
 # FI.EXVAL.FISH.USD.NO ----------------------------------------------------
 
 fishExports.df <- 
-  read.csv(file = "./Data/Raw/FishExports.csv", 
+  read.csv(file = "./input_data/raw/FisheryData/FishExports.csv", 
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 colnames(fishExports.df)[1] <- "UN_CODE"
 fishExports.df <- 
@@ -78,7 +78,7 @@ fishExports.df[, "Year"] <-
 # FI.IMVAL.FISH.USD.NO ----------------------------------------------------
 
 fishImports.df <- 
-  read.csv(file = "./Data/Raw/FishImports.csv", 
+  read.csv(file = "./input_data/raw/FisheryData/FishImports.csv", 
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 colnames(fishImports.df)[1] <- "UN_CODE"
 fishImports.df <- 
@@ -102,4 +102,4 @@ Fishery.df <-
   Reduce(function(x, y) merge(x, y, all = TRUE),
          x = list(aquaProdTot.df, captProdTot.df, fishExports.df, fishImports.df))
 rm(list = c("aquaProdTot.df", "captProdTot.df", "fishExports.df", "fishImports.df"))
-save(x = Fishery.df, file = "./Data/Processed/Fishery.RData")
+save(x = Fishery.df, file = "./input_data/processed/Fishery.RData")

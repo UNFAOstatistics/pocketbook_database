@@ -6,7 +6,7 @@
 # CP.D.ATLAS.GNP ----------------------------------------------------------
 
 CP.D.ATLAS.GNP.df <- 
-  read.csv(file = "./Data/Raw/CP.D.ATLAS.GNP.csv", 
+  read.csv(file = "./input_data/raw/WBManualData/CP.D.ATLAS.GNP.csv", 
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 CP.D.ATLAS.GNP.df <- 
   data.frame(Country.Code = rep(CP.D.ATLAS.GNP.df$Country_Code, 16),
@@ -21,7 +21,7 @@ CP.D.ATLAS.GNP.df <-
 # Employment --------------------------------------------------------------
 
 em.df <- 
-  read.csv(file = "./Data/Raw/Employment.csv", header = TRUE, 
+  read.csv(file = "./input_data/raw/WBManualData/Employment.csv", header = TRUE, 
            na.strings = "", stringsAsFactors = FALSE)
 colnames(em.df) <- 
   c("Country.Code", "Country.Name", "Series.Code", "Series.Name",
@@ -81,7 +81,7 @@ SL.EMP.TOTL.df[, "Year"] <- as.numeric(gsub("X", "", SL.EMP.TOTL.df[, "Year"]))
 
 ## data http://econ.worldbank.org/WBSITE/EXTERNAL/EXTDEC/EXTDECPROSPECTS/0,,contentMDK:20587651~menuPK:3279864~pagePK:64165401~piPK:64165026~theSitePK:476883,00.html
 
-MUV.df <- read.csv("./Data/Raw/MUV06-01-2014.csv", na.strings = "", 
+MUV.df <- read.csv("./input_data/raw/WBManualData/MUV06-01-2014.csv", na.strings = "", 
                    header = TRUE, stringsAsFactors = FALSE)
 codes <- subset(FAOcountryProfile, subset = M49 %in% "YES")[, "FAOST_CODE"]
 MUV.df <- data.frame(FAOST_CODE = rep(codes, times = length(unique(MUV.df$Year))),
@@ -98,4 +98,4 @@ WBManualData.df <-
                   SL.EMP.TOTL.df, MUV.df))
 rm(list = c("CP.D.ATLAS.GNP.df", "SL.EMP.TOTL.FE.df", "SL.EMP.TOTL.MA.df", 
             "SL.EMP.TOTL.df", "MUV.df"))
-save(x = WBManualData.df, file = "./Data/Processed/wbManualData.RData")
+save(x = WBManualData.df, file = "./input_data/processed/wbManualData.RData")

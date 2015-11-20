@@ -8,12 +8,12 @@ library(FAOSTAT)
 # ---- Young and old
 
 # download.file(url="http://esa.un.org/unpd/wpp/Excel-Data/EXCEL_FILES/1_Population/WPP2012_POP_F07_1_POPULATION_BY_AGE_BOTH_SEXES.XLS",
-#               destfile="Data/Raw/WPP2012_POP_F07_1_POPULATION_BY_AGE_BOTH_SEXES.XLS")
+#               destfile="./input_./input_data/raw/UNPopulationStats/UNPopulationStats/WPP2012_POP_F07_1_POPULATION_BY_AGE_BOTH_SEXES.XLS")
 
 ## ESTIMATES
 
 # Saved the each sheet as a single .csv -file first in libreoffice calc 
-un.pop.est <- read.csv("Data/Raw/WPP2012_POP_F07_1_POPULATION_BY_AGE_BOTH_SEXES_1.csv", skip=16)
+un.pop.est <- read.csv("./input_data/raw/UNPopulationStats/WPP2012_POP_F07_1_POPULATION_BY_AGE_BOTH_SEXES_1.csv", skip=16)
 
 dl <- gather(un.pop.est, "age", "n", 7:28);rm(un.pop.est)
 # clean
@@ -36,7 +36,7 @@ rm(dl)
 ## PROJECTIONS
 
 # Saved the each sheet as a single .csv -file first in libreoffice calc 
-un.pop.proj <- read.csv("Data/Raw/WPP2012_POP_F07_1_POPULATION_BY_AGE_BOTH_SEXES_2.csv", skip=16)
+un.pop.proj <- read.csv("./input_data/raw/UNPopulationStats/WPP2012_POP_F07_1_POPULATION_BY_AGE_BOTH_SEXES_2.csv", skip=16)
 
 dl <- gather(un.pop.proj, "age", "n", 7:27);rm(un.pop.proj)
 # clean
@@ -76,16 +76,16 @@ names(old.df)   <- c("UN_CODE","FAOST_CODE","Year","UN.POP.AGE64")
 # ---- Rural and Urban
 
 # download.file(url="http://esa.un.org/unpd/wpp/Excel-Data/EXCEL_FILES/1_Population/WPP2012_POP_F01_2_TOTAL_POPULATION_MALE.XLS",
-#               destfile="Data/Raw/WPP2012_POP_F01_2_TOTAL_POPULATION_MALE.XLS")
+#               destfile="./input_data/raw/UNPopulationStats/WPP2012_POP_F01_2_TOTAL_POPULATION_MALE.XLS")
 # download.file(url="http://esa.un.org/unpd/wpp/Excel-Data/EXCEL_FILES/1_Population/WPP2012_POP_F01_3_TOTAL_POPULATION_FEMALE.XLS",
-#               destfile="Data/Raw/WPP2012_POP_F01_3_TOTAL_POPULATION_FEMALE.XLS")
+#               destfile="./input_data/raw/UNPopulationStats/WPP2012_POP_F01_3_TOTAL_POPULATION_FEMALE.XLS")
 
 
 ## ESTIMATES
 
 # Saved the each sheet as a single .csv -file first in libreoffice calc 
-un.pop.male.est <- read.csv("Data/Raw/WPP2012_POP_F01_2_TOTAL_POPULATION_MALE_1.csv", skip=16)
-un.pop.female.est <- read.csv("Data/Raw/WPP2012_POP_F01_3_TOTAL_POPULATION_FEMALE_1.csv", skip=16)
+un.pop.male.est <- read.csv("./input_data/raw/UNPopulationStats/WPP2012_POP_F01_2_TOTAL_POPULATION_MALE_1.csv", skip=16)
+un.pop.female.est <- read.csv("./input_data/raw/UNPopulationStats/WPP2012_POP_F01_3_TOTAL_POPULATION_FEMALE_1.csv", skip=16)
 
 dl.m <- gather(un.pop.male.est, "year", "n", 6:66);rm(un.pop.male.est)
 dl.f <- gather(un.pop.female.est, "year", "n", 6:66);rm(un.pop.female.est)
@@ -112,8 +112,8 @@ dl.f.est <- dl.f[c("countrycode","year","n")];rm(df.f)
 ## PROJECTIONS
 
 # Saved the each sheet as a single .csv -file first in libreoffice calc 
-un.pop.male.proj <- read.csv("Data/Raw/WPP2012_POP_F01_2_TOTAL_POPULATION_MALE_2.csv", skip=16)
-un.pop.female.proj <- read.csv("Data/Raw/WPP2012_POP_F01_3_TOTAL_POPULATION_FEMALE_2.csv", skip=16)
+un.pop.male.proj <- read.csv("./input_data/raw/UNPopulationStats/WPP2012_POP_F01_2_TOTAL_POPULATION_MALE_2.csv", skip=16)
+un.pop.female.proj <- read.csv("./input_data/raw/UNPopulationStats/WPP2012_POP_F01_3_TOTAL_POPULATION_FEMALE_2.csv", skip=16)
 
 dl.m <- gather(un.pop.male.proj, "year", "n", 6:96);rm(un.pop.male.proj)
 dl.f <- gather(un.pop.female.proj, "year", "n", 6:96);rm(un.pop.female.proj)
@@ -151,7 +151,7 @@ UNPopManualData.df$Year <- as.integer(UNPopManualData.df$Year)
 
 UNPopManualData.df <- UNPopManualData.df[!duplicated(UNPopManualData.df[c("FAOST_CODE","Year")]),]
 
-save(x = UNPopManualData.df, file = "./Data/Processed/UNPopManualData.RData")
+save(x = UNPopManualData.df, file = "./input_data/processed/UNPopManualData.RData")
 
 # save(x = young.df, file = "./Data/Processed/UNPopYoung.RData");rm(young.df)
 # save(x = old.df, file = "./Data/Processed/UNPopOld.RData");rm(old.df)

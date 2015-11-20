@@ -759,23 +759,23 @@ WB.df <- WB.df[!is.na(WB.df$FAOST_CODE),]
 
 # Manual data -------------------------------------------------------------
 
-load("./input_data/processed/wbManualData.RData")
-load("./input_data/processed/AquastatManualData.RData")
-load("./input_data/processed/GlobalForestResourceAssessment.RData")
-load("./input_data/processed/BiofuelProduction2015-08-18.RData")
+load("./input_data/processed/wbManualData.RData") #
+load("./input_data/processed/AquastatManualData.RData") #
+load("./input_data/processed/GlobalForestResourceAssessment.RData") #
+load("./input_data/processed/BiofuelProduction2015-11-20.RData") #
 # 
-load("./input_data/processed/Fishery.RData")
-load("./input_data/processed/UNPopManualData.RData")
+load("./input_data/processed/Fishery.RData") #
+load("./input_data/processed/UNPopManualData.RData") #
 
 # New indicators for pocketbook project!
 # forestry assesments
-load("./input_data/processed/fra2015.RData")
-load("./input_data/processed/regional1.RData")
-load("./input_data/processed/prod_ind_2015.RData")
-load("./input_data/processed/df_area_harvested.RData")
-load("./input_data/processed/fish2015.RData")
-load("./input_data/processed/fertilizers.RData")
-load("./input_data/processed/prod_ind_weights.RData")
+load("./input_data/processed/fra2015.RData") #
+load("./input_data/processed/regional1.RData") #
+load("./input_data/processed/prod_ind_2015.RData") #
+load("./input_data/processed/df_area_harvested.RData") #
+load("./input_data/processed/fish2015.RData") #
+load("./input_data/processed/fertilizers.RData") #
+load("./input_data/processed/prod_ind_weights.RData") #
 load("./input_data/processed/oda_brian_2015.RData")
 
 

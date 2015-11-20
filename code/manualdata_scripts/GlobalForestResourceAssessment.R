@@ -6,7 +6,7 @@
 ###########################################################################
 
 gfra.df <- 
-  read.csv(file = "./Data/Raw/ForestCharacteristics.csv", 
+  read.csv(file = "./input_data/raw/GlobalForestResourceAssessment/ForestCharacteristics.csv", 
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 gfra.df <- gfra.df[, c("FRA.categories", "Year", "Country", "Value")]
 gfra.df <- fillCountryCode(country = "Country", data = gfra.df)
@@ -39,4 +39,4 @@ gfra.df <-
          x = list(onrf.df, prfor.df, plfor.df, totfor.df))
 rm(list = c("onrf.df", "prfor.df", "plfor.df", "totfor.df", "missFAOcode",
             "manualFAOcode", "manual.df", "tmp"))
-save(x = gfra.df, file = "./Data/Processed/GlobalForestResourceAssessment.RData")
+save(x = gfra.df, file = "./output_data/processed/GlobalForestResourceAssessment.RData")

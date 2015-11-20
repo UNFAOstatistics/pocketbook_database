@@ -61,7 +61,7 @@ utils::globalVariables(names = c("FAOcountryProfile"))
 
 # AQ.WAT.WATPCP.MC.NO ---------------------------------------------------------
 
-xls1 <- read.xls("./Data//Raw//SYB_AQUASTAT_Water_Tables_20150304.xls", sheet = 1)
+xls1 <- read.xls("./input_data/raw/AquastatManualData//SYB_AQUASTAT_Water_Tables_20150304.xls", sheet = 1)
 var1 <- xls1[-1:-3,1:7]
 names(var1) <- c("Country","y1990","y1993","y2000","y2003","y2010","y2013")
 var1l <- gather(var1,year,value,2:7)
@@ -84,7 +84,7 @@ names(wrpc.df) <- c("FAOST_CODE", "Year", "AQ.WAT.WATPCP.MC.NO")
 
 # AQ.WAT.IRRPOT.HA.NO ---------------------------------------------------------
 
-xls1 <- read.xls("./Data//Raw//SYB_AQUASTAT_Water_Tables_20150304.xls", sheet = 1)
+xls1 <- read.xls("./input_data/raw/AquastatManualData//SYB_AQUASTAT_Water_Tables_20150304.xls", sheet = 1)
 var1 <- xls1[-1:-3,c(1,9)]
 names(var1) <- c("Country","y2012")
 var1l <- gather(var1,year,value,2)
@@ -106,7 +106,7 @@ names(ip.df) <- c("FAOST_CODE", "Year", "AQ.WAT.IRRPOT.HA.NO")
 
 # AQ.WAT.EQIRR.HA.NO ---------------------------------------------------------
 
-xls1 <- read.xls("./Data//Raw//SYB_AQUASTAT_Water_Tables_20150304.xls", sheet = 1)
+xls1 <- read.xls("./input_data/raw/AquastatManualData/SYB_AQUASTAT_Water_Tables_20150304.xls", sheet = 1)
 var1 <- xls1[-1:-3,c(1,10)]
 names(var1) <- c("Country","y2012")
 var1l <- gather(var1,year,value,2)
@@ -127,7 +127,7 @@ names(tae.df) <- c("FAOST_CODE", "Year", "AQ.WAT.EQIRR.HA.NO")
 
 # AQ.WAT.SHIRR.HA.SH ---------------------------------------------------------
 
-xls1 <- read.xls("./Data//Raw//SYB_AQUASTAT_Water_Tables_20150304.xls", sheet = 1)
+xls1 <- read.xls("./input_data/raw/AquastatManualData/SYB_AQUASTAT_Water_Tables_20150304.xls", sheet = 1)
 peaai.df <- xls1[-1:-3,c(1,12:13)]
 names(peaai.df) <- c("Country","Year","AQ.WAT.SHIRR.HA.SH")
 peaai.df$Country <- as.character(peaai.df$Country)
@@ -148,7 +148,7 @@ peaai.df <- subset(peaai.df, subset = !is.na(Year))
 
 # AQ.WAT.WW ------------------------------------------------------------------
 
-xls1 <- read.xls("./Data//Raw//SYB_AQUASTAT_Water_Tables_20150304.xls", sheet = 2)
+xls1 <- read.xls("./input_data/raw/AquastatManualData/SYB_AQUASTAT_Water_Tables_20150304.xls", sheet = 2)
 wwr.df <- xls1[-1:-2,c(1:5,7:8,10:11)]
 names(wwr.df) <- c("Country","Year","var1","var2","var3","var4","var5","var6","var7")
 wwr.df.l <- gather(wwr.df, key = "var", value = "value",3:9)
@@ -196,4 +196,4 @@ AquastatManualData.df <-
 rm(list = c("wrpc.df", "ip.df", "tae.df", "peaai.df", "wwr.df"))
 str(AquastatManualData.df)
 AquastatManualData.df$Year <- as.integer(AquastatManualData.df$Year)
-save(x = AquastatManualData.df, file = "./Data/Processed/AquastatManualData.RData")
+save(x = AquastatManualData.df, file = "./input_data/processed/AquastatManualData.RData")

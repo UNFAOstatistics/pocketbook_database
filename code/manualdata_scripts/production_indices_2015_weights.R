@@ -8,12 +8,16 @@ library(readr)
 
 # production value data d
 
-d <- read_csv("~/Downloads/Value_of_Production_E_All_Data_(Norm).csv")
-names(d) <- str_replace_all(names(d), " ", "")
+download.file("http://faostat3.fao.org/faostat-bulkdownloads/Value_of_Production_E_All_Data_(Norm).zip",
+              destfile = "input_data/raw/Value_of_Production_E_All_Data_(Norm).zip")
+unzip(zipfile = "./input_data/raw/Value_of_Production_E_All_Data_(Norm).zip",
+      exdir = "./input_data/raw/")
+d <- read_csv("./input_data/raw/Value_of_Production_E_All_Data_(Norm).csv")
+names(d) <- str_replace_all(names(dat), " ", "")
 
 # Meat
 ## Extract subindexes from Amandas production index data
-dat <- read_csv("Data/Raw/production_indices_meat_subindicators.csv")
+dat <- read_csv("./input_data/raw/production_indices_2015_weights/production_indices_meat_subindicators.csv")
 subind <- unique(dat$ItemName)
 # subset the production VALUE data
 d_meat <- d %>% filter(Item %in% subind, Year %in% 2004:2006, CountryCode < 5000) %>% 
@@ -22,7 +26,7 @@ d_meat <- d %>% filter(Item %in% subind, Year %in% 2004:2006, CountryCode < 5000
 
 # Fruits and vegetables
 ## Extract subindexes from Amandas production index data
-dat <- read_csv("Data/Raw/production_indices_vegetable_subindicators.csv")
+dat <- read_csv("./input_data/raw/production_indices_2015_weights/production_indices_vegetable_subindicators.csv")
 subind <- unique(dat$ItemName)
 # subset the production VALUE data
 d_vege <- d %>% filter(Item %in% subind, Year %in% 2004:2006, CountryCode < 5000) %>% 
@@ -30,7 +34,7 @@ d_vege <- d %>% filter(Item %in% subind, Year %in% 2004:2006, CountryCode < 5000
 
 # Milk
 ## Extract subindexes from Amandas production index data
-dat <- read_csv("Data/Raw/production_indices_milk_subindicators.csv")
+dat <- read_csv("./input_data/raw/production_indices_2015_weights/production_indices_milk_subindicators.csv")
 subind <- unique(dat$ItemName)
 # subset the production VALUE data
 d_milk <- d %>% filter(Item %in% subind, Year %in% 2004:2006, CountryCode < 5000) %>% 
@@ -38,7 +42,7 @@ d_milk <- d %>% filter(Item %in% subind, Year %in% 2004:2006, CountryCode < 5000
 
 # Roots and tubers weights
 ## Extract subindexes from Amandas production index data
-dat <- read_csv("Data/Raw/production_indices_roots_subindicators.csv")
+dat <- read_csv("./input_data/raw/production_indices_2015_weights/production_indices_roots_subindicators.csv")
 subind <- unique(dat$ItemName)
 # subset the production VALUE data
 d_roots <- d %>% filter(Item %in% subind, Year %in% 2004:2006, CountryCode < 5000) %>% 
@@ -46,7 +50,7 @@ d_roots <- d %>% filter(Item %in% subind, Year %in% 2004:2006, CountryCode < 500
 
 # sugar
 ## Extract subindexes from Amandas production index data
-dat <- read_csv("Data/Raw/production_indices_sugar_subindicators.csv")
+dat <- read_csv("./input_data/raw/production_indices_2015_weights/production_indices_sugar_subindicators.csv")
 subind <- unique(dat$ItemName)
 # subset the production VALUE data
 d_sugar <- d %>% filter(Item %in% subind, Year %in% 2004:2006, CountryCode < 5000) %>% 
@@ -54,7 +58,7 @@ d_sugar <- d %>% filter(Item %in% subind, Year %in% 2004:2006, CountryCode < 500
 
 # vegetable oils
 ## Extract subindexes from Amandas production index data
-dat <- read_csv("Data/Raw/production_indices_vegoil_subindicators.csv")
+dat <- read_csv("./input_data/raw/production_indices_2015_weights/production_indices_vegoil_subindicators.csv")
 subind <- unique(dat$ItemName)
 # subset the production VALUE data
 d_vegoil <- d %>% filter(Item %in% subind, Year %in% 2004:2006, CountryCode < 5000) %>% 
@@ -64,5 +68,5 @@ prod_ind_weights.df <- Reduce(function(x, y) merge(x, y, all=TRUE), list(d_vegoi
 names(prod_ind_weights.df)[names(prod_ind_weights.df)=="CountryCode"] <- "FAOST_CODE"
 prod_ind_weights.df <- prod_ind_weights.df[!duplicated(prod_ind_weights.df[c("FAOST_CODE","Year")]),]
 
-save(x = prod_ind_weights.df, file = "./Data/Processed/prod_ind_weights.RData")
+save(x = prod_ind_weights.df, file = "./input_data/processed/prod_ind_weights.RData")
 

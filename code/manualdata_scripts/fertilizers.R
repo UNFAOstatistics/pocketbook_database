@@ -2,7 +2,12 @@ library(tidyr)
 library(stringr)
 library(dplyr)
 
-load("~/btsync/faosync/pocketbooks/GSPB15/database/Data/Raw/fertilizers/Inputs_Fertilizers_E_All_Data_(Norm).RData")
+download.file("http://faostat3.fao.org/faostat-bulkdownloads/Inputs_Fertilizers_E_All_Data_(Norm).zip",
+              destfile = "input_data/raw/Inputs_Fertilizers_E_All_Data_(Norm).zip")
+unzip(zipfile = "./input_data/raw/Inputs_Fertilizers_E_All_Data_(Norm).zip",
+      exdir = "./input_data/raw/")
+dat <- read_csv("./input_data/raw/Inputs_Fertilizers_E_All_Data_(Norm).csv")
+names(dat) <- str_replace_all(names(dat), " ", ".")
 
 dat <- dat[dat$Item %in% c("Phosphate Fertilizers (P205 total nutrients)",
                            "Potash Fertilizers (K20 total nutrients)",
@@ -30,4 +35,4 @@ fertilizers.df <- fertilizers.df[!duplicated(fertilizers.df[c("FAOST_CODE","Year
 
 fertilizers.df <- fertilizers.df[fertilizers.df$FAOST_CODE < 5000,]
 
-save(x = fertilizers.df, file = "./Data/Processed/fertilizers.RData")
+save(x = fertilizers.df, file = "./input_data/processed/fertilizers.RData")

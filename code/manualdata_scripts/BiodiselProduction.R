@@ -8,7 +8,7 @@
 # BP.AP.GP.MT.NO ----------------------------------------------------------
 
 gap.df <- 
-  read.csv(file = "./Data/Raw/AlcoholProduction.csv",
+  read.csv(file = "./input_data/raw/BiodiselProduction/AlcoholProduction.csv",
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 gap.df <- 
   gap.df[, c("Country.or.Area.Code", "Year", "Quantity")]
@@ -21,7 +21,7 @@ colnames(gap.df) <- c("FAOST_CODE", "Year", "BP.AP.GP.MT.NO")
 # BP.AP.CNEU.MT.NO --------------------------------------------------------
 
 acneu.df <- 
-  read.csv(file = "./Data/Raw/AlcoholConsumptionForNonEnergyUses.csv",
+  read.csv(file = "./input_data/raw/BiodiselProduction/AlcoholConsumptionForNonEnergyUses.csv",
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 acneu.df <- 
   acneu.df[, c("Country.or.Area.Code", "Year", "Quantity")]
@@ -47,7 +47,7 @@ gap.df <- gap.df[, c("FAOST_CODE", "Year", "BP.AP.GP.TJ.NO")]
 # BP.BP.GP.MT.NO ----------------------------------------------------------
 
 gbp.df <- 
-  read.csv(file = "./Data/Raw/BagasseProduction.csv",
+  read.csv(file = "./input_data/raw/BiodiselProduction/BagasseProduction.csv",
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 gbp.df <- 
   gbp.df[, c("Country.or.Area.Code", "Year", "Quantity")]
@@ -60,7 +60,7 @@ colnames(gbp.df) <- c("FAOST_CODE", "Year", "BP.BP.GP.MT.NO")
 # BP.BP.CNEU.MT.NO --------------------------------------------------------
 
 bcneu.df <- 
-  read.csv(file = "./Data/Raw/BagasseConsumptionForNonEnergyUses.csv",
+  read.csv(file = "./input_data/raw/BiodiselProduction/BagasseConsumptionForNonEnergyUses.csv",
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 bcneu.df <- 
   bcneu.df[, c("Country.or.Area.Code", "Year", "Quantity")]
@@ -86,7 +86,7 @@ gbp.df <- gbp.df[, c("FAOST_CODE", "Year", "BP.BP.GP.TJ.NO")]
 # BP.BDP.GP.MT.NO ---------------------------------------------------------
 
 gbdp.df <- 
-  read.csv(file = "./Data/Raw/BiodiselGrossProduction.csv",
+  read.csv(file = "./input_data/raw/BiodiselProduction/BiodiselGrossProduction.csv",
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 gbdp.df <- 
   gbdp.df[, c("Country.or.Area.Code", "Year", "Quantity")]
@@ -102,7 +102,7 @@ gbdp.df <- gbdp.df[, c("FAOST_CODE", "Year", "BP.BDP.GP.TJ.NO")]
 # BP.BGP.GP.TJ.NO ---------------------------------------------------------
 
 gbgp.df <- 
-  read.csv(file = "./Data/Raw/BiogasGrossProduction.csv",
+  read.csv(file = "./input_data/raw/BiodiselProduction/BiogasGrossProduction.csv",
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 gbgp.df <- 
   gbgp.df[, c("Country.or.Area.Code", "Year", "Quantity")]
@@ -115,7 +115,7 @@ colnames(gbgp.df) <- c("FAOST_CODE", "Year", "BP.BGP.GP.TJ.NO")
 # BP.VWP.GP.MT.NO ---------------------------------------------------------
 
 gvp.df <- 
-  read.csv(file = "./Data/Raw/VegetalProduction.csv",
+  read.csv(file = "./input_data/raw/BiodiselProduction/VegetalProduction.csv",
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 gvp.df <- 
   gvp.df[, c("Country.or.Area.Code", "Year", "Quantity")]
@@ -128,7 +128,7 @@ colnames(gvp.df) <- c("FAOST_CODE", "Year", "BP.VWP.GP.MT.NO")
 # BP.VWP.CNEU.MT.NO -------------------------------------------------------
 
 vwcneu.df <- 
-  read.csv(file = "./Data/Raw/VegetalConsumptionForNonEnergyUses.csv",
+  read.csv(file = "./input_data/raw/BiodiselProduction/VegetalConsumptionForNonEnergyUses.csv",
            header = TRUE, na.strings = "", stringsAsFactors = FALSE)
 vwcneu.df <- 
   vwcneu.df[, c("Country.or.Area.Code", "Year", "Quantity")]
@@ -162,4 +162,4 @@ BiofuelProduction.df[, "BP.TP.GP.TJ.NO"] <-
                                    "BP.BDP.GP.TJ.NO", "BP.BGP.GP.TJ.NO",
                                    "BP.VWP.GP.TJ.NO")], na.rm = TRUE)
 rm(list = c("gap.df", "gbp.df", "gbdp.df", "gbgp.df", "gvp.df"))
-save(x = BiofuelProduction.df, file = paste0("./Data/Processed/BiofuelProduction",Sys.Date(),".RData"))
+save(x = BiofuelProduction.df, file = paste0("./input_data/processed/BiofuelProduction",Sys.Date(),".RData"))
