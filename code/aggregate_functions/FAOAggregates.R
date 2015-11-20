@@ -155,14 +155,20 @@ colnames(REUsubReg.df)[which(colnames(REUsubReg.df) == "FAO_REU_SUB_REG")] = "FA
 ## Specify the area
 REUsubReg.df$Area = "REUsubReg"
 ## Add country names
-REUsubRegName = data.frame(FAOST_CODE = c("REUCISeurope", "REUCaucAndTurkey", 
-                                          "REUCentralAsia", "REUCentralEasternEurope", 
-                                          "REUIsrael", "REUOtherAndEFTA",
+REUsubRegName = data.frame(FAOST_CODE = c("REUCISeurope",
+                                          "REUCaucAndTurkey", 
+                                          "REUCentralAsia",
+                                          "REUCentralEasternEurope", 
+                                          "REUIsrael",
+                                          "REUOtherAndEFTA",
                                           "REUSouthEasternEurope"),
-                           FAO_TABLE_NAME = c("REU CIS Europe", "REU Caucasus and Turkey",
-                                    "REU Central Asia", "REU Central Eastern Europe",
-                                    "Israel", "REU Other and EFTA",
-                                    "REU South Eastern Europe"),
+                           FAO_TABLE_NAME = c("CIS Europe",
+                                              "Caucasus and Turkey",
+                                              "Central Asia",
+                                              "EU Central and Eastern",
+                                              "Israel",
+                                              "EU other and EFTA",
+                                              "South Eastern Europe"),
                            stringsAsFactors = FALSE)
 REUsubReg.df = merge(REUsubReg.df, REUsubRegName, all.x = TRUE, by = "FAOST_CODE")
 
@@ -205,10 +211,14 @@ colnames(LACsubReg.df)[which(colnames(LACsubReg.df) == "FAO_LAC_SUB_REG")] = "FA
 ## Specify the area
 LACsubReg.df$Area = "LACsubReg"
 ## Add country names
-LACsubRegName = data.frame(FAOST_CODE = c("LACCaribbean", "LACCentralAmerica", 
-                                          "LACNorthAmerica", "LACSouthAmerica"),
-                           FAO_TABLE_NAME = c("Caribbean", "Central America", 
-                                    "North America", "South America"),
+LACsubRegName = data.frame(FAOST_CODE = c("LACCaribbean",
+                                          "LACCentralAmerica", 
+                                          "LACNorthAmerica",
+                                          "LACSouthAmerica"),
+                           FAO_TABLE_NAME = c("Caribbean",
+                                              "Central America",
+                                              "North America",
+                                              "South America"),
                            stringsAsFactors = FALSE)
 LACsubReg.df = merge(LACsubReg.df, LACsubRegName, all.x = TRUE, by = "FAOST_CODE")
 
