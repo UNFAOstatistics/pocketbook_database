@@ -1275,44 +1275,70 @@ load(file = paste0("./output_data/",date,"/SYB",Sys.Date(),".RData"))
 ###########################################################################
 
 ###########################################################################
-# Compare with metadata
-check <- meta.lst$FULL[1:2]
-# varname <- paste0("d_",gsub("\\D", "", as.character(Sys.time())))
-varname <- paste("d_",date)
-ff <- apply(SYB.df[,3:ncol(SYB.df)-1], 2, function(x) tail(table(x, useNA="ifany"),1)/nrow(SYB.df)*100)
-fff <- as.data.frame(ff)
-names(fff) <- varname
-fff$STS_ID <- row.names(fff)
-d <- left_join(check,fff)
-d$text_color <- 'background-color: white;'
-d$text_color2 <- 'background-color: white;'
-d$cols[d[3] < 20] <-  'background-color: #1a9641;'
-d$cols[d[3] >= 20] <-  'background-color: #a6d96a;'
-d$cols[d[3] >= 40] <-  'background-color: #ffffbf;'
-d$cols[d[3] >= 60] <-  'background-color: #fdae61;'
-d$cols[d[3] >= 80] <-  'background-color: #d7191c;'
-d$cols[is.na(d[3])] <-  'background-color: #696969;'
-
-library(htmlTable)
-print(htmlTable(as.matrix(d[1:3]), css.cell = as.matrix(d[4:6])), file=paste0("./output_data/",date,"/missing_data.html"))
-write.csv(d, file=paste0("./output_data/",date,"/missing_data.csv"))
-
 ## cumulative
 all_missing_datas <- list.files(path = "./output_data/",pattern = "missing_data.csv", recursive = T,full.names = T)
 check <- meta.lst$FULL[1:2]
 for (i in all_missing_datas){
  d <- read.csv(i, stringsAsFactors = FALSE) 
- check <- left_join(check,d[2:4])
- check$X <- NULL
+ d$X <- NULL
+ check <- left_join(check,d[1:3], by = c("STS_ID" = "STS_ID",
+                                         "TITLE_STS" = "TITLE_STS"))
 }
-check_cumul <- check
-write.csv(check_cumul, file=paste0("./output_data/",date,"/missing_data_cumulative.csv"))
+
+
+varname <- paste("d",date,format(Sys.time(), "%H"),sep="_")
+ff <- apply(SYB.df[,3:ncol(SYB.df)-1], 2, function(x) tail(table(x, useNA="ifany"),1)/nrow(SYB.df)*100)
+fff <- as.data.frame(ff)
+names(fff) <- varname
+fff$STS_ID <- row.names(fff)
+d <- left_join(check,fff)
+# names(d) <- stringr::str_replace_all(names(d), "_", "")
+names(d) <- stringr::str_replace_all(names(d), "-", "")
+names(d) <- stringr::str_replace_all(names(d), "\\.", "")
+names(d) <- stringr::str_replace_all(names(d), "2015", "15")
+
+colorize_syb <- function(x){
+  
+  d$col_1 <- 'background-color: #fff7f3'
+  d$col_2 <- 'background-color: #fff7f3'
+  d[x] <- round(d[x],2)
+  d[[ paste0("col_",x) ]][d[x] <    5]  <- 'background-color: #00FF00'
+  d[[ paste0("col_",x) ]][d[x] >=  10]  <- 'background-color: #0DF200'
+  d[[ paste0("col_",x) ]][d[x] >=  15]  <- 'background-color: #1AE600'
+  d[[ paste0("col_",x) ]][d[x] >=  20]  <- 'background-color: #26D900'
+  d[[ paste0("col_",x) ]][d[x] >=  25]  <- 'background-color: #33CC00'
+  d[[ paste0("col_",x) ]][d[x] >=  30]  <- 'background-color: #40BF00'
+  d[[ paste0("col_",x) ]][d[x] >=  35]  <- 'background-color: #4CB200'
+  d[[ paste0("col_",x) ]][d[x] >=  40]  <- 'background-color: #59A600'
+  d[[ paste0("col_",x) ]][d[x] >=  45]  <- 'background-color: #669900'
+  d[[ paste0("col_",x) ]][d[x] >=  50]  <- 'background-color: #738C00'
+  d[[ paste0("col_",x) ]][d[x] >=  55]  <- 'background-color: #808000'
+  d[[ paste0("col_",x) ]][d[x] >=  60]  <- 'background-color: #8C7300'
+  d[[ paste0("col_",x) ]][d[x] >=  65]  <- 'background-color: #996600'
+  d[[ paste0("col_",x) ]][d[x] >=  70]  <- 'background-color: #A65900'
+  d[[ paste0("col_",x) ]][d[x] >=  75]  <- 'background-color: #B24D00'
+  d[[ paste0("col_",x) ]][d[x] >=  80]  <- 'background-color: #BF4000'
+  d[[ paste0("col_",x) ]][d[x] >=  85]  <- 'background-color: #CC3300'
+  d[[ paste0("col_",x) ]][d[x] >=  90]  <- 'background-color: #D92600'
+  d[[ paste0("col_",x) ]][d[x] >=  95]  <- 'background-color: #E61900'
+  d[[ paste0("col_",x) ]][is.na(d[x])] <- 'background-color: #696969;'
+  return(d)
+}
+
+for (i in names(d[-1:-2])){
+  d <- colorize_syb(i)
+}
+
+library(htmlTable)
+ncolcols <- length(names(d)[grepl("col_", names(d))])
+print(htmlTable(as.matrix(d[1:ncolcols]), css.cell = as.matrix(d[(ncolcols+1):(2*ncolcols)])),
+      file=paste0("./output_data/",date,"/missing_data.html"))
+write.csv(d, file=paste0("./output_data/",date,"/missing_data.csv"))
 
 # End timing!
 t2 <- Sys.time()
 duration <- t2 - t1
 writeLines(format(duration), con = paste0("./output_data/",date,"/duration.txt"))
-
 
 
 
