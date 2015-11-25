@@ -128,77 +128,45 @@ source('~/btsync/faosync/pocketbooks/regional15/input/code/define_regions.R')
 
 
 # RAF
-FAOcountryProfile$FAO_RAF_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF"]]),]$FAOST_CODE, "RAFregion", FAOcountryProfile$FAO_RAF_REG)
+FAOcountryProfile$FAO_RAF_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF"]]),]$FAOST_CODE,                     "RAFregion",         FAOcountryProfile$FAO_RAF_REG)
 ## subregs
-FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF_Central_Africa"]]),]$FAOST_CODE, 
-                                            "RAFCentralAfrica", FAOcountryProfile$FAO_RAF_SUB_REG)
-FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF_Eastern_Africa"]]),]$FAOST_CODE, 
-                                            "RAFEastAfrica", FAOcountryProfile$FAO_RAF_SUB_REG)
-FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF_Northern_Africa"]]),]$FAOST_CODE, 
-                                            "RAFNorthAfrica", FAOcountryProfile$FAO_RAF_SUB_REG)
-FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF_Southern_Africa"]]),]$FAOST_CODE, 
-                                            "RAFSouthernAfrica", FAOcountryProfile$FAO_RAF_SUB_REG)
-FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF_Western_Africa"]]),]$FAOST_CODE, 
-                                            "RAFWestAfrica", FAOcountryProfile$FAO_RAF_SUB_REG)
+FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF_Central_Africa"]]),]$FAOST_CODE,  "RAFCentralAfrica",  FAOcountryProfile$FAO_RAF_SUB_REG)
+FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF_Eastern_Africa"]]),]$FAOST_CODE,  "RAFEastAfrica",     FAOcountryProfile$FAO_RAF_SUB_REG)
+FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF_Northern_Africa"]]),]$FAOST_CODE, "RAFNorthAfrica",    FAOcountryProfile$FAO_RAF_SUB_REG)
+FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF_Southern_Africa"]]),]$FAOST_CODE, "RAFSouthernAfrica", FAOcountryProfile$FAO_RAF_SUB_REG)
+FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF_Western_Africa"]]),]$FAOST_CODE,  "RAFWestAfrica",     FAOcountryProfile$FAO_RAF_SUB_REG)
 
 # RAP
-FAOcountryProfile$FAO_RAP_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP"]]),]$FAOST_CODE, "RAPregion", FAOcountryProfile$FAO_RAP_REG)
-
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Central_Asia"]]),]$FAOST_CODE, 
-                                            "RAPCentralAsia", FAOcountryProfile$FAO_RAP_SUB_REG)
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Eastern_Asia"]]),]$FAOST_CODE, 
-                                            "RAPEastAsia", FAOcountryProfile$FAO_RAP_SUB_REG)
-
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_South_Eastern_Asia"]]),]$FAOST_CODE, 
-                                            "RAPSoutheastAsia", FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP"]]),]$FAOST_CODE,                               "RAPregion",              FAOcountryProfile$FAO_RAP_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Central_Asia"]]),]$FAOST_CODE,              "RAPCentralAsia",         FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Eastern_Asia"]]),]$FAOST_CODE,              "RAPEastAsia",            FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_South_Eastern_Asia"]]),]$FAOST_CODE,        "RAPSoutheastAsia",       FAOcountryProfile$FAO_RAP_SUB_REG)
 ## New ones
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Western_Asia"]]),]$FAOST_CODE, 
-                                            "RAPWesternAsia", FAOcountryProfile$FAO_RAP_SUB_REG)
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Southern_Asia"]]),]$FAOST_CODE, 
-                                            "RAPSouthernAsia", FAOcountryProfile$FAO_RAP_SUB_REG)
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Austriala_and_New_Zealand"]]),]$FAOST_CODE, 
-                                            "RAPAustraliaNewZealand", FAOcountryProfile$FAO_RAP_SUB_REG)
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Melanesia"]]),]$FAOST_CODE, 
-                                            "RAPMelanesia", FAOcountryProfile$FAO_RAP_SUB_REG)
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Micronesia"]]),]$FAOST_CODE, 
-                                            "RAPMicronesia", FAOcountryProfile$FAO_RAP_SUB_REG)
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Polynesia"]]),]$FAOST_CODE, 
-                                            "RAPPolynesia", FAOcountryProfile$FAO_RAP_SUB_REG)
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Russian_Federation"]]),]$FAOST_CODE, 
-                                            "RAPRussianFederation", FAOcountryProfile$FAO_RAP_SUB_REG)
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_France"]]),]$FAOST_CODE, 
-                                            "RAPFrance", FAOcountryProfile$FAO_RAP_SUB_REG)
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_United_States"]]),]$FAOST_CODE, 
-                                            "RAPUnitedStates", FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Western_Asia"]]),]$FAOST_CODE,              "RAPWesternAsia",         FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Southern_Asia"]]),]$FAOST_CODE,             "RAPSouthernAsia",        FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Austriala_and_New_Zealand"]]),]$FAOST_CODE, "RAPAustraliaNewZealand", FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Melanesia"]]),]$FAOST_CODE,                 "RAPMelanesia",           FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Micronesia"]]),]$FAOST_CODE,                "RAPMicronesia",          FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Polynesia"]]),]$FAOST_CODE,                 "RAPPolynesia",           FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Russian_Federation"]]),]$FAOST_CODE,        "RAPRussianFederation",   FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_France"]]),]$FAOST_CODE,                    "RAPFrance",              FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_United_States"]]),]$FAOST_CODE,             "RAPUnitedStates",        FAOcountryProfile$FAO_RAP_SUB_REG)
 
 # REU
-FAOcountryProfile$FAO_REU_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU"]]),]$FAOST_CODE, "REUregion", FAOcountryProfile$FAO_REU_REG)
-
-FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_South_Eastern_Europe"]]),]$FAOST_CODE, 
-                                            "REUSouthEasternEurope", FAOcountryProfile$FAO_REU_SUB_REG)
-FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_EU_other_and_EFTA"]]),]$FAOST_CODE, 
-                                            "REUOtherAndEFTA", FAOcountryProfile$FAO_REU_SUB_REG)
-FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Caucasus_and_Turkey"]]),]$FAOST_CODE, 
-                                            "REUCaucAndTurkey", FAOcountryProfile$FAO_REU_SUB_REG)
-FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_CIS_Europe"]]),]$FAOST_CODE, 
-                                            "REUCISeurope", FAOcountryProfile$FAO_REU_SUB_REG)
-FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_EU_Central_and_Eastern"]]),]$FAOST_CODE, 
-                                            "REUCentralEasternEurope", FAOcountryProfile$FAO_REU_SUB_REG)
-FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Israel"]]),]$FAOST_CODE, 
-                                            "REUIsrael", FAOcountryProfile$FAO_REU_SUB_REG)
-FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Central_Asia"]]),]$FAOST_CODE, 
-                                            "REUIsrael", FAOcountryProfile$FAO_REU_SUB_REG)
+FAOcountryProfile$FAO_REU_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU"]]),]$FAOST_CODE,                            "REUregion",               FAOcountryProfile$FAO_REU_REG)
+FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_South_Eastern_Europe"]]),]$FAOST_CODE,   "REUSouthEasternEurope",   FAOcountryProfile$FAO_REU_SUB_REG)
+FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_EU_other_and_EFTA"]]),]$FAOST_CODE,      "REUOtherAndEFTA",         FAOcountryProfile$FAO_REU_SUB_REG)
+FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Caucasus_and_Turkey"]]),]$FAOST_CODE,    "REUCaucAndTurkey",        FAOcountryProfile$FAO_REU_SUB_REG)
+FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_CIS_Europe"]]),]$FAOST_CODE,             "REUCISeurope",            FAOcountryProfile$FAO_REU_SUB_REG)
+FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_EU_Central_and_Eastern"]]),]$FAOST_CODE, "REUCentralEasternEurope", FAOcountryProfile$FAO_REU_SUB_REG)
+FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Israel"]]),]$FAOST_CODE,                 "REUIsrael",               FAOcountryProfile$FAO_REU_SUB_REG)
+FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Central_Asia"]]),]$FAOST_CODE,           "REUIsrael",               FAOcountryProfile$FAO_REU_SUB_REG)
 
 # RNE
-FAOcountryProfile$FAO_RNE_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RNE"]]),]$FAOST_CODE, "RNEregion", FAOcountryProfile$FAO_RNE_REG)
-
-FAOcountryProfile$FAO_RNE_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RNE_Gulf_Cooperation_Council_States_and_Yemen"]]),]$FAOST_CODE, 
-                                            "RNEgccsy", FAOcountryProfile$FAO_RNE_SUB_REG)
-FAOcountryProfile$FAO_RNE_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RNE_Other_Near_East_countries"]]),]$FAOST_CODE, 
-                                            "RNEome", FAOcountryProfile$FAO_RNE_SUB_REG)
-FAOcountryProfile$FAO_RNE_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RNE_North_Africa"]]),]$FAOST_CODE, 
-                                            "RNEna", FAOcountryProfile$FAO_RNE_SUB_REG)
-
+FAOcountryProfile$FAO_RNE_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RNE"]]),]$FAOST_CODE,                                               "RNEregion", FAOcountryProfile$FAO_RNE_REG)
+FAOcountryProfile$FAO_RNE_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RNE_Gulf_Cooperation_Council_States_and_Yemen"]]),]$FAOST_CODE, "RNEgccsy",  FAOcountryProfile$FAO_RNE_SUB_REG)
+FAOcountryProfile$FAO_RNE_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RNE_Other_Near_East_countries"]]),]$FAOST_CODE,                 "RNEome",    FAOcountryProfile$FAO_RNE_SUB_REG)
+FAOcountryProfile$FAO_RNE_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RNE_North_Africa"]]),]$FAOST_CODE,                              "RNEna",     FAOcountryProfile$FAO_RNE_SUB_REG)
 
 
 # Construction and metadata files -----------------------------------------
@@ -214,7 +182,7 @@ meta.lst <- ReadMetadata(file = "./input_data/Metadata2015.csv",
 
 
 # Create a new folder for today
-date <- Sys.Date()
+date <- paste(Sys.Date(),format(Sys.time(), "%H"),sep="-")
 if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date))
 
 #   ____                          _                    _   _____  _     ___   ____  _____ 
@@ -232,7 +200,7 @@ if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_dat
 # Download variables from FAOSTAT, parameters -----------------------------
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
-dwnldOA <- TRUE # Population
+dwnldOA <- FALSE # Population
 dwnldRL <- TRUE # Resources, Resources - Land
 dwnldRF <- TRUE # Resources - Fertilizers
 dwnldRP <- TRUE # Resources - Pesticides
@@ -257,10 +225,8 @@ dwnldCOF <- TRUE # Coffeebook indicators
 downloadWB <- TRUE; CheckLogical(downloadWB)
 
 
-# replication_date <- "2015-11-18"
+replication_date <- "2015-11-25-11"
 
-
-date <- Sys.Date()
 if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date))
 
 # FAOSTAT, Population - Annual population ---------------------------------
@@ -276,7 +242,7 @@ if (dwnldOA) {
                               useCHMT = FALSE))
   FAOoa.df <- FAO.lst$entity; rm(dwnldOA); rm(FAO.lst)
   ## ...update list
-  save(x = FAOoa.df, file = paste0("./output_data/",date,"/FAOoa", Sys.Date(), ".RData"))
+  save(x = FAOoa.df, file = paste0("./output_data/",date,"/FAOoa", date, ".RData"))
 } else {
   ## ...open list
   load(file = "./output_data/2015-10-08/FAOoa2015-08-18.RData") # to get the pop in employment..
@@ -296,7 +262,7 @@ if (dwnldRL) {
                               useCHMT = FALSE))
   FAOrl.df <- FAO.lst$entity; rm(dwnldRL); rm(FAO.lst)
   ## ...update list
-  save(x = FAOrl.df, file = paste0("./output_data/",date,"/FAOrl", Sys.Date(), ".RData"))
+  save(x = FAOrl.df, file = paste0("./output_data/",date,"/FAOrl", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOrl2015-10-08.RData")
@@ -316,7 +282,7 @@ if (dwnldRF) {
                               useCHMT = FALSE))
   FAOrf.df <- FAO.lst$entity; rm(dwnldRF); rm(FAO.lst)
   ## ...update list
-  save(x = FAOrf.df, file = paste0("./output_data/",date,"/FAOrf", Sys.Date(), ".RData"))
+  save(x = FAOrf.df, file = paste0("./output_data/",date,"/FAOrf", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOrf2015-10-08.RData")
@@ -336,7 +302,7 @@ if (dwnldRP) {
                               useCHMT = FALSE))
   FAOrp.df <- FAO.lst$entity; rm(dwnldRP); rm(FAO.lst)
   ## ...update list
-  save(x = FAOrp.df, file = paste0("./output_data/",date,"/FAOrp", Sys.Date(), ".RData"))
+  save(x = FAOrp.df, file = paste0("./output_data/",date,"/FAOrp", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOrp2015-10-08.RData")
@@ -356,7 +322,7 @@ if (dwnldCS) {
                               useCHMT = FALSE))
   FAOcs.df <- FAO.lst$entity; rm(dwnldCS); rm(FAO.lst)
   ## ...update list
-  save(x = FAOcs.df, file = paste0("./output_data/",date,"/FAOcs", Sys.Date(), ".RData"))
+  save(x = FAOcs.df, file = paste0("./output_data/",date,"/FAOcs", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOcs2015-10-08.RData")
@@ -376,7 +342,7 @@ if (dwnldRM) {
                               useCHMT = FALSE))
   FAOrm.df <- FAO.lst$entity; rm(dwnldRM); rm(FAO.lst)
   ## ...update list
-  save(x = FAOrm.df, file = paste0("./output_data/",date,"/FAOrm", Sys.Date(), ".RData"))
+  save(x = FAOrm.df, file = paste0("./output_data/",date,"/FAOrm", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOrm2015-10-08.RData")
@@ -396,7 +362,7 @@ if (dwnldIG) {
                               useCHMT = FALSE))
   FAOig.df <- FAO.lst$entity; rm(dwnldIG); rm(FAO.lst)
   ## ...update list
-  save(x = FAOig.df, file = paste0("./output_data/",date,"/FAOig", Sys.Date(), ".RData"))
+  save(x = FAOig.df, file = paste0("./output_data/",date,"/FAOig", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOig2014-12-05.RData") # so the last time this was built succesfully
@@ -416,7 +382,7 @@ if (dwnldA) {
                               useCHMT = FALSE))
   FAOa.df <- FAO.lst$entity; rm(dwnldA); rm(FAO.lst)
   ## ...update list
-  save(x = FAOa.df, file = paste0("./output_data/",date,"/FAOa", Sys.Date(), ".RData"))
+  save(x = FAOa.df, file = paste0("./output_data/",date,"/FAOa", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOa2015-10-08.RData")
@@ -436,7 +402,7 @@ if (dwnldQC) {
                               useCHMT = FALSE))
   FAOqc.df <- FAO.lst$entity; rm(dwnldQC); rm(FAO.lst)
   ## ...update list
-  save(x = FAOqc.df, file = paste0("./output_data/",date,"/FAOqc", Sys.Date(), ".RData"))
+  save(x = FAOqc.df, file = paste0("./output_data/",date,"/FAOqc", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOqc2015-10-08.RData")
@@ -456,7 +422,7 @@ if (dwnldQA) {
                               useCHMT = FALSE))
   FAOqa.df <- FAO.lst$entity; rm(dwnldQA); rm(FAO.lst)
   ## ...update list
-  save(x = FAOqa.df, file = paste0("./output_data/",date,"/FAOqa", Sys.Date(), ".RData"))
+  save(x = FAOqa.df, file = paste0("./output_data/",date,"/FAOqa", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOqa2015-10-08.RData")
@@ -476,7 +442,7 @@ if (dwnldQD) {
                               useCHMT = FALSE))
   FAOqd.df <- FAO.lst$entity; rm(dwnldQD); rm(FAO.lst)
   ## ...update list
-  save(x = FAOqd.df, file = paste0("./output_data/",date,"/FAOqd", Sys.Date(), ".RData"))
+  save(x = FAOqd.df, file = paste0("./output_data/",date,"/FAOqd", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOqd2015-10-08.RData")
@@ -496,7 +462,7 @@ if (dwnldQL) {
                               useCHMT = FALSE))
   FAOql.df <- FAO.lst$entity; rm(dwnldQL); rm(FAO.lst)
   ## ...update list
-  save(x = FAOql.df, file = paste0("./output_data/",date,"/FAOql", Sys.Date(), ".RData"))
+  save(x = FAOql.df, file = paste0("./output_data/",date,"/FAOql", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOql2015-10-08.RData")
@@ -516,7 +482,7 @@ if (dwnldQP) {
                               useCHMT = FALSE))
   FAOqp.df <- FAO.lst$entity; rm(dwnldQP); rm(FAO.lst)
   ## ...update list
-  save(x = FAOqp.df, file = paste0("./output_data/",date,"/FAOqp", Sys.Date(), ".RData"))
+  save(x = FAOqp.df, file = paste0("./output_data/",date,"/FAOqp", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOqp2015-10-08.RData")
@@ -536,7 +502,7 @@ if (dwnldQV) {
                               useCHMT = FALSE))
   FAOqv.df <- FAO.lst$entity; rm(dwnldQV); rm(FAO.lst)
   ## ...update list
-  save(x = FAOqv.df, file = paste0("./output_data/",date,"/FAOqv", Sys.Date(), ".RData"))
+  save(x = FAOqv.df, file = paste0("./output_data/",date,"/FAOqv", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOqv2015-10-08.RData")
@@ -556,7 +522,7 @@ if (dwnldQI) {
                               useCHMT = FALSE))
   FAOqi.df <- FAO.lst$entity; rm(dwnldQI); rm(FAO.lst)
   ## ...update list
-  save(x = FAOqi.df, file = paste0("./output_data/",date,"/FAOqi", Sys.Date(), ".RData"))
+  save(x = FAOqi.df, file = paste0("./output_data/",date,"/FAOqi", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOqi2015-10-08.RData")
@@ -576,7 +542,7 @@ if (dwnldTP) {
                               useCHMT = FALSE))
   FAOtp.df <- FAO.lst$entity; rm(dwnldTP); rm(FAO.lst)
   ## ...update list
-  save(x = FAOtp.df, file = paste0("./output_data/",date,"/FAOtp", Sys.Date(), ".RData"))
+  save(x = FAOtp.df, file = paste0("./output_data/",date,"/FAOtp", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOtp2015-10-08.RData")
@@ -596,7 +562,7 @@ if (dwnldTI) {
                               useCHMT = FALSE))
   FAOti.df <- FAO.lst$entity; rm(dwnldTI); rm(FAO.lst)
   ## ...update list
-  save(x = FAOti.df, file = paste0("./output_data/",date,"/FAOti", Sys.Date(), ".RData"))
+  save(x = FAOti.df, file = paste0("./output_data/",date,"/FAOti", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOti2015-10-08.RData")
@@ -616,7 +582,7 @@ if (dwnldFO) {
                               useCHMT = FALSE))
   FAOfo.df <- FAO.lst$entity; rm(dwnldFO); rm(FAO.lst)
   ## ...update list
-  save(x = FAOfo.df, file = paste0("./output_data/",date,"/FAOfo", Sys.Date(), ".RData"))
+  save(x = FAOfo.df, file = paste0("./output_data/",date,"/FAOfo", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOfo2015-10-08.RData")
@@ -639,7 +605,7 @@ if (dwnldGHG) {
     FAOghg.df[, i] <- as.numeric(FAOghg.df[, i])
   }
   ## ...update list
-  save(x = FAOghg.df, file = paste0("./output_data/",date,"/FAOghg", Sys.Date(), ".RData"))
+  save(x = FAOghg.df, file = paste0("./output_data/",date,"/FAOghg", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOghg2015-10-08.RData") # use this to get the data for forest net-emissions!
@@ -658,7 +624,7 @@ if (dwnldGHG) {
 #                               useCHMT = FALSE))
 #   FAOoa.df <- FAO.lst$entity; rm(dwnldOA); rm(FAO.lst)
 #   ## ...update list
-#   save(x = FAOoa.df, file = paste0("./output_data/",date,"/FAOoa", Sys.Date(), ".RData"))
+#   save(x = FAOoa.df, file = paste0("./output_data/",date,"/FAOoa", date, ".RData"))
 # } else {
 #   ## ...open list
 #   load(file = "./output_data/2015-10-08/FAOoa2015-10-08.RData")
@@ -679,7 +645,7 @@ if (dwnldCOF) {
     FAOcof.df[, i] <- as.numeric(FAOcof.df[, i])
   }
   ## ...update list
-  save(x = FAOcof.df, file = paste0("./output_data/",date,"/FAOcof", Sys.Date(), ".RData"))
+  save(x = FAOcof.df, file = paste0("./output_data/",date,"/FAOcof", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOcof2015-10-13.RData")
@@ -702,7 +668,7 @@ if (downloadWB) {
   WB.lst1 <- with(meta.lst[["WDI"]][1:40,],
                   getWDItoSYB(indicator = WDINAME, name = STS_ID))
   ## ...update list
-  save(x = WB.lst1, file = paste0("./output_data/",date,"/WBdata1", Sys.Date(), ".RData"))
+  save(x = WB.lst1, file = paste0("./output_data/",date,"/WBdata1", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/WBdata12015-11-05.RData")
@@ -713,7 +679,7 @@ if (downloadWB) {
   WB.lst2 <- with(meta.lst[["WDI"]][41:75,],
                   getWDItoSYB(indicator = WDINAME, name = STS_ID))
   ## ...update list
-  save(x = WB.lst2, file = paste0("./output_data/",date,"/WBdata2", Sys.Date(), ".RData"))
+  save(x = WB.lst2, file = paste0("./output_data/",date,"/WBdata2", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/WBdata22015-11-05.RData")
@@ -724,7 +690,7 @@ if (downloadWB) {
   WB.lst3 <- with(meta.lst[["WDI"]][76:nrow(meta.lst[["WDI"]]),],
                   getWDItoSYB(indicator = WDINAME, name = STS_ID))
   ## ...update list
-  save(x = WB.lst3, file = paste0("./output_data/",date,"/WBdata3", Sys.Date(), ".RData"))
+  save(x = WB.lst3, file = paste0("./output_data/",date,"/WBdata3", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/WBdata32015-11-05.RData")
@@ -1163,7 +1129,7 @@ manScalVars <- subset(con.df, select = c("STS_ID", "SCALING"), subset = !is.na(S
 # for (i in 1:NROW(manScalVars)) {
 #   preAgg.df[, manScalVars[i, "STS_ID"]] <- preAgg.df[, manScalVars[i, "STS_ID"]] * manScalVars[i, "SCALING"]
 # }
-rm(list = c("manScalVars", "i"))
+# rm(list = c("manScalVars", "i"))
 
 #####################################
 
@@ -1224,10 +1190,10 @@ postAgg.df <- CheckValues(dataset = postAgg.df, columns = colnames(postAgg.df)[
 
 SYB.df <- postAgg.df
 
-save(x = SYB.df, file = paste0("./output_data/",date,"/SYB",Sys.Date(),".RData"))
-# save(x = SYB.df, file = paste0("./Data/Processed/SYB",Sys.Date(),".RData"))
+save(x = SYB.df, file = paste0("./output_data/",date,"/SYB",date,".RData"))
+# save(x = SYB.df, file = paste0("./Data/Processed/SYB",date,".RData"))
 # save(x = SYB.df, file = "./Data/Processed/SYB.RData")
-load(file = paste0("./output_data/",date,"/SYB",Sys.Date(),".RData"))
+load(file = paste0("./output_data/",date,"/SYB",date,".RData"))
 
 # Merge the FSI dataset ---------------------------------------------------
 
@@ -1249,7 +1215,7 @@ load(file = paste0("./output_data/",date,"/SYB",Sys.Date(),".RData"))
 # fsi.df <- fsi.df[, fsiVar]
 # SYB.df <- merge(SYB.df, fsi.df, all = FALSE, by = c("FAOST_CODE", "Year"))
 # rm(fsi.df)
-# save(x = SYB.df, file = paste0("./Data/Processed/SYB",Sys.Date(),".RData"))
+# save(x = SYB.df, file = paste0("./Data/Processed/SYB",date,".RData"))
 # 
 # ## Merge metadata and construction file
 # fsicon.df <- ReadConstruction(file = "FSIconstruction15.csv", 
@@ -1286,7 +1252,7 @@ for (i in all_missing_datas){
 }
 
 
-varname <- paste("d",date,format(Sys.time(), "%H"),sep="_")
+varname <- date
 ff <- apply(SYB.df[,3:ncol(SYB.df)-1], 2, function(x) tail(table(x, useNA="ifany"),1)/nrow(SYB.df)*100)
 fff <- as.data.frame(ff)
 names(fff) <- varname
