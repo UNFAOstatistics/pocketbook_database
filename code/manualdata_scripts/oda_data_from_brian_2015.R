@@ -1,4 +1,3 @@
-# new weights for 
 library(dplyr)
 library(stringr)
 library(readxl)
@@ -10,6 +9,20 @@ library(tidyr)
 # dat1 <- dat %>% select(year,recipientcode,dfa_share_commit_tot) %>% 
 #    rename(Year = year,FAOST_CODE = recipientcode)
 # dat1 <- dat1[!duplicated(dat1[c("FAOST_CODE","Year")]),]
+
+
+# if (!file.exists("~/input_data/processed/eda.Rdata")){
+#   download.file("http://faostat3.fao.org/faostat-bulkdownloads/Development_Assistance_to_Agriculture_E_All_Data_(Norm).zip",
+#                 destfile = "~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).zip")
+#   unzip("~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).zip",
+#         exdir = "~/fao_temp/data/")
+#   d <- read_csv("~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).csv")
+#   save(d, file="~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).Rdata")
+# }
+
+
+
+
 
 # label = Chart 19: DFA Agriculture Orientation Index, highest and lowest values, average (2009-2013)
 dat <- read_excel("./input_data/raw/oda_brian_2015/oda_data_from_brian_2005.xlsx",sheet = 2, skip = 3)
