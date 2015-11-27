@@ -1242,26 +1242,25 @@ load(file = paste0("./output_data/",date,"/SYB",date,".RData"))
 
 ###########################################################################
 ## cumulative
-all_missing_datas <- list.files(path = "./output_data/",pattern = "missing_data.csv", recursive = T,full.names = T)
+all_missing_datas <- list.files(path = "./output_data",pattern = "missing_data.csv", recursive = T,full.names = T)
 check <- meta.lst$FULL[1:2]
 for (i in all_missing_datas){
- d <- read.csv(i, stringsAsFactors = FALSE) 
+ d <- read.csv(i, stringsAsFactors = FALSE)
+ varname <- str_replace_all(i, "/missing_data.csv", "")
+ varname <- str_replace_all(varname, "./output_data/", "")
+ varname <- str_replace_all(varname, "-", "")
  d$X <- NULL
+ names(d)[3] <- paste0("D",varname)
  check <- left_join(check,d[1:3], by = c("STS_ID" = "STS_ID",
                                          "TITLE_STS" = "TITLE_STS"))
 }
 
-
-varname <- date
 ff <- apply(SYB.df[,3:ncol(SYB.df)-1], 2, function(x) tail(table(x, useNA="ifany"),1)/nrow(SYB.df)*100)
 fff <- as.data.frame(ff)
+varname <- paste0("D",str_replace_all(date, "-", ""))
 names(fff) <- varname
 fff$STS_ID <- row.names(fff)
 d <- left_join(check,fff)
-# names(d) <- stringr::str_replace_all(names(d), "_", "")
-names(d) <- stringr::str_replace_all(names(d), "-", "")
-names(d) <- stringr::str_replace_all(names(d), "\\.", "")
-names(d) <- stringr::str_replace_all(names(d), "2015", "15")
 
 colorize_syb <- function(x){
   
