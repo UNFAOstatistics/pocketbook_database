@@ -117,30 +117,36 @@ RAPsubReg.df$Area = "RAPsubReg"
 #                            stringsAsFactors = FALSE)
 # RAPsubReg.df = merge(RAPsubReg.df, RAPsubRegName, all.x = TRUE, by = "FAOST_CODE")
 
-RAPsubRegName = data.frame(FAOST_CODE = c("RAPAustraliaNewZealand",
+RAPsubRegName = data.frame(FAOST_CODE = c(
+                                          # "RAPAustraliaNewZealand",
                                           "RAPCentralAsia",
                                           "RAPEastAsia",
-                                          "RAPFrance",
-                                          "RAPMelanesia",
-                                          "RAPMicronesia",
-                                          "RAPPolynesia",
-                                          "RAPRussianFederation",
+                                          # "RAPFrance",
+                                          # "RAPMelanesia",
+                                          # "RAPMicronesia",
+                                          # "RAPPolynesia",
+                                          # "RAPRussianFederation",
                                           "RAPSoutheastAsia",
                                           "RAPSouthernAsia",
-                                          "RAPUnitedStates",
-                                          "RAPWesternAsia" ),
-                           FAO_TABLE_NAME = c( "Australia and New Zealand",
+                                          "RAPOceania"
+                                          # "RAPUnitedStates",
+                                          # "RAPWesternAsia" 
+                                          ),
+                           FAO_TABLE_NAME = c( 
+                                              # "Australia and New Zealand",
                                                "Central Asia",
                                                "East Asia",
-                                               "France",
-                                               "Melanesia",
-                                               "Micronesia",
-                                               "Polynesia",
-                                               "Russian Federation",
+                                               # "France",
+                                               # "Melanesia",
+                                               # "Micronesia",
+                                               # "Polynesia",
+                                               # "Russian Federation",
                                                "Southeast Asia",
                                                "Southern Asia",
-                                               "United States",
-                                               "Western Asia"),
+                                               "Oceania"
+                                               # "United States",
+                                               # "Western Asia"
+                                               ),
                            stringsAsFactors = FALSE)
 RAPsubReg.df = merge(RAPsubReg.df, RAPsubRegName, all.x = TRUE, by = "FAOST_CODE")
 
