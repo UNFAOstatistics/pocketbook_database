@@ -186,13 +186,19 @@ colnames(REUsubReg.df)[which(colnames(REUsubReg.df) == "FAO_REU_SUB_REG")] = "FA
 ## Specify the area
 REUsubReg.df$Area = "REUsubReg"
 ## Add country names
-REUsubRegName = data.frame(FAOST_CODE = c("REUCISeurope", "REUCaucAndTurkey",
-                                          "REUCentralAsia", "REUCentralEasternEurope",
-                                          "REUIsrael", "REUOtherAndEFTA",
+REUsubRegName = data.frame(FAOST_CODE = c("REUCISeurope",
+                                          "REUCaucAndTurkey",
+                                          "REUCentralAsia",
+                                          "REUEUCentralandEastern",
+                                          "REUIsrael",
+                                          "REUEUOtherAndEFTA",
                                           "REUSouthEasternEurope"),
-                           FAO_TABLE_NAME = c("CIS Europe", "Caucasus and Turkey",
-                                              "Central Asia", "Central Eastern Europe",
-                                              "Israel", "Other and EFTA",
+                           FAO_TABLE_NAME = c("CIS Europe",
+                                              "Caucasus and Turkey",
+                                              "Central Asia",
+                                              "EU Central Eastern",
+                                              "Israel",
+                                              "EU Other and EFTA",
                                               "South Eastern Europe"),
                            stringsAsFactors = FALSE)
 REUsubReg.df = merge(REUsubReg.df, REUsubRegName, all.x = TRUE, by = "FAOST_CODE")
