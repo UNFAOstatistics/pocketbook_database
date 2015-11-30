@@ -142,7 +142,7 @@ FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% re
 FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Eastern_Asia"]]),]$FAOST_CODE,              "RAPEastAsia",            FAOcountryProfile$FAO_RAP_SUB_REG)
 FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_South_Eastern_Asia"]]),]$FAOST_CODE,        "RAPSoutheastAsia",       FAOcountryProfile$FAO_RAP_SUB_REG)
 ## New ones
-FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Oceania"]]),]$FAOST_CODE,test =             "RAPOceania",             FAOcountryProfile$FAO_RAP_SUB_REG)
+FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Oceania"]]),]$FAOST_CODE,                    "RAPOceania",            FAOcountryProfile$FAO_RAP_SUB_REG)
 # FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Western_Asia"]]),]$FAOST_CODE,              "RAPWesternAsia",         FAOcountryProfile$FAO_RAP_SUB_REG)
 FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Southern_Asia"]]),]$FAOST_CODE,             "RAPSouthernAsia",        FAOcountryProfile$FAO_RAP_SUB_REG)
 # FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Austriala_and_New_Zealand"]]),]$FAOST_CODE, "RAPAustraliaNewZealand", FAOcountryProfile$FAO_RAP_SUB_REG)

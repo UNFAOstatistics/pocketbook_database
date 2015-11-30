@@ -34,12 +34,16 @@ colnames(RAFsubReg.df)[which(colnames(RAFsubReg.df) == "FAO_RAF_SUB_REG")] = "FA
 ## Specify the area
 RAFsubReg.df$Area = "RAFsubReg"
 ## Add country names
-RAFsubRegName = data.frame(FAOST_CODE = c("RAFCentralAfrica", "RAFEastAfrica",
-                                          "RAFNorthAfrica", "RAFSouthernAfrica",
+RAFsubRegName = data.frame(FAOST_CODE = c("RAFCentralAfrica",
+                                          "RAFEastAfrica",
+                                          "RAFNorthAfrica",
+                                          "RAFSouthernAfrica",
                                           "RAFWestAfrica"),
                            FAO_TABLE_NAME = c("Central Africa",
-                                              "Eastern Africa", "Northern Africa",
-                                              "Southern Africa", "Western Africa"),
+                                              "Eastern Africa",
+                                              "Northern Africa",
+                                              "Southern Africa",
+                                              "Western Africa"),
                            stringsAsFactors = FALSE)
 RAFsubReg.df = merge(RAFsubReg.df, RAFsubRegName, all.x = TRUE, by = "FAOST_CODE")
 
