@@ -155,13 +155,12 @@ FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% re
 # REU
 FAOcountryProfile$FAO_REU_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU"]]),]$FAOST_CODE,                            "REUregion",               FAOcountryProfile$FAO_REU_REG)
 FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_South_Eastern_Europe"]]),]$FAOST_CODE,   "REUSouthEasternEurope",   FAOcountryProfile$FAO_REU_SUB_REG)
-FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_EU_other_and_EFTA"]]),]$FAOST_CODE,      "REUOtherAndEFTA",         FAOcountryProfile$FAO_REU_SUB_REG)
+FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_EU_other_and_EFTA"]]),]$FAOST_CODE,      "REUEUOtherAndEFTA",       FAOcountryProfile$FAO_REU_SUB_REG)
 FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Caucasus_and_Turkey"]]),]$FAOST_CODE,    "REUCaucAndTurkey",        FAOcountryProfile$FAO_REU_SUB_REG)
 FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_CIS_Europe"]]),]$FAOST_CODE,             "REUCISeurope",            FAOcountryProfile$FAO_REU_SUB_REG)
-FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_EU_Central_and_Eastern"]]),]$FAOST_CODE, "REUCentralEasternEurope", FAOcountryProfile$FAO_REU_SUB_REG)
+FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_EU_Central_and_Eastern"]]),]$FAOST_CODE, "REUEUCentralandEastern",  FAOcountryProfile$FAO_REU_SUB_REG)
 FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Israel"]]),]$FAOST_CODE,                 "REUIsrael",               FAOcountryProfile$FAO_REU_SUB_REG)
-FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Central_Asia"]]),]$FAOST_CODE,           "REUIsrael",               FAOcountryProfile$FAO_REU_SUB_REG)
-
+FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Central_Asia"]]),]$FAOST_CODE,           "REUCentralAsia",          FAOcountryProfile$FAO_REU_SUB_REG)
 # RNE
 FAOcountryProfile$FAO_RNE_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RNE"]]),]$FAOST_CODE,                                               "RNEregion", FAOcountryProfile$FAO_RNE_REG)
 FAOcountryProfile$FAO_RNE_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RNE_Gulf_Cooperation_Council_States_and_Yemen"]]),]$FAOST_CODE, "RNEgccsy",  FAOcountryProfile$FAO_RNE_SUB_REG)
@@ -1239,16 +1238,19 @@ load(file = paste0("./output_data/",date,"/SYB",date,".RData"))
 ###########################################################################
 ## End
 ###########################################################################
-
+load("/home/markus/btsync/faosync/syb_database/output_data/2015-11-28-01/SYB2015-11-28-01.RData")
+meta.lst <- ReadMetadata(file = "./input_data/Metadata2015.csv", 
+                         encoding = "UTF-8")
 ###########################################################################
 ## cumulative
 all_missing_datas <- list.files(path = "./output_data",pattern = "missing_data.csv", recursive = T,full.names = T)
 check <- meta.lst$FULL[1:2]
+check2 <- meta.lst$FULL[1:2]
 for (i in all_missing_datas){
  d <- read.csv(i, stringsAsFactors = FALSE)
- varname <- str_replace_all(i, "/missing_data.csv", "")
- varname <- str_replace_all(varname, "./output_data/", "")
- varname <- str_replace_all(varname, "-", "")
+ varname <- stringr::str_replace_all(i, "/missing_data.csv", "")
+ varname <- stringr::str_replace_all(varname, "./output_data/", "")
+ varname <- stringr::str_replace_all(varname, "-", "")
  d$X <- NULL
  names(d)[3] <- paste0("D",varname)
  check <- left_join(check,d[1:3], by = c("STS_ID" = "STS_ID",
@@ -1257,9 +1259,11 @@ for (i in all_missing_datas){
 
 ff <- apply(SYB.df[,3:ncol(SYB.df)-1], 2, function(x) tail(table(x, useNA="ifany"),1)/nrow(SYB.df)*100)
 fff <- as.data.frame(ff)
-varname <- paste0("D",str_replace_all(date, "-", ""))
+varname <- paste0("D",stringr::str_replace_all(date, "-", ""))
 names(fff) <- varname
 fff$STS_ID <- row.names(fff)
+gg <- left_join(check2,fff)
+write.csv(gg, file=paste0("./output_data/",date,"/missing_data.csv"))
 d <- left_join(check,fff)
 
 colorize_syb <- function(x){
@@ -1298,7 +1302,7 @@ library(htmlTable)
 ncolcols <- length(names(d)[grepl("col_", names(d))])
 print(htmlTable(as.matrix(d[1:ncolcols]), css.cell = as.matrix(d[(ncolcols+1):(2*ncolcols)])),
       file=paste0("./output_data/",date,"/missing_data.html"))
-write.csv(d, file=paste0("./output_data/",date,"/missing_data.csv"))
+
 
 # End timing!
 t2 <- Sys.time()
