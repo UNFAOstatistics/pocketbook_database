@@ -128,6 +128,8 @@ source('~/btsync/faosync/pocketbooks/regional15/input/code/define_regions.R')
 
 
 # RAF
+FAOcountryProfile$FAO_RAF_REG <- NA
+FAOcountryProfile$FAO_RAF_SUB_REG <- NA
 FAOcountryProfile$FAO_RAF_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF"]]),]$FAOST_CODE,                     "RAFregion",         FAOcountryProfile$FAO_RAF_REG)
 ## subregs
 FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF_Central_Africa"]]),]$FAOST_CODE,  "RAFCentralAfrica",  FAOcountryProfile$FAO_RAF_SUB_REG)
@@ -137,6 +139,8 @@ FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% re
 FAOcountryProfile$FAO_RAF_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAF_Western_Africa"]]),]$FAOST_CODE,  "RAFWestAfrica",     FAOcountryProfile$FAO_RAF_SUB_REG)
 
 # RAP
+FAOcountryProfile$FAO_RAP_REG <- NA
+FAOcountryProfile$FAO_RAP_SUB_REG <- NA
 FAOcountryProfile$FAO_RAP_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP"]]),]$FAOST_CODE,                               "RAPregion",              FAOcountryProfile$FAO_RAP_REG)
 FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Central_Asia"]]),]$FAOST_CODE,              "RAPCentralAsia",         FAOcountryProfile$FAO_RAP_SUB_REG)
 FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_Eastern_Asia"]]),]$FAOST_CODE,              "RAPEastAsia",            FAOcountryProfile$FAO_RAP_SUB_REG)
@@ -154,6 +158,9 @@ FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% re
 # FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_United_States"]]),]$FAOST_CODE,             "RAPUnitedStates",        FAOcountryProfile$FAO_RAP_SUB_REG)
 
 # REU
+FAOcountryProfile$FAO_REU_REG <- NA
+FAOcountryProfile$FAO_REU_SUB_REG <- NA
+
 FAOcountryProfile$FAO_REU_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU"]]),]$FAOST_CODE,                            "REUregion",               FAOcountryProfile$FAO_REU_REG)
 FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_South_Eastern_Europe"]]),]$FAOST_CODE,   "REUSouthEasternEurope",   FAOcountryProfile$FAO_REU_SUB_REG)
 FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_EU_other_and_EFTA"]]),]$FAOST_CODE,      "REUEUOtherAndEFTA",       FAOcountryProfile$FAO_REU_SUB_REG)
