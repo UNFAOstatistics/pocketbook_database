@@ -4,7 +4,9 @@ t1 <- Sys.time()
 ## This script generates the dataset for the Statistical Yearbooks
 ###########################################################################
 
-root.dir <- "~/btsync/faosync/syb_database/"
+if (Sys.info()[["user"]] %in% c("markus","aurelius") & Sys.info()[["sysname"]] != "Windows") root.dir <- "~/btsync/faosync/syb_database/" 
+if (Sys.info()[["user"]] == "markus" & Sys.info()[["sysname"]] == "Windows")   root.dir <- "C:/temp/syb_database/" 
+
 setwd(root.dir)
 
 
@@ -82,7 +84,8 @@ source("./code/read_functions/ReadConstruction.R")
 
 # Country profile ---------------------------------------------------------
 
-FAOcountryProfile <- read.csv("~/btsync/faosync/pocketbooks/regional15/input/data/FAOcountryProfile.csv", stringsAsFactors = FALSE)
+if (Sys.info()[["user"]] %in% c("markus","aurelius") & Sys.info()[["sysname"]] != "Windows") FAOcountryProfile <- read.csv("~/btsync/faosync/pocketbooks/regional15/input/data/FAOcountryProfile.csv", stringsAsFactors = FALSE)
+if (Sys.info()[["user"]] == "markus" & Sys.info()[["sysname"]] == "Windows")   FAOcountryProfile <- read.csv("C:/temp/regional15/input/data/FAOcountryProfile.csv", stringsAsFactors = FALSE)
 
 
 # Recode the Short Name Variables
@@ -105,7 +108,11 @@ FAOcountryProfile[FAOcountryProfile[, "SHORT_NAME"] == "Sao Tome and Principe"  
 FAOcountryProfile[FAOcountryProfile[, "SHORT_NAME"] == "United States of America"                     & !is.na(FAOcountryProfile[, "SHORT_NAME"]), "SHORT_NAME"] <- "United States\nof America"
 FAOcountryProfile[FAOcountryProfile[, "SHORT_NAME"] == "Iran (Islamic Republic of)"                   & !is.na(FAOcountryProfile[, "SHORT_NAME"]), "SHORT_NAME"] <- "Iran\n(Islamic Republic of)"
 FAOcountryProfile[FAOcountryProfile[, "SHORT_NAME"] == "Bosnia and Herzegovina"                       & !is.na(FAOcountryProfile[, "SHORT_NAME"]), "SHORT_NAME"] <- "Bosnia and\nHerzegovina"
-# FAOcountryProfile["SHORT_NAME"][FAOcountryProfile[, "FAOST_CODE"] == 107]                                                                                        <- "Côte d'Ivoire"
+
+if (Sys.info()[["sysname"]] == "Windows") FAOcountryProfile$SHORT_NAME[FAOcountryProfile$FAOST_CODE == 107]   <- "Cote d'Ivoire"
+if (Sys.info()[["sysname"]] != "Windows") FAOcountryProfile$SHORT_NAME[FAOcountryProfile$FAOST_CODE == 107]   <- "Côte d'Ivoire"
+
+
 FAOcountryProfile[FAOcountryProfile[, "SHORT_NAME"] == "Falkland Islands (Malvinas)"                  & !is.na(FAOcountryProfile[, "SHORT_NAME"]), "SHORT_NAME"] <- "Falkland Islands\n(Malvinas)"
 FAOcountryProfile[FAOcountryProfile[, "SHORT_NAME"] == "Papua New Guinea"                             & !is.na(FAOcountryProfile[, "SHORT_NAME"]), "SHORT_NAME"] <- "Papua New\nGuinea"
 FAOcountryProfile[FAOcountryProfile[, "SHORT_NAME"] == "American Samoa"                               & !is.na(FAOcountryProfile[, "SHORT_NAME"]), "SHORT_NAME"] <- "American\nSamoa"
@@ -124,7 +131,9 @@ FAOcountryProfile[FAOcountryProfile[, "SHORT_NAME"] == "Netherlands Antilles"   
 
 # Source script from yearbook processing
 run_only_regions <- TRUE
-source('~/btsync/faosync/pocketbooks/regional15/input/code/define_regions.R')
+
+if (Sys.info()[["sysname"]] == "Windows") source('C:/temp/regional15/input/code/define_regions.R')
+if (Sys.info()[["sysname"]] != "Windows") source('~/btsync/faosync/pocketbooks/regional15/input/code/define_regions.R')
 
 
 # RAF
@@ -207,7 +216,7 @@ if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_dat
 # Download variables from FAOSTAT, parameters -----------------------------
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
-dwnldOA <- FALSE # Population
+dwnldOA <- TRUE # Population
 dwnldRL <- TRUE # Resources, Resources - Land
 dwnldRF <- TRUE # Resources - Fertilizers
 dwnldRP <- TRUE # Resources - Pesticides
@@ -234,7 +243,7 @@ downloadWB <- TRUE; CheckLogical(downloadWB)
 
 replication_date <- "2015-11-25-11"
 
-if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date))
+if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date), recursive = TRUE)
 
 # FAOSTAT, Population - Annual population ---------------------------------
 
@@ -1246,9 +1255,9 @@ load(file = paste0("./output_data/",date,"/SYB",date,".RData"))
 ###########################################################################
 ## End
 ###########################################################################
-load("/home/markus/btsync/faosync/syb_database/output_data/2015-11-28-01/SYB2015-11-28-01.RData")
-meta.lst <- ReadMetadata(file = "./input_data/Metadata2015.csv", 
-                         encoding = "UTF-8")
+# load("/home/markus/btsync/faosync/syb_database/output_data/2015-11-28-01/SYB2015-11-28-01.RData")
+# meta.lst <- ReadMetadata(file = "./input_data/Metadata2015.csv", 
+#                          encoding = "UTF-8")
 ###########################################################################
 ## cumulative
 all_missing_datas <- list.files(path = "./output_data",pattern = "missing_data.csv", recursive = T,full.names = T)
