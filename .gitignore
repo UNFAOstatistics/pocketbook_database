@@ -6,3 +6,4 @@ data/processed/
 raw_data/
 explorer/FAOmetaTable.RData
 output_data/
+pocketbook_database.Rproj
