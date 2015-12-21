@@ -4,7 +4,7 @@ t1 <- Sys.time()
 ## This script generates the dataset for the Statistical Yearbooks
 ###########################################################################
 
-root.dir <- "~/btsync/faosync/syb_database/"
+root.dir <- "~/btsync/faosync/pocketbooks/pocketbook_database/"
 setwd(root.dir)
 
 
@@ -82,7 +82,7 @@ source("./code/read_functions/ReadConstruction.R")
 
 # Country profile ---------------------------------------------------------
 
-FAOcountryProfile <- read.csv("~/btsync/faosync/pocketbooks/regional15/input/data/FAOcountryProfile.csv", stringsAsFactors = FALSE)
+FAOcountryProfile <- read.csv("~/btsync/faosync/pocketbooks/pocketbook/input/data/FAOcountryProfile.csv", stringsAsFactors = FALSE)
 
 
 # Recode the Short Name Variables
@@ -124,7 +124,7 @@ FAOcountryProfile[FAOcountryProfile[, "SHORT_NAME"] == "Netherlands Antilles"   
 
 # Source script from yearbook processing
 run_only_regions <- TRUE
-source('~/btsync/faosync/pocketbooks/regional15/input/code/define_regions.R')
+source('~/btsync/faosync/pocketbooks/pocketbook/input/code/define_regions.R')
 
 
 # RAF
@@ -190,7 +190,7 @@ meta.lst <- ReadMetadata(file = "./input_data/Metadata2015.csv",
 
 # Create a new folder for today
 date <- paste(Sys.Date(),format(Sys.time(), "%H"),sep="-")
-if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date))
+if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date),recursive = TRUE)
 
 #   ____                          _                    _   _____  _     ___   ____  _____ 
 #  |  _ \   ___ __      __ _ __  | |  ___    __ _   __| | |  ___|/ \   / _ \ / ___||_   _|
