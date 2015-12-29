@@ -730,8 +730,8 @@ prod_ind_Sugar.raw,production indice sugar,regional,,index,regional,regional,"FA
 prod_ind_Vegetables.and.Fruit.Primary,production indice vegetable and fruit,regional,,index,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
 dfa_share_commit_tot,"Aid  commitment flows to agriculture, forestry and fishing, share of total aid in % ",regional,,percent,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
 dfa_AOI_commit,"DFA Agriculture Orientation Index, highest and lowest values, average ",regional,,index,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
-dfa_commit_usd2013,"ishing, (1995-2013),  2013 USD in million",regional,million,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
-bilat_don_agr,"Bilateral Aid commitment flow to Agriculture, Forestry and Fishing",regional,million,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
-multilat_don_agr,"Multilateral Aid commitment flow to Agriculture, Forestry and Fishing",regional,million,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
-privat_don_agr,"Private Aid commitment flow to Agriculture, Forestry and Fishing",regional,million,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
-total_oda_usd2013,total ODA,regional,million,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
+dfa_commit_usd2013,"ishing, (1995-2013),  2013 USD in million",regional,,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
+bilat_don_agr,"Bilateral Aid commitment flow to Agriculture, Forestry and Fishing",regional,,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
+multilat_don_agr,"Multilateral Aid commitment flow to Agriculture, Forestry and Fishing",regional,,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
+privat_don_agr,"Private Aid commitment flow to Agriculture, Forestry and Fishing",regional,,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
+total_oda_usd2013,total ODA,regional,,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
