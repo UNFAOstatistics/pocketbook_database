@@ -208,31 +208,31 @@ if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_dat
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
 dwnldOA <- FALSE # Population
-dwnldRL <- TRUE # Resources, Resources - Land
-dwnldRF <- TRUE # Resources - Fertilizers
-dwnldRP <- TRUE # Resources - Pesticides
-dwnldCS <- TRUE # Investments - Capital stock
-dwnldRM <- TRUE # Investments - Machinery
-dwnldIG <- TRUE # Government expenditures
-dwnldA <- TRUE # ASTI
-dwnldQC <- TRUE # Production - Crops
-dwnldQA <- TRUE # Production - Live animals
-dwnldQD <- TRUE # Production - Crops processed
-dwnldQL <- TRUE # Production - Livestock primary
-dwnldQP <- TRUE # Production - Livestock processed
-dwnldQV <- TRUE # Production - Value of agricultural production
-dwnldQI <- TRUE # Production indices
-dwnldTP <- TRUE # Trade - Crops and livestock products
-dwnldTI <- TRUE # Trade - Trade indices
-dwnldFO <- TRUE # Forestry
-dwnldGHG <- TRUE # Greenhouse gases
-dwnldFB <- TRUE # Food balance sheets
-dwnldCOF <- TRUE # Coffeebook indicators
+dwnldRL <- FALSE # Resources, Resources - Land
+dwnldRF <- FALSE # Resources - Fertilizers
+dwnldRP <- FALSE # Resources - Pesticides
+dwnldCS <- FALSE # Investments - Capital stock
+dwnldRM <- FALSE # Investments - Machinery
+dwnldIG <- FALSE # Government expenditures
+dwnldA <- FALSE # ASTI
+dwnldQC <- FALSE # Production - Crops
+dwnldQA <- FALSE # Production - Live animals
+dwnldQD <- FALSE # Production - Crops processed
+dwnldQL <- FALSE # Production - Livestock primary
+dwnldQP <- FALSE # Production - Livestock processed
+dwnldQV <- FALSE # Production - Value of agricultural production
+dwnldQI <- FALSE # Production indices
+dwnldTP <- FALSE # Trade - Crops and livestock products
+dwnldTI <- FALSE # Trade - Trade indices
+dwnldFO <- FALSE # Forestry
+dwnldGHG <- FALSE # Greenhouse gases
+dwnldFB <- FALSE # Food balance sheets
+dwnldCOF <- FALSE # Coffeebook indicators
 
-downloadWB <- TRUE; CheckLogical(downloadWB)
+downloadWB <- FALSE; CheckLogical(downloadWB)
 
 
-replication_date <- "2015-11-25-11"
+replication_date <- "2015-12-23-01"
 
 if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date))
 
@@ -723,33 +723,33 @@ WB.df <- WB.df[, -grep("ISO2_WB_CODE|Country", colnames(WB.df))]
 WB.df <- WB.df[WB.df$FAOST_CODE < 400,]
 WB.df <- WB.df[!is.na(WB.df$FAOST_CODE),]
 
+# save(x = FAO.df, file = paste0("./output_data/",date,"/FAO.RData"))
+# load(file = "./output_data/2015-11-17/FAO.RData")
 
 
+# Source manual data functions ------------------------------------------------
 
-  # save(x = FAO.df, file = paste0("./output_data/",date,"/FAO.RData"))
-  # load(file = "./output_data/2015-11-17/FAO.RData")
+if (!file.exists("./input_data/processed/AquastatManualData.RData")) source(paste0(root.dir,"/code/manualdata_scripts/AquastatManualData.R"))             else load("./input_data/processed/AquastatManualData.RData")
+rm(fillCountryCode)
+library(FAOSTAT)
+if (!file.exists("./input_data/processed/BiofuelProduction.RData"))  source(paste0(root.dir,"/code/manualdata_scripts/BiodiselProduction.R"))             else load("./input_data/processed/BiofuelProduction.RData")
 
+if (!file.exists("./input_data/processed/df_area_harvested.RData"))  source(paste0(root.dir,"/code/manualdata_scripts/area_harvested_2015.R"))            else load("./input_data/processed/df_area_harvested.RData")
+if (!file.exists("./input_data/processed/fertilizers.RData"))        source(paste0(root.dir,"/code/manualdata_scripts/fertilizers.R"))                    else load("./input_data/processed/fertilizers.RData")
+if (!file.exists("./input_data/processed/fish2015.RData"))           source(paste0(root.dir,"/code/manualdata_scripts/fisheries_2015.R"))                 else load("./input_data/processed/fish2015.RData")
+if (!file.exists("./input_data/processed/fra2015.RData"))            source(paste0(root.dir,"/code/manualdata_scripts/fra2015.R"))                        else load("./input_data/processed/fra2015.RData") #
 
-# Manual data -------------------------------------------------------------
+if (!file.exists("./input_data/processed/oda_brian_2015.RData"))    source(paste0(root.dir,"/code/manualdata_scripts/oda_data_from_brian_2015.R"))        else load("./input_data/processed/oda_brian_2015.RData")
+if (!file.exists("./input_data/processed/regional1.RData"))         source(paste0(root.dir,"/code/manualdata_scripts/overweight2015.R"))                  else load("./input_data/processed/regional1.RData") #
+if (!file.exists("./input_data/processed/prod_ind_2015.RData"))     source(paste0(root.dir,"/code/manualdata_scripts/production_indices_2015.R"))         else load("./input_data/processed/prod_ind_2015.RData") #
+if (!file.exists("./input_data/processed/prod_ind_weights.RData"))  source(paste0(root.dir,"/code/manualdata_scripts/production_indices_2015_weights.R")) else load("./input_data/processed/prod_ind_weights.RData") #
 
-load("./input_data/processed/wbManualData.RData") #
-load("./input_data/processed/AquastatManualData.RData") #
-load("./input_data/processed/GlobalForestResourceAssessment.RData") #
-load("./input_data/processed/BiofuelProduction2015-11-20.RData") #
-# 
-load("./input_data/processed/Fishery.RData") #
-load("./input_data/processed/UNPopManualData.RData") #
+if (!file.exists("./input_data/processed/UNPopManualData.RData"))  source(paste0(root.dir,"/code/manualdata_scripts/UNPopulationStats.R")) else load("./input_data/processed/UNPopManualData.RData") #
+if (!file.exists("./input_data/processed/wbManualData.RData"))     source(paste0(root.dir,"/code/manualdata_scripts/WBManualData.R"))      else load("./input_data/processed/wbManualData.RData") #
 
-# New indicators for pocketbook project!
-# forestry assesments
-load("./input_data/processed/fra2015.RData") #
-load("./input_data/processed/regional1.RData") #
-load("./input_data/processed/prod_ind_2015.RData") #
-load("./input_data/processed/df_area_harvested.RData") #
-load("./input_data/processed/fish2015.RData") #
-load("./input_data/processed/fertilizers.RData") #
-load("./input_data/processed/prod_ind_weights.RData") #
-load("./input_data/processed/oda_brian_2015.RData")
+# if (!file.exists("./input_data/processed/RWBclimate.R")) source(paste0(root.dir,"/code/manualdata_scripts/RWBclimate.R"))
+# if (!file.exists("./input_data/processed/GlobalForestResourceAssessment.RData")) source(paste0(root.dir,"/code/manualdata_scripts/GlobalForestResourceAssessment.R")) else load("./input_data/processed/GlobalForestResourceAssessment.RData") #
+# if (!file.exists("./input_data/processed/Fishery.RData"))            source(paste0(root.dir,"/code/manualdata_scripts/FisheryData.R"))                    else load("./input_data/processed/Fishery.RData") #
 
 
 ###########################################################################
@@ -790,9 +790,9 @@ initial.df = Reduce(function(x, y) merge(x, y, all = TRUE),
                              fertilizers.df,
                              prod_ind_weights.df,
                              oda_brian_2015.df,
-                             gfra.df, # not updated
+                             # gfra.df, # not updated
                              BiofuelProduction.df, # not update
-                             Fishery.df, # not updated  
+                             # Fishery.df, # not updated
                              UNPopManualData.df), # added by Markus 20150401
                     init = WB.df)
 # rm(list = c("dwnldA", "dwnldCS", "dwnldFB", "dwnldFO", "dwnldGHG", "dwnldIG",
@@ -1071,23 +1071,23 @@ preConstr.df[, "GN.UI.EA.TJPIN.NO"] <-
 
 # FI.PRD.TOT.TN.NO --------------------------------------------------------
 
-preConstr.df$FI.PRD.TOT.TN.NO = preConstr.df$FI.PRD.AQ.TN.NO + 
-  preConstr.df$FI.PRD.CAPT.TN.NO
-
-# FI.NETVAL.FISH.USD.NO ---------------------------------------------------
-
-preConstr.df$FI.NETVAL.FISH.USD.NO = preConstr.df$FI.EXVAL.FISH.USD.NO - 
-  preConstr.df$FI.IMVAL.FISH.USD.NO
-
-# TP.EXVAL.FOODWF.USD.NO --------------------------------------------------
-
-preConstr.df$TP.EXVAL.FOODWF.USD.NO = preConstr.df$TP.EXVAL.FOOD.USD.NO + 
-  preConstr.df$FI.EXVAL.FISH.USD.NO
-
-# TP.IMVAL.FOODWF.USD.NO --------------------------------------------------
-
-preConstr.df$TP.IMVAL.FOODWF.USD.NO = preConstr.df$TP.IMVAL.FOOD.USD.NO + 
-  preConstr.df$FI.IMVAL.FISH.USD.NO
+# preConstr.df$FI.PRD.TOT.TN.NO = preConstr.df$FI.PRD.AQ.TN.NO + 
+#   preConstr.df$FI.PRD.CAPT.TN.NO
+# 
+# # FI.NETVAL.FISH.USD.NO ---------------------------------------------------
+# 
+# preConstr.df$FI.NETVAL.FISH.USD.NO = preConstr.df$FI.EXVAL.FISH.USD.NO - 
+#   preConstr.df$FI.IMVAL.FISH.USD.NO
+# 
+# # TP.EXVAL.FOODWF.USD.NO --------------------------------------------------
+# 
+# preConstr.df$TP.EXVAL.FOODWF.USD.NO = preConstr.df$TP.EXVAL.FOOD.USD.NO + 
+#   preConstr.df$FI.EXVAL.FISH.USD.NO
+# 
+# # TP.IMVAL.FOODWF.USD.NO --------------------------------------------------
+# 
+# preConstr.df$TP.IMVAL.FOODWF.USD.NO = preConstr.df$TP.IMVAL.FOOD.USD.NO + 
+#   preConstr.df$FI.IMVAL.FISH.USD.NO
 
 # Clean the environment ---------------------------------------------------
 

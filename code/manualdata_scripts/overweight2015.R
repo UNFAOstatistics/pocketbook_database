@@ -42,7 +42,7 @@ names(obesity) <- c("FAOST_CODE","Year","obesity_BOTH","obesity_FMLE","obesity_M
 # syb.df <- merge(syb.df,dat1,by=c("FAOST_CODE","Year"), all.x=TRUE)
 
 # # rur_pop_share_male_female
-dat <- read_csv("~/btsync/faosync/syb_database/input_data/raw/rur_rub_pocketbook_data.csv")
+dat <- read_csv(paste0(root.dir,"/input_data/raw/rur_rub_pocketbook_data.csv"))
 dat <- dat[c(1,2,3,4,22)]
 names(dat) <- c("SHORT_NAME","Year","Sex","Area","Total")
 dat <- dat[!duplicated(dat[c("SHORT_NAME","Year","Sex","Area")]),]

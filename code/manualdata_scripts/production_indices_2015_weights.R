@@ -13,7 +13,7 @@ download.file("http://faostat3.fao.org/faostat-bulkdownloads/Value_of_Production
 unzip(zipfile = "./input_data/raw/Value_of_Production_E_All_Data_(Norm).zip",
       exdir = "./input_data/raw/")
 d <- read_csv("./input_data/raw/Value_of_Production_E_All_Data_(Norm).csv")
-names(d) <- str_replace_all(names(dat), " ", "")
+names(d) <- gsub(" ", "", names(d))
 
 # Meat
 ## Extract subindexes from Amandas production index data

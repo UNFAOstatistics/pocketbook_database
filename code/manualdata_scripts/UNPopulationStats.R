@@ -58,8 +58,8 @@ proj.young <- dl[dl$age %in% c("0-4","5-9","10-14"),] %>% group_by(countrycode,y
 proj.old <- dl[!(dl$age %in% c("0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44","45-49","50-54","55-59","60-64")),] %>% group_by(countrycode,year) %>% summarise(n = sum(n, na.rm = TRUE))
 rm(dl)
 
-young.df <- as.data.frame(rbind(est.young,proj.young));rm(est.young);rm(proj.young)
-old.df   <- as.data.frame(rbind(est.old,proj.old));rm(est.old);rm(proj.old)
+young.df <- as.data.frame(rbind(est.young,proj.young));rm(est.young)#;rm(proj.young)
+old.df   <- as.data.frame(rbind(est.old,proj.old));rm(est.old)#;rm(proj.old)
 
 young.df <- translateCountryCode(young.df, from = "UN_CODE", to = "FAOST_CODE", oldCode = "countrycode")
 old.df <- translateCountryCode(old.df, from = "UN_CODE", to = "FAOST_CODE", oldCode = "countrycode")
@@ -106,8 +106,8 @@ clean_dl <- function(dl) {
 dl.m <- clean_dl(dl.m)
 dl.f <- clean_dl(dl.f)
 
-dl.m.est <- dl.m[c("countrycode","year","n")];rm(df.m)
-dl.f.est <- dl.f[c("countrycode","year","n")];rm(df.f)
+dl.m.est <- dl.m[c("countrycode","year","n")]#;rm(df.m)
+dl.f.est <- dl.f[c("countrycode","year","n")]#;rm(df.f)
 
 ## PROJECTIONS
 
@@ -115,17 +115,17 @@ dl.f.est <- dl.f[c("countrycode","year","n")];rm(df.f)
 un.pop.male.proj <- read.csv("./input_data/raw/UNPopulationStats/WPP2012_POP_F01_2_TOTAL_POPULATION_MALE_2.csv", skip=16)
 un.pop.female.proj <- read.csv("./input_data/raw/UNPopulationStats/WPP2012_POP_F01_3_TOTAL_POPULATION_FEMALE_2.csv", skip=16)
 
-dl.m <- gather(un.pop.male.proj, "year", "n", 6:96);rm(un.pop.male.proj)
-dl.f <- gather(un.pop.female.proj, "year", "n", 6:96);rm(un.pop.female.proj)
+dl.m <- gather(un.pop.male.proj, "year", "n", 6:96)#;rm(un.pop.male.proj)
+dl.f <- gather(un.pop.female.proj, "year", "n", 6:96)#;rm(un.pop.female.proj)
 # clean
 dl.m <- clean_dl(dl.m)
 dl.f <- clean_dl(dl.f)
 
-dl.m.proj <- dl.m[c("countrycode","year","n")];rm(dl.m)
-dl.f.proj <- dl.f[c("countrycode","year","n")];rm(dl.f)
+dl.m.proj <- dl.m[c("countrycode","year","n")]#;rm(dl.m)
+dl.f.proj <- dl.f[c("countrycode","year","n")]#;rm(dl.f)
 
-male.pop.df <- as.data.frame(rbind(dl.m.est,dl.m.proj));rm(dl.m.est);rm(dl.m.proj)
-female.pop.df <- as.data.frame(rbind(dl.f.est,dl.f.proj));rm(dl.f.est);rm(dl.f.proj)
+male.pop.df <- as.data.frame(rbind(dl.m.est,dl.m.proj))#;rm(dl.m.est);rm(dl.m.proj)
+female.pop.df <- as.data.frame(rbind(dl.f.est,dl.f.proj))#;rm(dl.f.est);rm(dl.f.proj)
 
 male.pop.df <- translateCountryCode(male.pop.df, from = "UN_CODE", to = "FAOST_CODE", oldCode = "countrycode")
 female.pop.df <- translateCountryCode(female.pop.df, from = "UN_CODE", to = "FAOST_CODE", oldCode = "countrycode")
