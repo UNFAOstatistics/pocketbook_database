@@ -11,16 +11,39 @@ library(tidyr)
 # dat1 <- dat1[!duplicated(dat1[c("FAOST_CODE","Year")]),]
 
 
-# if (!file.exists("~/input_data/processed/eda.Rdata")){
-#   download.file("http://faostat3.fao.org/faostat-bulkdownloads/Development_Assistance_to_Agriculture_E_All_Data_(Norm).zip",
-#                 destfile = "~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).zip")
-#   unzip("~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).zip",
-#         exdir = "~/fao_temp/data/")
-#   d <- read_csv("~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).csv")
-#   save(d, file="~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).Rdata")
-# }
+if (!file.exists("~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).Rdata")){
+  download.file("http://faostat3.fao.org/faostat-bulkdownloads/Development_Assistance_to_Agriculture_E_All_Data_(Norm).zip",
+                destfile = "~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).zip")
+  unzip("~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).zip",
+        exdir = "~/fao_temp/data/")
+  d <- read_csv("~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).csv")
+  save(d, file="~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).Rdata")
+} else load("~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).Rdata")
 
 
+# label = Chart20 : Aid commitment flow to Agriculture, Forestry and Fishing, (1995-2013),  2013 USD in million
+# dat <- read_excel("./input_data/raw/oda_brian_2015/oda_data_from_brian_2005.xlsx",sheet = 3, skip = 3)
+# dat3 <- dat %>% select(year,donor,recipientcode,dfa_commit_usd2013) %>% 
+#   filter(recipientcode <= 351) %>% 
+#   rename(Year = year,FAOST_CODE = recipientcode)
+# dat3 <- spread(data=dat3, key = donor, value = dfa_commit_usd2013)
+# dat3 <- dat3 %>% rename(bilat_don_agr = `Bilateral Donors, Total`,
+#                         multilat_don_agr = `Multilateral Donors, Total`,
+#                         privat_don_agr = `Private Donors, Total`)
+
+names(d) <- gsub(" ", "", names(d))
+dat3 <- d %>% filter(ItemCode == 22040,
+                  ElementCode == 6137,
+                  DonorCode %in% c(690,691,692),
+                  Year %in% 1995:2013,
+                  RecipientCountryCode <= 351,
+                  Purpose == "Agriculture, forestry, fishing") %>% 
+  select(RecipientCountryCode,Year,Donor,Value) %>% 
+  spread(data=., key = Donor, value = Value) %>% 
+  rename(bilat_don_agr = `Bilateral Donors`,
+         multilat_don_agr = `Multilateral Donors`,
+         privat_don_agr = `Private Donors`,
+         FAOST_CODE = RecipientCountryCode)
 
 
 
@@ -30,15 +53,9 @@ dat2 <- dat %>% select(year,recipientcode,dfa_AOI_commit) %>%
   rename(Year = year,FAOST_CODE = recipientcode)
 dat2 <- dat2[!duplicated(dat2[c("FAOST_CODE","Year")]),]
 
-# label = Chart20 : Aid commitment flow to Agriculture, Forestry and Fishing, (1995-2013),  2013 USD in million
-dat <- read_excel("./input_data/raw/oda_brian_2015/oda_data_from_brian_2005.xlsx",sheet = 3, skip = 3)
-dat3 <- dat %>% select(year,donor,recipientcode,dfa_commit_usd2013) %>% 
-  filter(recipientcode <= 351) %>% 
-  rename(Year = year,FAOST_CODE = recipientcode)
-dat3 <- spread(data=dat3, key = donor, value = dfa_commit_usd2013)
-dat3 <- dat3 %>% rename(bilat_don_agr = `Bilateral Donors, Total`,
-                        multilat_don_agr = `Multilateral Donors, Total`,
-                        privat_don_agr = `Private Donors, Total`)
+
+
+# d <- left_join(dat3,FAOcountryProfile)
 
 # 
 dat <- read_csv("./input_data/raw/oda_brian_2015/Regional_Yearbook_Total_ODA_by_country_1995_2013.csv")
