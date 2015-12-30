@@ -19,7 +19,7 @@ if (!file.exists("~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Da
   d <- read_csv("~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).csv")
   save(d, file="~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).Rdata")
 } else load("~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Data_(Norm).Rdata")
-
+names(d) <- gsub(" ", "", names(d)) # remove spaces from varnames
 
 # label = Chart20 : Aid commitment flow to Agriculture, Forestry and Fishing, (1995-2013),  2013 USD in million
 # dat <- read_excel("./input_data/raw/oda_brian_2015/oda_data_from_brian_2005.xlsx",sheet = 3, skip = 3)
@@ -31,7 +31,7 @@ if (!file.exists("~/fao_temp/data/Development_Assistance_to_Agriculture_E_All_Da
 #                         multilat_don_agr = `Multilateral Donors, Total`,
 #                         privat_don_agr = `Private Donors, Total`)
 
-names(d) <- gsub(" ", "", names(d))
+
 dat3 <- d %>% filter(ItemCode == 22040,
                   ElementCode == 6137,
                   DonorCode %in% c(690,691,692),
@@ -48,23 +48,54 @@ dat3 <- d %>% filter(ItemCode == 22040,
 
 
 # label = Chart 19: DFA Agriculture Orientation Index, highest and lowest values, average (2009-2013)
-dat <- read_excel("./input_data/raw/oda_brian_2015/oda_data_from_brian_2005.xlsx",sheet = 2, skip = 3)
-dat2 <- dat %>% select(year,recipientcode,dfa_AOI_commit) %>% 
-  rename(Year = year,FAOST_CODE = recipientcode)
-dat2 <- dat2[!duplicated(dat2[c("FAOST_CODE","Year")]),]
+# dat <- read_excel("./input_data/raw/oda_brian_2015/oda_data_from_brian_2005.xlsx",sheet = 2, skip = 3)
+# dat2 <- dat %>% select(year,recipientcode,dfa_AOI_commit) %>% 
+#   rename(Year = year,FAOST_CODE = recipientcode)
+# dat2 <- dat2[!duplicated(dat2[c("FAOST_CODE","Year")]),]
 
+
+dat2 <- d %>% filter(ItemCode == 22040,
+                     ElementCode == 6112,
+                     DonorCode %in% c(702),
+                     Year %in% 1995:2013,
+                     RecipientCountryCode <= 351,
+                     Purpose == "Agriculture, forestry, fishing") %>% 
+  select(RecipientCountryCode,Year,Value) %>% 
+  rename(dfa_AOI_commit = Value,
+         FAOST_CODE = RecipientCountryCode)
 
 
 # d <- left_join(dat3,FAOcountryProfile)
 
 # 
-dat <- read_csv("./input_data/raw/oda_brian_2015/Regional_Yearbook_Total_ODA_by_country_1995_2013.csv")
-dat4 <- dat %>% group_by(year,recipientcode) %>% mutate(total_oda_usd2013 = sum(dfa_commit_usd2013, na.rm=T)) %>% 
-            select(year,recipientcode,recipient,dfa_subsector,dfa_commit_usd2013,total_oda_usd2013) %>% 
-            filter(dfa_subsector %in% "Agriculture, Forestry & Fishing, Total") %>% 
-            mutate(dfa_share_commit_tot = dfa_commit_usd2013 / total_oda_usd2013 * 100) %>% 
-  select(year,recipientcode,dfa_commit_usd2013,dfa_share_commit_tot,total_oda_usd2013) %>% 
-  rename(FAOST_CODE = recipientcode,Year = year)
+# dat <- read_csv("./input_data/raw/oda_brian_2015/Regional_Yearbook_Total_ODA_by_country_1995_2013.csv")
+# dat4 <- dat %>% group_by(year,recipientcode) %>% mutate(total_oda_usd2013 = sum(dfa_commit_usd2013, na.rm=T)) %>% 
+#             select(year,recipientcode,recipient,dfa_subsector,dfa_commit_usd2013,total_oda_usd2013) %>% 
+#             filter(dfa_subsector %in% "Agriculture, Forestry & Fishing, Total") %>% 
+#             mutate(dfa_share_commit_tot = dfa_commit_usd2013 / total_oda_usd2013 * 100) %>% 
+#   select(year,recipientcode,dfa_commit_usd2013,dfa_share_commit_tot,total_oda_usd2013) %>% 
+#   rename(FAOST_CODE = recipientcode,Year = year)
+
+# Eli siis tsekkaa tuosta yläpuolelta - summaa kaikki ja jaa sillä agri!
+
+
+dat41 <- d %>% filter(ItemCode == 22040,
+                     ElementCode == 6137,
+                     DonorCode %in% c(702),
+                     Year %in% 1995:2013,
+                     RecipientCountryCode <= 351) %>% 
+  group_by(Year,RecipientCountryCode) %>% mutate(total_oda_usd2013 = sum(Value, na.rm=T)) %>% 
+  ungroup() %>% 
+  select(RecipientCountryCode,Year,Value,total_oda_usd2013,Purpose) %>% 
+  filter(Purpose %in% "Agriculture, forestry, fishing") %>% 
+  mutate(dfa_share_commit_tot = Value / total_oda_usd2013 * 100) %>% 
+  rename(dfa_commit_usd2013 = Value) %>% 
+  select(-Purpose) %>% 
+  rename(FAOST_CODE = RecipientCountryCode)
+
+
+
+
 
 
 # merge
