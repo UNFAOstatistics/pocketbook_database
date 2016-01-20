@@ -3,6 +3,7 @@
 library(tidyr)
 library(stringr)
 library(dplyr)
+library(readr)
 
 download.file("http://faostat3.fao.org/faostat-bulkdownloads/Production_Crops_E_All_Data_(Norm).zip",
               destfile = "input_data/raw/Production_Crops_E_All_Data_(Norm).zip")

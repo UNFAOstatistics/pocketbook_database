@@ -208,31 +208,31 @@ if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_dat
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
 dwnldOA <- FALSE # Population
-dwnldRL <- FALSE # Resources, Resources - Land
-dwnldRF <- FALSE # Resources - Fertilizers
-dwnldRP <- FALSE # Resources - Pesticides
-dwnldCS <- FALSE # Investments - Capital stock
-dwnldRM <- FALSE # Investments - Machinery
-dwnldIG <- FALSE # Government expenditures
-dwnldA <- FALSE # ASTI
-dwnldQC <- FALSE # Production - Crops
-dwnldQA <- FALSE # Production - Live animals
-dwnldQD <- FALSE # Production - Crops processed
-dwnldQL <- FALSE # Production - Livestock primary
-dwnldQP <- FALSE # Production - Livestock processed
-dwnldQV <- FALSE # Production - Value of agricultural production
-dwnldQI <- FALSE # Production indices
-dwnldTP <- FALSE # Trade - Crops and livestock products
-dwnldTI <- FALSE # Trade - Trade indices
+dwnldRL <- TRUE # Resources, Resources - Land
+dwnldRF <- TRUE # Resources - Fertilizers
+dwnldRP <- TRUE # Resources - Pesticides
+dwnldCS <- TRUE # Investments - Capital stock
+dwnldRM <- TRUE # Investments - Machinery
+dwnldIG <- TRUE # Government expenditures
+dwnldA <- TRUE # ASTI
+dwnldQC <- TRUE # Production - Crops
+dwnldQA <- TRUE # Production - Live animals
+dwnldQD <- TRUE # Production - Crops processed
+dwnldQL <- TRUE # Production - Livestock primary
+dwnldQP <- TRUE # Production - Livestock processed
+dwnldQV <- TRUE # Production - Value of agricultural production
+dwnldQI <- TRUE # Production indices
+dwnldTP <- TRUE # Trade - Crops and livestock products
+dwnldTI <- TRUE # Trade - Trade indices
 dwnldFO <- FALSE # Forestry
 dwnldGHG <- FALSE # Greenhouse gases
-dwnldFB <- FALSE # Food balance sheets
-dwnldCOF <- FALSE # Coffeebook indicators
+dwnldFB <- TRUE # Food balance sheets
+dwnldCOF <- TRUE # Coffeebook indicators
 
 downloadWB <- FALSE; CheckLogical(downloadWB)
 
 
-replication_date <- "2015-12-23-01"
+replication_date <- "2015-12-28-01"
 
 if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date))
 
