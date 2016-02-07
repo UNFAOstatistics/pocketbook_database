@@ -1,6 +1,7 @@
 library(tidyr)
 library(stringr)
 library(dplyr)
+library(readr)
 
 download.file("http://faostat3.fao.org/faostat-bulkdownloads/Inputs_Fertilizers_E_All_Data_(Norm).zip",
               destfile = "input_data/raw/Inputs_Fertilizers_E_All_Data_(Norm).zip")

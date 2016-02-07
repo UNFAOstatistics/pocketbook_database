@@ -208,31 +208,31 @@ if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_dat
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
 dwnldOA <- FALSE # Population
-dwnldRL <- TRUE # Resources, Resources - Land
-dwnldRF <- TRUE # Resources - Fertilizers
-dwnldRP <- TRUE # Resources - Pesticides
-dwnldCS <- TRUE # Investments - Capital stock
-dwnldRM <- TRUE # Investments - Machinery
-dwnldIG <- TRUE # Government expenditures
-dwnldA <- TRUE # ASTI
-dwnldQC <- TRUE # Production - Crops
-dwnldQA <- TRUE # Production - Live animals
-dwnldQD <- TRUE # Production - Crops processed
-dwnldQL <- TRUE # Production - Livestock primary
-dwnldQP <- TRUE # Production - Livestock processed
-dwnldQV <- TRUE # Production - Value of agricultural production
-dwnldQI <- TRUE # Production indices
-dwnldTP <- TRUE # Trade - Crops and livestock products
-dwnldTI <- TRUE # Trade - Trade indices
+dwnldRL <- FALSE # Resources, Resources - Land
+dwnldRF <- FALSE # Resources - Fertilizers
+dwnldRP <- FALSE # Resources - Pesticides
+dwnldCS <- FALSE # Investments - Capital stock
+dwnldRM <- FALSE # Investments - Machinery
+dwnldIG <- FALSE # Government expenditures
+dwnldA <- FALSE # ASTI
+dwnldQC <- FALSE # Production - Crops
+dwnldQA <- FALSE # Production - Live animals
+dwnldQD <- FALSE # Production - Crops processed
+dwnldQL <- FALSE # Production - Livestock primary
+dwnldQP <- FALSE # Production - Livestock processed
+dwnldQV <- FALSE # Production - Value of agricultural production
+dwnldQI <- FALSE # Production indices
+dwnldTP <- FALSE # Trade - Crops and livestock products
+dwnldTI <- FALSE # Trade - Trade indices
 dwnldFO <- FALSE # Forestry
 dwnldGHG <- FALSE # Greenhouse gases
-dwnldFB <- TRUE # Food balance sheets
-dwnldCOF <- TRUE # Coffeebook indicators
+dwnldFB <- FALSE # Food balance sheets
+dwnldCOF <- FALSE # Coffeebook indicators
 
 downloadWB <- FALSE; CheckLogical(downloadWB)
 
 
-replication_date <- "2015-12-28-01"
+replication_date <- "2016-01-25-20"
 
 if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date))
 
@@ -592,8 +592,8 @@ if (dwnldFO) {
   save(x = FAOfo.df, file = paste0("./output_data/",date,"/FAOfo", date, ".RData"))
 } else {
   ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOfo2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOfo",replication_date,".RData"))
+  load(file = "./output_data/2015-12-28-01/FAOfo2015-12-28-01.RData")
+  # load(file = paste0("./output_data/",replication_date,"/FAOfo",replication_date,".RData"))
 }
 
 # FAOSTAT, Greenhouse gases -----------------------------------------------
@@ -615,8 +615,8 @@ if (dwnldGHG) {
   save(x = FAOghg.df, file = paste0("./output_data/",date,"/FAOghg", date, ".RData"))
 } else {
   ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOghg2015-10-08.RData") # use this to get the data for forest net-emissions!
-  load(file = paste0("./output_data/",replication_date,"/FAOghg",replication_date,".RData"))
+  load(file = "./output_data/2015-12-28-01/FAOghg2015-12-28-01.RData") # use this to get the data for forest net-emissions!
+  # load(file = paste0("./output_data/",replication_date,"/FAOghg",replication_date,".RData"))
 }
 
 # FAOSTAT, Food balance sheets --------------------------------------------
@@ -678,8 +678,8 @@ if (downloadWB) {
   save(x = WB.lst1, file = paste0("./output_data/",date,"/WBdata1", date, ".RData"))
 } else {
   ## ...open list
-  # load(file = "./output_data/2015-10-08/WBdata12015-11-05.RData")
-  load(file = paste0("./output_data/",replication_date,"/WBdata1",replication_date,".RData"))
+  load(file = "./output_data/2015-12-28-01/WBdata12015-12-28-01.RData")
+  # load(file = paste0("./output_data/",replication_date,"/WBdata1",replication_date,".RData"))
 }
 if (downloadWB) {
   ## Download data from WDI
@@ -689,8 +689,8 @@ if (downloadWB) {
   save(x = WB.lst2, file = paste0("./output_data/",date,"/WBdata2", date, ".RData"))
 } else {
   ## ...open list
-  # load(file = "./output_data/2015-10-08/WBdata22015-11-05.RData")
-  load(file = paste0("./output_data/",replication_date,"/WBdata2",replication_date,".RData"))
+  load(file = "./output_data/2015-12-28-01/WBdata22015-12-28-01.RData")
+  # load(file = paste0("./output_data/",replication_date,"/WBdata2",replication_date,".RData"))
 }
 if (downloadWB) {
   ## Download data from WDI
@@ -700,8 +700,8 @@ if (downloadWB) {
   save(x = WB.lst3, file = paste0("./output_data/",date,"/WBdata3", date, ".RData"))
 } else {
   ## ...open list
-  # load(file = "./output_data/2015-10-08/WBdata32015-11-05.RData")
-  load(file = paste0("./output_data/",replication_date,"/WBdata3",replication_date,".RData"))
+  load(file = "./output_data/2015-12-28-01/WBdata32015-12-28-01.RData")
+  # load(file = paste0("./output_data/",replication_date,"/WBdata3",replication_date,".RData"))
 }
 WB.df1 <- WB.lst1$entity
 WB.df2 <- WB.lst2$entity
