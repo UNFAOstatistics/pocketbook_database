@@ -698,9 +698,9 @@ TP_5922_1882,Export value of agriculture production,coffee,thousand,US$,coffee,c
 energy.for.power.irrigation,energy.for.power.irrigation,regional,million,kWh,regional,regional,"FAO, Statistics Division (FAOSTAT)",raw,GN,72182,6808,,,coffee
 CP_7013_230123,"Consumer Prices, Food Indices (2000 = 100)",regional,,index,regional,regional,"FAO, Statistics Division (FAOSTAT)",raw,CP,7013,23013,,,coffee
 area_harvested,total area harvested,regional,,ha,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
-nitrogen_tonnes,nitrogen_tonnes,regional,,tonnes,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
-phosphate_tonnes,phosphate_tonnes,regional,,tonnes,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
-potash_tonnes,potash_tonnes,regional,,tonnes,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
+nitrogen_tonnes,nitrogen tonnes per hectare,regional,,tonne/ha,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
+phosphate_tonnes,Phosphate tonnes per hectare,regional,,tonne/ha,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
+potash_tonnes,Potash tonnes per hectare,regional,,tonne/ha,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
 EE_6740_72041,Bioenergy production,coffee,,percent,coffee,coffee,"FAO, Statistics Division (FAOSTAT)",raw,EE,72041,6740,,,coffee
 EE_6741_72040,Energy use in agriculture and forestry,coffee,,percent,coffee,coffee,"FAO, Statistics Division (FAOSTAT)",raw,EE,72040,6741,,,coffee
 GN_6808_72182,Energy consumption for power irrigation,coffee,million,kWh,coffee,coffee,"FAO, Statistics Division (FAOSTAT)",raw,GN,72182,6808,,,coffee

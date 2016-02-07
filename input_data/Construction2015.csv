@@ -91,10 +91,10 @@ SL.AGR.0714.FE.ZS,,,,,,,discard,0,0,,WB doesn't aggregate this variable
 SL.AGR.0714.MA.ZS,,,,,,,discard,0,0,,WB doesn't aggregate this variable
 SL.EMP.TOTL.FE,,,,,,,sum,0,0,,used just to compute the female empl weight
 SL.EMP.TOTL.MA,,,,,,,sum,0,0,,used just to compute the male empl weight
-SL.AGR.EMPL.FE.ZS,,,SL.EMP.TOTL.FE,,,,weighted.mean,0,0,,
-SL.AGR.EMPL.MA.ZS,,,SL.EMP.TOTL.MA,,,,weighted.mean,0,0,,
+SL.AGR.EMPL.FE.ZS,,,SL.EMP.TOTL.FE,share,,,weighted.mean,0,0,,
+SL.AGR.EMPL.MA.ZS,,,SL.EMP.TOTL.MA,share,,,weighted.mean,0,0,,
 SL.EMP.TOTL,,,,,,,sum,0,0,,use as weight
-SL.AGR.EMPL.ZS,,,SL.EMP.TOTL,,,,weighted.mean,0,0,,
+SL.AGR.EMPL.ZS,,,SL.EMP.TOTL,share,,,weighted.mean,0,0,,
 SL.IND.EMPL.ZS,,,SL.EMP.TOTL,,,,weighted.mean,0,0,,
 SL.SRV.EMPL.ZS,,,SL.EMP.TOTL,,,,weighted.mean,0,0,,
 SP.POP.1564.FE.IN,,,,,,,sum,0,0,,used just to compute the lab part rate weight
@@ -698,9 +698,9 @@ TP_5922_1882,,,,,,,sum,0,0,,
 energy.for.power.irrigation,,,,,,,sum,0,0,,
 CP_7013_230123,,,,,,,mean,0,0,,
 area_harvested,,,,,,,sum,0,0,,
-nitrogen_tonnes,,,,,,,sum,0,0,,
-phosphate_tonnes,,,,,,,sum,0,0,,
-potash_tonnes,,,,,,,sum,0,0,,
+nitrogen_tonnes,,,RL.AREA.AGR.HA.NO,,,,weighted.mean,0,0,,
+phosphate_tonnes,,,RL.AREA.AGR.HA.NO,,,,weighted.mean,0,0,,
+potash_tonnes,,,RL.AREA.AGR.HA.NO,,,,weighted.mean,0,0,,
 EE_6740_72041,,,NY.GDP.MKTP.CD,,,,weighted.mean,0,0,,
 EE_6741_72040,,,NY.GDP.MKTP.CD,,,,weighted.mean,0,0,,
 GN_6808_72182,,,,,,,sum,0,0,,
