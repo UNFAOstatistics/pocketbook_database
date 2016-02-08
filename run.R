@@ -208,26 +208,26 @@ if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_dat
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
 dwnldOA <- FALSE # Population
-dwnldRL <- FALSE # Resources, Resources - Land
-dwnldRF <- FALSE # Resources - Fertilizers
-dwnldRP <- FALSE # Resources - Pesticides
-dwnldCS <- FALSE # Investments - Capital stock
-dwnldRM <- FALSE # Investments - Machinery
-dwnldIG <- FALSE # Government expenditures
-dwnldA <- FALSE # ASTI
-dwnldQC <- FALSE # Production - Crops
-dwnldQA <- FALSE # Production - Live animals
-dwnldQD <- FALSE # Production - Crops processed
-dwnldQL <- FALSE # Production - Livestock primary
-dwnldQP <- FALSE # Production - Livestock processed
-dwnldQV <- FALSE # Production - Value of agricultural production
-dwnldQI <- FALSE # Production indices
-dwnldTP <- FALSE # Trade - Crops and livestock products
-dwnldTI <- FALSE # Trade - Trade indices
+dwnldRL <- TRUE # Resources, Resources - Land
+dwnldRF <- TRUE # Resources - Fertilizers
+dwnldRP <- TRUE # Resources - Pesticides
+dwnldCS <- TRUE # Investments - Capital stock
+dwnldRM <- TRUE # Investments - Machinery
+dwnldIG <- TRUE # Government expenditures
+dwnldA <- TRUE # ASTI
+dwnldQC <- TRUE # Production - Crops
+dwnldQA <- TRUE # Production - Live animals
+dwnldQD <- TRUE # Production - Crops processed
+dwnldQL <- TRUE # Production - Livestock primary
+dwnldQP <- TRUE # Production - Livestock processed
+dwnldQV <- TRUE # Production - Value of agricultural production
+dwnldQI <- TRUE # Production indices
+dwnldTP <- TRUE # Trade - Crops and livestock products
+dwnldTI <- TRUE # Trade - Trade indices
 dwnldFO <- FALSE # Forestry
 dwnldGHG <- FALSE # Greenhouse gases
 dwnldFB <- FALSE # Food balance sheets
-dwnldCOF <- FALSE # Coffeebook indicators
+dwnldCOF <- TRUE # Coffeebook indicators
 
 downloadWB <- FALSE; CheckLogical(downloadWB)
 
@@ -1171,7 +1171,7 @@ rm(OldCountries)
 country.df <- merge(country.df, FAOcountryProfile[, c("FAOST_CODE", "FAO_TABLE_NAME")], 
                     by = "FAOST_CODE", all.x = FALSE)
 ## M49 aggregates
-do49aggr <- TRUE
+do49aggr <- FALSE
 if (do49aggr) {
   source("./code/aggregate_functions/M49aggregates.R")
 } else load()
@@ -1185,7 +1185,9 @@ source("./code//aggregate_functions/FAOAggregates.R")
 # Sourcehttps(source("./Rcode/Final/ComplementaryScripts/EconomicAggregates.R")
 ## rbind the datasets
 
-postAgg.df <- rbind(country.df, M49.df,FAOregions.df)
+postAgg.df <- rbind(country.df, 
+                    M49.df,
+                    FAOregions.df)
 
 # postAgg.df <- rbind(country.df, M49.df)
 # rm(list = c("country.df", "M49.df")) # because M49.df takes a loooooong time to run
@@ -1196,6 +1198,12 @@ postAgg.df <- CheckValues(dataset = postAgg.df, columns = colnames(postAgg.df)[
   -grep("FAOST_CODE|Year|Area|POU_DISTR|FAO_TABLE_NAME", colnames(postAgg.df))])
 
 SYB.df <- postAgg.df
+
+# debugging begins ---
+# SYB.df %>% filter(grepl("RNE",FAOST_CODE), Year %in% c(1998:2002,2010:2015))  %>%
+#            select(FAOST_CODE,Year,SL.AGR.EMPL.ZS,SL.AGR.EMPL.FE.ZS)
+# debugging ends ---
+
 
 save(x = SYB.df, file = paste0("./output_data/",date,"/SYB",date,".RData"))
 # save(x = SYB.df, file = paste0("./Data/Processed/SYB",date,".RData"))

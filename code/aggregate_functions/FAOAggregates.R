@@ -134,9 +134,9 @@ RAPsubRegName = data.frame(FAOST_CODE = c(
                                           "RAPSouthernAsia",
                                           "RAPOceania"
                                           # "RAPUnitedStates",
-                                          # "RAPWesternAsia" 
+                                          # "RAPWesternAsia"
                                           ),
-                           FAO_TABLE_NAME = c( 
+                           FAO_TABLE_NAME = c(
                                               # "Australia and New Zealand",
                                                "Central Asia",
                                                "East Asia",
@@ -232,57 +232,58 @@ REUregion.df$Area = "REUregion"
 ## Add country names
 REUregion.df[, "FAO_TABLE_NAME"] = "Regional Office for Europe and Central Asia"
 
-# Latin America and the Caribbean -----------------------------------------
-
-## Relation data frame
-LACsubReg = FAOcountryProfile[, c("FAOST_CODE", "FAO_LAC_SUB_REG")]
-## Aggregation
-LACsubReg.df =
-  Aggregation(data = country.df,
-              relationDF = LACsubReg,
-              aggVar = con.df[, "STS_ID"],
-              
-              aggMethod = con.df[, "AGGREGATION"],
-              weightVar = con.df[, "STS_ID_WEIGHT"],
-              thresholdProp = con.df[, "THRESHOLD_PROP"],
-              #               thresholdCountry = con.df[, "THRESHOLD_COUNTRIES"],
-              #               applyRules = TRUE,
-              keepUnspecified = FALSE)
-colnames(LACsubReg.df)[which(colnames(LACsubReg.df) == "FAO_LAC_SUB_REG")] = "FAOST_CODE"
-## Specify the area
-LACsubReg.df$Area = "LACsubReg"
-## Add country names
-LACsubRegName = data.frame(FAOST_CODE = c("LACCaribbean", "LACCentralAmerica",
-                                          "LACNorthAmerica", "LACSouthAmerica"),
-                           FAO_TABLE_NAME = c("Caribbean", "Central America",
-                                              "North America", "South America"),
-                           stringsAsFactors = FALSE)
-LACsubReg.df = merge(LACsubReg.df, LACsubRegName, all.x = TRUE, by = "FAOST_CODE")
-
-## Relation data frame
-LACregion = FAOcountryProfile[, c("FAOST_CODE", "FAO_LAC_REG")]
-## NOTE (FILIPPO): I'm removing LACNorthAmerica because it is not part of the
-## Regional Office for Latin America and the Caribbean and (although they
-## want to show it) I want to keep the two aggregates separate.
-NAcountries =
-  na.omit(FAOcountryProfile[FAOcountryProfile[, "FAO_LAC_SUB_REG"] == "LACNorthAmerica", "FAOST_CODE"])
-LACregion[LACregion[, "FAOST_CODE"] %in% NAcountries, "FAO_LAC_REG"] = NA
-## Aggregation
-LACregion.df =
-  Aggregation(data = country.df,
-              relationDF = LACregion,
-              aggVar = con.df[, "STS_ID"],
-              aggMethod = con.df[, "AGGREGATION"],
-              weightVar = con.df[, "STS_ID_WEIGHT"],
-              thresholdProp = con.df[, "THRESHOLD_PROP"],
-              #               thresholdCountry = con.df[, "THRESHOLD_COUNTRIES"],
-              #               applyRules = TRUE,
-              keepUnspecified = FALSE)
-colnames(LACregion.df)[which(colnames(LACregion.df) == "FAO_LAC_REG")] = "FAOST_CODE"
-## Specify the area
-LACregion.df$Area = "LACregion"
-## Add country names
-LACregion.df[, "FAO_TABLE_NAME"] = "Regional Office for Latin America and the Caribbean"
+# Commented by Markus on 20160208 to speed up the process
+# # Latin America and the Caribbean -----------------------------------------
+# 
+# ## Relation data frame
+# LACsubReg = FAOcountryProfile[, c("FAOST_CODE", "FAO_LAC_SUB_REG")]
+# ## Aggregation
+# LACsubReg.df =
+#   Aggregation(data = country.df,
+#               relationDF = LACsubReg,
+#               aggVar = con.df[, "STS_ID"],
+#               
+#               aggMethod = con.df[, "AGGREGATION"],
+#               weightVar = con.df[, "STS_ID_WEIGHT"],
+#               thresholdProp = con.df[, "THRESHOLD_PROP"],
+#               #               thresholdCountry = con.df[, "THRESHOLD_COUNTRIES"],
+#               #               applyRules = TRUE,
+#               keepUnspecified = FALSE)
+# colnames(LACsubReg.df)[which(colnames(LACsubReg.df) == "FAO_LAC_SUB_REG")] = "FAOST_CODE"
+# ## Specify the area
+# LACsubReg.df$Area = "LACsubReg"
+# ## Add country names
+# LACsubRegName = data.frame(FAOST_CODE = c("LACCaribbean", "LACCentralAmerica",
+#                                           "LACNorthAmerica", "LACSouthAmerica"),
+#                            FAO_TABLE_NAME = c("Caribbean", "Central America",
+#                                               "North America", "South America"),
+#                            stringsAsFactors = FALSE)
+# LACsubReg.df = merge(LACsubReg.df, LACsubRegName, all.x = TRUE, by = "FAOST_CODE")
+# 
+# ## Relation data frame
+# LACregion = FAOcountryProfile[, c("FAOST_CODE", "FAO_LAC_REG")]
+# ## NOTE (FILIPPO): I'm removing LACNorthAmerica because it is not part of the
+# ## Regional Office for Latin America and the Caribbean and (although they
+# ## want to show it) I want to keep the two aggregates separate.
+# NAcountries =
+#   na.omit(FAOcountryProfile[FAOcountryProfile[, "FAO_LAC_SUB_REG"] == "LACNorthAmerica", "FAOST_CODE"])
+# LACregion[LACregion[, "FAOST_CODE"] %in% NAcountries, "FAO_LAC_REG"] = NA
+# ## Aggregation
+# LACregion.df =
+#   Aggregation(data = country.df,
+#               relationDF = LACregion,
+#               aggVar = con.df[, "STS_ID"],
+#               aggMethod = con.df[, "AGGREGATION"],
+#               weightVar = con.df[, "STS_ID_WEIGHT"],
+#               thresholdProp = con.df[, "THRESHOLD_PROP"],
+#               #               thresholdCountry = con.df[, "THRESHOLD_COUNTRIES"],
+#               #               applyRules = TRUE,
+#               keepUnspecified = FALSE)
+# colnames(LACregion.df)[which(colnames(LACregion.df) == "FAO_LAC_REG")] = "FAOST_CODE"
+# ## Specify the area
+# LACregion.df$Area = "LACregion"
+# ## Add country names
+# LACregion.df[, "FAO_TABLE_NAME"] = "Regional Office for Latin America and the Caribbean"
 
 # Near East ---------------------------------------------------------------
 
@@ -335,11 +336,11 @@ RNEregion.df[, "FAO_TABLE_NAME"] = "Regional Office for the Near East"
 FAOregions.df = rbind(RAFsubReg.df, RAFregion.df,
                       RAPsubReg.df, RAPregion.df, RAPdev.df,
                       REUsubReg.df, REUregion.df,
-                      LACsubReg.df, LACregion.df,
+                      #LACsubReg.df, LACregion.df,
                       RNEsubReg.df, RNEregion.df)
 rm(list = c("RAFsubReg", "RAFsubReg.df", "RAFsubRegName", "RAFregion", "RAFregion.df",
             "RAPsubReg", "RAPsubReg.df", "RAPsubRegName", "RAPregion", "RAPregion.df",
             "RAPdev", "RAPdev.df", "RAPdevName",
             "REUsubReg", "REUsubReg.df", "REUsubRegName", "REUregion", "REUregion.df",
-            "LACsubReg", "LACsubReg.df", "LACsubRegName", "LACregion", "LACregion.df",
+            # "LACsubReg", "LACsubReg.df", "LACsubRegName", "LACregion", "LACregion.df",
             "RNEsubReg", "RNEsubReg.df", "RNEsubRegName", "RNEregion", "RNEregion.df"))
