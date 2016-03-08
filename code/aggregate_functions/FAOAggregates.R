@@ -177,6 +177,30 @@ RAPregion.df$Area = "RAPregion"
 ## Add country names
 RAPregion.df[, "FAO_TABLE_NAME"] = "Regional Office for Asia and the Pacific"
 
+
+# New regiona for a ALL FAO RAP MEMBERS ie. WAP
+## Relation data frame
+WAPregion = FAOcountryProfile[, c("FAOST_CODE", "FAO_WAP_REG")]
+## Aggregation
+WAPregion.df =
+  Aggregation(data = country.df,
+              relationDF = WAPregion,
+              aggVar = con.df[, "STS_ID"],
+              aggMethod = con.df[, "AGGREGATION"],
+              weightVar = con.df[, "STS_ID_WEIGHT"],
+              thresholdProp = con.df[, "THRESHOLD_PROP"],
+              #               thresholdCountry = con.df[, "THRESHOLD_COUNTRIES"],
+              #               applyRules = TRUE,
+              keepUnspecified = FALSE)
+colnames(WAPregion.df)[which(colnames(WAPregion.df) == "FAO_WAP_REG")] = "FAOST_CODE"
+## Specify the area
+WAPregion.df$Area = "WAPregion"
+## Add country names
+WAPregion.df[, "FAO_TABLE_NAME"] = "FAO RAP member countries"
+
+
+
+
 # Europe and Central Asia -------------------------------------------------
 
 ## Relation data frame
@@ -335,11 +359,13 @@ RNEregion.df[, "FAO_TABLE_NAME"] = "Regional Office for the Near East"
 
 FAOregions.df = rbind(RAFsubReg.df, RAFregion.df,
                       RAPsubReg.df, RAPregion.df, RAPdev.df,
+                      WAPregion.df,
                       REUsubReg.df, REUregion.df,
                       #LACsubReg.df, LACregion.df,
                       RNEsubReg.df, RNEregion.df)
 rm(list = c("RAFsubReg", "RAFsubReg.df", "RAFsubRegName", "RAFregion", "RAFregion.df",
             "RAPsubReg", "RAPsubReg.df", "RAPsubRegName", "RAPregion", "RAPregion.df",
+            
             "RAPdev", "RAPdev.df", "RAPdevName",
             "REUsubReg", "REUsubReg.df", "REUsubRegName", "REUregion", "REUregion.df",
             # "LACsubReg", "LACsubReg.df", "LACsubRegName", "LACregion", "LACregion.df",

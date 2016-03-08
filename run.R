@@ -157,6 +157,10 @@ FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% re
 # FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_France"]]),]$FAOST_CODE,                    "RAPFrance",              FAOcountryProfile$FAO_RAP_SUB_REG)
 # FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_United_States"]]),]$FAOST_CODE,             "RAPUnitedStates",        FAOcountryProfile$FAO_RAP_SUB_REG)
 
+# New regiona for a ALL FAO RAP MEMBERS ie. WAP
+FAOcountryProfile$FAO_WAP_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["WAP"]]),]$FAOST_CODE,                               "WAPregion",              FAOcountryProfile$FAO_RAP_REG)
+
+
 # REU
 FAOcountryProfile$FAO_REU_REG <- NA
 FAOcountryProfile$FAO_REU_SUB_REG <- NA
@@ -208,28 +212,28 @@ if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_dat
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
 dwnldOA <- FALSE # Population
-dwnldRL <- FALSE # Resources, Resources - Land
-dwnldRF <- FALSE # Resources - Fertilizers
-dwnldRP <- FALSE # Resources - Pesticides
-dwnldCS <- FALSE # Investments - Capital stock
-dwnldRM <- FALSE # Investments - Machinery
-dwnldIG <- FALSE # Government expenditures
-dwnldA <- FALSE # ASTI
-dwnldQC <- FALSE # Production - Crops
-dwnldQA <- FALSE # Production - Live animals
-dwnldQD <- FALSE # Production - Crops processed
-dwnldQL <- FALSE # Production - Livestock primary
-dwnldQP <- FALSE # Production - Livestock processed
-dwnldQV <- FALSE # Production - Value of agricultural production
-dwnldQI <- FALSE # Production indices
-dwnldTP <- FALSE # Trade - Crops and livestock products
-dwnldTI <- FALSE # Trade - Trade indices
+dwnldRL <- TRUE # Resources, Resources - Land
+dwnldRF <- TRUE # Resources - Fertilizers
+dwnldRP <- TRUE # Resources - Pesticides
+dwnldCS <- TRUE # Investments - Capital stock
+dwnldRM <- TRUE # Investments - Machinery
+dwnldIG <- TRUE # Government expenditures
+dwnldA <- TRUE # ASTI
+dwnldQC <- TRUE # Production - Crops
+dwnldQA <- TRUE # Production - Live animals
+dwnldQD <- TRUE # Production - Crops processed
+dwnldQL <- TRUE # Production - Livestock primary
+dwnldQP <- TRUE # Production - Livestock processed
+dwnldQV <- TRUE # Production - Value of agricultural production
+dwnldQI <- TRUE # Production indices
+dwnldTP <- TRUE # Trade - Crops and livestock products
+dwnldTI <- TRUE # Trade - Trade indices
 dwnldFO <- FALSE # Forestry
 dwnldGHG <- FALSE # Greenhouse gases
 dwnldFB <- FALSE # Food balance sheets
-dwnldCOF <- FALSE # Coffeebook indicators
+dwnldCOF <- TRUE # Coffeebook indicators
 
-downloadWB <- FALSE; CheckLogical(downloadWB)
+downloadWB <- TRUE; CheckLogical(downloadWB)
 
 
 replication_date <- "2016-02-08-23"
