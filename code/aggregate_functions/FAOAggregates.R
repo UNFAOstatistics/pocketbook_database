@@ -178,25 +178,25 @@ RAPregion.df$Area = "RAPregion"
 RAPregion.df[, "FAO_TABLE_NAME"] = "Regional Office for Asia and the Pacific"
 
 
-# New regiona for a ALL FAO RAP MEMBERS ie. WAP
-## Relation data frame
-WAPregion = FAOcountryProfile[, c("FAOST_CODE", "FAO_WAP_REG")]
-## Aggregation
-WAPregion.df =
-  Aggregation(data = country.df,
-              relationDF = WAPregion,
-              aggVar = con.df[, "STS_ID"],
-              aggMethod = con.df[, "AGGREGATION"],
-              weightVar = con.df[, "STS_ID_WEIGHT"],
-              thresholdProp = con.df[, "THRESHOLD_PROP"],
-              #               thresholdCountry = con.df[, "THRESHOLD_COUNTRIES"],
-              #               applyRules = TRUE,
-              keepUnspecified = FALSE)
-colnames(WAPregion.df)[which(colnames(WAPregion.df) == "FAO_WAP_REG")] = "FAOST_CODE"
-## Specify the area
-WAPregion.df$Area = "WAPregion"
-## Add country names
-WAPregion.df[, "FAO_TABLE_NAME"] = "FAO RAP member countries"
+# # New regiona for a ALL FAO RAP MEMBERS ie. WAP - no longer needed 20160502
+# ## Relation data frame
+# WAPregion = FAOcountryProfile[, c("FAOST_CODE", "FAO_WAP_REG")]
+# ## Aggregation
+# WAPregion.df =
+#   Aggregation(data = country.df,
+#               relationDF = WAPregion,
+#               aggVar = con.df[, "STS_ID"],
+#               aggMethod = con.df[, "AGGREGATION"],
+#               weightVar = con.df[, "STS_ID_WEIGHT"],
+#               thresholdProp = con.df[, "THRESHOLD_PROP"],
+#               #               thresholdCountry = con.df[, "THRESHOLD_COUNTRIES"],
+#               #               applyRules = TRUE,
+#               keepUnspecified = FALSE)
+# colnames(WAPregion.df)[which(colnames(WAPregion.df) == "FAO_WAP_REG")] = "FAOST_CODE"
+# ## Specify the area
+# WAPregion.df$Area = "WAPregion"
+# ## Add country names
+# WAPregion.df[, "FAO_TABLE_NAME"] = "FAO RAP member countries"
 
 
 
@@ -359,7 +359,7 @@ RNEregion.df[, "FAO_TABLE_NAME"] = "Regional Office for the Near East"
 
 FAOregions.df = rbind(RAFsubReg.df, RAFregion.df,
                       RAPsubReg.df, RAPregion.df, RAPdev.df,
-                      WAPregion.df,
+                      # WAPregion.df,
                       REUsubReg.df, REUregion.df,
                       #LACsubReg.df, LACregion.df,
                       RNEsubReg.df, RNEregion.df)

@@ -157,8 +157,8 @@ FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% re
 # FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_France"]]),]$FAOST_CODE,                    "RAPFrance",              FAOcountryProfile$FAO_RAP_SUB_REG)
 # FAOcountryProfile$FAO_RAP_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RAP_United_States"]]),]$FAOST_CODE,             "RAPUnitedStates",        FAOcountryProfile$FAO_RAP_SUB_REG)
 
-# New regiona for a ALL FAO RAP MEMBERS ie. WAP
-FAOcountryProfile$FAO_WAP_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["WAP"]]),]$FAOST_CODE,                               "WAPregion",              FAOcountryProfile$FAO_RAP_REG)
+# New regiona for a ALL FAO RAP MEMBERS ie. WAP - removed 20160502
+# FAOcountryProfile$FAO_WAP_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["WAP"]]),]$FAOST_CODE,                               "WAPregion",              FAOcountryProfile$FAO_RAP_REG)
 
 
 # REU
@@ -211,7 +211,7 @@ if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_dat
 # Download variables from FAOSTAT, parameters -----------------------------
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
-dwnldOA <- FALSE # Population
+dwnldOA <- FALSE # Population # FALSE DEFAULT
 dwnldRL <- TRUE # Resources, Resources - Land
 dwnldRF <- TRUE # Resources - Fertilizers
 dwnldRP <- TRUE # Resources - Pesticides
@@ -228,15 +228,15 @@ dwnldQV <- TRUE # Production - Value of agricultural production
 dwnldQI <- TRUE # Production indices
 dwnldTP <- TRUE # Trade - Crops and livestock products
 dwnldTI <- TRUE # Trade - Trade indices
-dwnldFO <- FALSE # Forestry
-dwnldGHG <- FALSE # Greenhouse gases
-dwnldFB <- FALSE # Food balance sheets
+dwnldFO <- FALSE # Forestry # FALSE DEFAULT
+dwnldGHG <- FALSE # Greenhouse gases # FALSE DEFAULT
+dwnldFB <- FALSE # Food balance sheets # FALSE DEFAULT
 dwnldCOF <- TRUE # Coffeebook indicators
 
 downloadWB <- TRUE; CheckLogical(downloadWB)
 
 
-replication_date <- "2016-02-08-23"
+replication_date <- "2016-03-08-09"
 
 if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date))
 
@@ -1178,7 +1178,7 @@ country.df <- merge(country.df, FAOcountryProfile[, c("FAOST_CODE", "FAO_TABLE_N
 do49aggr <- FALSE
 if (do49aggr) {
   source("./code/aggregate_functions/M49aggregates.R")
-} else load()
+} #else load()
 
 ## FAO aggregates
 # Sourcehttps(source("./Rcode/Final/ComplementaryScripts/FAOAggregates.R")
