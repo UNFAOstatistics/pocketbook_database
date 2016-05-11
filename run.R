@@ -171,7 +171,7 @@ FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% re
 FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Caucasus_and_Turkey"]]),]$FAOST_CODE,    "REUCaucAndTurkey",        FAOcountryProfile$FAO_REU_SUB_REG)
 FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_CIS_Europe"]]),]$FAOST_CODE,             "REUCISeurope",            FAOcountryProfile$FAO_REU_SUB_REG)
 FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_EU_Central_and_Eastern"]]),]$FAOST_CODE, "REUEUCentralandEastern",  FAOcountryProfile$FAO_REU_SUB_REG)
-FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Israel"]]),]$FAOST_CODE,                 "REUIsrael",               FAOcountryProfile$FAO_REU_SUB_REG)
+# FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Israel"]]),]$FAOST_CODE,                 "REUIsrael",               FAOcountryProfile$FAO_REU_SUB_REG)
 FAOcountryProfile$FAO_REU_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["REU_Central_Asia"]]),]$FAOST_CODE,           "REUCentralAsia",          FAOcountryProfile$FAO_REU_SUB_REG)
 # RNE
 FAOcountryProfile$FAO_RNE_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% region_key[which(region_key[["RNE"]]),]$FAOST_CODE,                                               "RNEregion", FAOcountryProfile$FAO_RNE_REG)
@@ -211,32 +211,32 @@ if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_dat
 # Download variables from FAOSTAT, parameters -----------------------------
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
-dwnldOA <- FALSE # Population # FALSE DEFAULT
-dwnldRL <- TRUE # Resources, Resources - Land
-dwnldRF <- TRUE # Resources - Fertilizers
-dwnldRP <- TRUE # Resources - Pesticides
-dwnldCS <- TRUE # Investments - Capital stock
-dwnldRM <- TRUE # Investments - Machinery
-dwnldIG <- TRUE # Government expenditures
-dwnldA <- TRUE # ASTI
-dwnldQC <- TRUE # Production - Crops
-dwnldQA <- TRUE # Production - Live animals
-dwnldQD <- TRUE # Production - Crops processed
-dwnldQL <- TRUE # Production - Livestock primary
-dwnldQP <- TRUE # Production - Livestock processed
-dwnldQV <- TRUE # Production - Value of agricultural production
-dwnldQI <- TRUE # Production indices
-dwnldTP <- TRUE # Trade - Crops and livestock products
-dwnldTI <- TRUE # Trade - Trade indices
-dwnldFO <- FALSE # Forestry # FALSE DEFAULT
+dwnldOA  <- FALSE # Population # FALSE DEFAULT
+dwnldRL  <- FALSE # Resources, Resources - Land
+dwnldRF  <- FALSE # Resources - Fertilizers
+dwnldRP  <- FALSE # Resources - Pesticides
+dwnldCS  <- FALSE # Investments - Capital stock
+dwnldRM  <- FALSE # Investments - Machinery
+dwnldIG  <- FALSE # Government expenditures
+dwnldA   <- FALSE # ASTI
+dwnldQC  <- FALSE # Production - Crops
+dwnldQA  <- FALSE # Production - Live animals
+dwnldQD  <- FALSE # Production - Crops processed
+dwnldQL  <- FALSE # Production - Livestock primary
+dwnldQP  <- FALSE # Production - Livestock processed
+dwnldQV  <- FALSE # Production - Value of agricultural production
+dwnldQI  <- FALSE # Production indices
+dwnldTP  <- FALSE # Trade - Crops and livestock products
+dwnldTI  <- FALSE # Trade - Trade indices
+dwnldFO  <- FALSE # Forestry # FALSE DEFAULT
 dwnldGHG <- FALSE # Greenhouse gases # FALSE DEFAULT
-dwnldFB <- FALSE # Food balance sheets # FALSE DEFAULT
-dwnldCOF <- TRUE # Coffeebook indicators
+dwnldFB  <- FALSE # Food balance sheets # FALSE DEFAULT
+dwnldCOF <- FALSE # Coffeebook indicators
 
-downloadWB <- TRUE; CheckLogical(downloadWB)
+downloadWB <- FALSE; CheckLogical(downloadWB)
 
 
-replication_date <- "2016-03-08-09"
+replication_date <- "2016-05-02-19"
 
 if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date))
 
