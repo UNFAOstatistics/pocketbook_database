@@ -225,6 +225,7 @@ REUsubRegName = data.frame(FAOST_CODE = c("REUCISeurope",
                                           "REUCentralAsia",
                                           "REUEUCentralandEastern",
                                           # "REUIsrael",
+                                          "REUAndorraIsraelMonacoandSanMarino",
                                           "REUEUOtherAndEFTA",
                                           "REUSouthEasternEurope"),
                            FAO_TABLE_NAME = c("CIS Europe",
@@ -232,6 +233,7 @@ REUsubRegName = data.frame(FAOST_CODE = c("REUCISeurope",
                                               "Central Asia",
                                               "EU Central Eastern",
                                               # "Israel",
+                                              "REU_Andorra, Israel, Monaco and San Marino",
                                               "EU Other and EFTA",
                                               "South Eastern Europe"),
                            stringsAsFactors = FALSE)
@@ -363,10 +365,10 @@ FAOregions.df = rbind(RAFsubReg.df, RAFregion.df,
                       REUsubReg.df, REUregion.df,
                       #LACsubReg.df, LACregion.df,
                       RNEsubReg.df, RNEregion.df)
-rm(list = c("RAFsubReg", "RAFsubReg.df", "RAFsubRegName", "RAFregion", "RAFregion.df",
-            "RAPsubReg", "RAPsubReg.df", "RAPsubRegName", "RAPregion", "RAPregion.df",
-            
-            "RAPdev", "RAPdev.df", "RAPdevName",
-            "REUsubReg", "REUsubReg.df", "REUsubRegName", "REUregion", "REUregion.df",
-            # "LACsubReg", "LACsubReg.df", "LACsubRegName", "LACregion", "LACregion.df",
-            "RNEsubReg", "RNEsubReg.df", "RNEsubRegName", "RNEregion", "RNEregion.df"))
+# rm(list = c("RAFsubReg", "RAFsubReg.df", "RAFsubRegName", "RAFregion", "RAFregion.df",
+#             "RAPsubReg", "RAPsubReg.df", "RAPsubRegName", "RAPregion", "RAPregion.df",
+#             
+#             "RAPdev", "RAPdev.df", "RAPdevName",
+#             "REUsubReg", "REUsubReg.df", "REUsubRegName", "REUregion", "REUregion.df",
+#             # "LACsubReg", "LACsubReg.df", "LACsubRegName", "LACregion", "LACregion.df",
+#             "RNEsubReg", "RNEsubReg.df", "RNEsubRegName", "RNEregion", "RNEregion.df"))

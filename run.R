@@ -236,7 +236,8 @@ dwnldCOF <- FALSE # Coffeebook indicators
 downloadWB <- FALSE; CheckLogical(downloadWB)
 
 
-replication_date <- "2016-05-02-19"
+replication_date <- "2016-03-08-09" # used to work
+# replication_date <- "2016-02-08-23" 
 
 if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date))
 
@@ -734,7 +735,7 @@ WB.df <- WB.df[!is.na(WB.df$FAOST_CODE),]
 # Source manual data functions ------------------------------------------------
 
 if (!file.exists("./input_data/processed/AquastatManualData.RData")) source(paste0(root.dir,"/code/manualdata_scripts/AquastatManualData.R"))             else load("./input_data/processed/AquastatManualData.RData")
-rm(fillCountryCode)
+# rm(fillCountryCode)
 library(FAOSTAT)
 if (!file.exists("./input_data/processed/BiofuelProduction.RData"))  source(paste0(root.dir,"/code/manualdata_scripts/BiodiselProduction.R"))             else load("./input_data/processed/BiofuelProduction.RData")
 
@@ -1168,8 +1169,7 @@ OldCountries <-
                               "Sudan (former)", "Yemen (former)", 
                               "Yemen (old)", "Yugoslav SFR"),
              stringsAsFactors = FALSE)
-country.df[country.df[, "FAOST_CODE"] %in% OldCountries$FAOST_CODE, "Area"] =
-  "Old territory"
+country.df[country.df[, "FAOST_CODE"] %in% OldCountries$FAOST_CODE, "Area"] = "Old territory"
 rm(OldCountries)
 ## Add country names
 country.df <- merge(country.df, FAOcountryProfile[, c("FAOST_CODE", "FAO_TABLE_NAME")], 
