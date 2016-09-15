@@ -4,7 +4,7 @@ t1 <- Sys.time()
 ## This script generates the dataset for the Statistical Yearbooks
 ###########################################################################
 
-root.dir <- "~/btsync/faosync/pocketbooks/pocketbook_database/"
+root.dir <- "~/faosync/pocketbooks/pocketbook_database/"
 setwd(root.dir)
 
 
@@ -82,7 +82,7 @@ source("./code/read_functions/ReadConstruction.R")
 
 # Country profile ---------------------------------------------------------
 
-FAOcountryProfile <- read.csv("~/btsync/faosync/pocketbooks/pocketbook/input/data/FAOcountryProfile.csv", stringsAsFactors = FALSE)
+FAOcountryProfile <- read.csv("~/faosync/pocketbooks/pocketbook/input/data/FAOcountryProfile.csv", stringsAsFactors = FALSE)
 
 
 # Recode the Short Name Variables
@@ -124,7 +124,7 @@ FAOcountryProfile[FAOcountryProfile[, "SHORT_NAME"] == "Netherlands Antilles"   
 
 # Source script from yearbook processing
 run_only_regions <- TRUE
-source('~/btsync/faosync/pocketbooks/pocketbook/input/code/define_regions.R')
+source('~/faosync/pocketbooks/pocketbook/input/code/define_regions.R')
 
 
 # RAF
@@ -212,28 +212,28 @@ if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_dat
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
 dwnldOA  <- FALSE # Population # FALSE DEFAULT
-dwnldRL  <- FALSE # Resources, Resources - Land
-dwnldRF  <- FALSE # Resources - Fertilizers
-dwnldRP  <- FALSE # Resources - Pesticides
-dwnldCS  <- FALSE # Investments - Capital stock
-dwnldRM  <- FALSE # Investments - Machinery
-dwnldIG  <- FALSE # Government expenditures
-dwnldA   <- FALSE # ASTI
-dwnldQC  <- FALSE # Production - Crops
-dwnldQA  <- FALSE # Production - Live animals
-dwnldQD  <- FALSE # Production - Crops processed
-dwnldQL  <- FALSE # Production - Livestock primary
-dwnldQP  <- FALSE # Production - Livestock processed
-dwnldQV  <- FALSE # Production - Value of agricultural production
-dwnldQI  <- FALSE # Production indices
-dwnldTP  <- FALSE # Trade - Crops and livestock products
-dwnldTI  <- FALSE # Trade - Trade indices
+dwnldRL  <- TRUE # Resources, Resources - Land
+dwnldRF  <- TRUE # Resources - Fertilizers
+dwnldRP  <- TRUE # Resources - Pesticides
+dwnldCS  <- TRUE # Investments - Capital stock
+dwnldRM  <- TRUE # Investments - Machinery
+dwnldIG  <- TRUE # Government expenditures
+dwnldA   <- TRUE # ASTI
+dwnldQC  <- TRUE # Production - Crops
+dwnldQA  <- TRUE # Production - Live animals
+dwnldQD  <- TRUE # Production - Crops processed
+dwnldQL  <- TRUE # Production - Livestock primary
+dwnldQP  <- TRUE # Production - Livestock processed
+dwnldQV  <- TRUE # Production - Value of agricultural production
+dwnldQI  <- TRUE # Production indices
+dwnldTP  <- TRUE # Trade - Crops and livestock products
+dwnldTI  <- TRUE # Trade - Trade indices
 dwnldFO  <- FALSE # Forestry # FALSE DEFAULT
 dwnldGHG <- FALSE # Greenhouse gases # FALSE DEFAULT
 dwnldFB  <- FALSE # Food balance sheets # FALSE DEFAULT
-dwnldCOF <- FALSE # Coffeebook indicators
+dwnldCOF <- TRUE # Coffeebook indicators
 
-downloadWB <- FALSE; CheckLogical(downloadWB)
+downloadWB <- TRUE; CheckLogical(downloadWB)
 
 
 replication_date <- "2016-03-08-09" # used to work
@@ -1258,7 +1258,7 @@ load(file = paste0("./output_data/",date,"/SYB",date,".RData"))
 ###########################################################################
 ## End
 ###########################################################################
-load("/home/markus/btsync/faosync/syb_database/output_data/2015-11-28-01/SYB2015-11-28-01.RData")
+# load("/home/aurelius/faosync/pocketbooks/pocketbook_database/output_data/2015-11-28-01/SYB2015-11-28-01.RData")
 meta.lst <- ReadMetadata(file = "./input_data/Metadata2015.csv", 
                          encoding = "UTF-8")
 ###########################################################################
