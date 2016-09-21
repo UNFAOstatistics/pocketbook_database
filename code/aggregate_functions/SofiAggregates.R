@@ -4,6 +4,11 @@
 ## Modified: 22-12-2013
 ###########################################################################
 
+# To allow parallel processing 
+session_path <- readLines(con = "./input_data/session_path.txt")
+load(paste0(session_path,"/pre_agg_image.RData"))
+lapply(pkg_list, library, character.only = TRUE)
+
 # Sub-region  -------------------------------------------------------------
 
 ## Relation data frame
@@ -136,3 +141,6 @@ sofiAggs.df = rbind(SOFIsubReg.df, SOFIotherReg.df,
 rm(list = c("SOFIdevReg", "SOFIdevReg.df", "SOFImacroReg", "SOFImacroReg.df",
              "SOFIotherReg", "SOFIotherReg.df", "SOFIsubReg", "SOFIsubReg.df",
              "SOFIworld", "SOFIworld.df"))
+
+
+saveRDS(sofiAggs.df, file = paste0(session_path,"/sofiAggs.df.RDS"))

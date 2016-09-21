@@ -14,15 +14,10 @@ setwd(root.dir)
 
 
 # Needed libraries --------------------------------------------------------
+pkg_list <- c("plyr","dplyr","reshape2","data.table","readr","RJSONIO","FAOSTAT")
+lapply(pkg_list, library, character.only = TRUE)
 
-require(plyr)
-require(dplyr)
-require(reshape2)
-require(data.table)
-library(readr)
-library(RJSONIO)
 
-library(FAOSTAT)
 
 # Source functions --------------------------------------------------------
 source("./code/misc_functions/CheckLogical.R")
@@ -194,7 +189,9 @@ meta.lst <- ReadMetadata(file = "./input_data/Metadata2015.csv",
 
 # Create a new folder for today
 date <- paste(Sys.Date(),format(Sys.time(), "%H"),sep="-")
-if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date),recursive = TRUE)
+session_path <- paste0("./output_data/",date)
+dir.create(session_path)
+
 
 #   ____                          _                    _   _____  _     ___   ____  _____ 
 #  |  _ \   ___ __      __ _ __  | |  ___    __ _   __| | |  ___|/ \   / _ \ / ___||_   _|
@@ -212,6 +209,10 @@ if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_dat
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
 dwnldOA  <- FALSE # Population # FALSE DEFAULT
+dwnldFO  <- FALSE # Forestry # FALSE DEFAULT
+dwnldGHG <- FALSE # Greenhouse gases # FALSE DEFAULT
+dwnldFB  <- FALSE # Food balance sheets # FALSE DEFAULT
+
 dwnldRL  <- TRUE # Resources, Resources - Land
 dwnldRF  <- TRUE # Resources - Fertilizers
 dwnldRP  <- TRUE # Resources - Pesticides
@@ -228,18 +229,18 @@ dwnldQV  <- TRUE # Production - Value of agricultural production
 dwnldQI  <- TRUE # Production indices
 dwnldTP  <- TRUE # Trade - Crops and livestock products
 dwnldTI  <- TRUE # Trade - Trade indices
-dwnldFO  <- FALSE # Forestry # FALSE DEFAULT
-dwnldGHG <- FALSE # Greenhouse gases # FALSE DEFAULT
-dwnldFB  <- FALSE # Food balance sheets # FALSE DEFAULT
+
 dwnldCOF <- TRUE # Coffeebook indicators
 
 downloadWB <- TRUE; CheckLogical(downloadWB)
 
 
-replication_date <- "2016-03-08-09" # used to work
+replication_date <- "2016-09-15-09" # used to work
 # replication_date <- "2016-02-08-23" 
 
-if (!file.exists(paste0("./output_data/",date))) dir.create(paste0("./output_data/",date))
+
+
+# paste0("./output_data/",date)
 
 # FAOSTAT, Population - Annual population ---------------------------------
 
@@ -314,7 +315,7 @@ if (dwnldRP) {
                               useCHMT = FALSE))
   FAOrp.df <- FAO.lst$entity; rm(dwnldRP); rm(FAO.lst)
   ## ...update list
-  save(x = FAOrp.df, file = paste0("./output_data/",date,"/FAOrp", date, ".RData"))
+  save(x = FAOrp.df, file = paste0(session_path,"/FAOrp", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOrp2015-10-08.RData")
@@ -334,7 +335,7 @@ if (dwnldCS) {
                               useCHMT = FALSE))
   FAOcs.df <- FAO.lst$entity; rm(dwnldCS); rm(FAO.lst)
   ## ...update list
-  save(x = FAOcs.df, file = paste0("./output_data/",date,"/FAOcs", date, ".RData"))
+  save(x = FAOcs.df, file = paste0(session_path,"/FAOcs", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOcs2015-10-08.RData")
@@ -354,7 +355,7 @@ if (dwnldRM) {
                               useCHMT = FALSE))
   FAOrm.df <- FAO.lst$entity; rm(dwnldRM); rm(FAO.lst)
   ## ...update list
-  save(x = FAOrm.df, file = paste0("./output_data/",date,"/FAOrm", date, ".RData"))
+  save(x = FAOrm.df, file = paste0(session_path,"/FAOrm", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOrm2015-10-08.RData")
@@ -374,7 +375,7 @@ if (dwnldIG) {
                               useCHMT = FALSE))
   FAOig.df <- FAO.lst$entity; rm(dwnldIG); rm(FAO.lst)
   ## ...update list
-  save(x = FAOig.df, file = paste0("./output_data/",date,"/FAOig", date, ".RData"))
+  save(x = FAOig.df, file = paste0(session_path,"/FAOig", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOig2014-12-05.RData") # so the last time this was built succesfully
@@ -394,7 +395,7 @@ if (dwnldA) {
                               useCHMT = FALSE))
   FAOa.df <- FAO.lst$entity; rm(dwnldA); rm(FAO.lst)
   ## ...update list
-  save(x = FAOa.df, file = paste0("./output_data/",date,"/FAOa", date, ".RData"))
+  save(x = FAOa.df, file = paste0(session_path,"/FAOa", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOa2015-10-08.RData")
@@ -414,7 +415,7 @@ if (dwnldQC) {
                               useCHMT = FALSE))
   FAOqc.df <- FAO.lst$entity; rm(dwnldQC); rm(FAO.lst)
   ## ...update list
-  save(x = FAOqc.df, file = paste0("./output_data/",date,"/FAOqc", date, ".RData"))
+  save(x = FAOqc.df, file = paste0(session_path,"/FAOqc", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOqc2015-10-08.RData")
@@ -434,7 +435,7 @@ if (dwnldQA) {
                               useCHMT = FALSE))
   FAOqa.df <- FAO.lst$entity; rm(dwnldQA); rm(FAO.lst)
   ## ...update list
-  save(x = FAOqa.df, file = paste0("./output_data/",date,"/FAOqa", date, ".RData"))
+  save(x = FAOqa.df, file = paste0(session_path,"/FAOqa", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOqa2015-10-08.RData")
@@ -454,7 +455,7 @@ if (dwnldQD) {
                               useCHMT = FALSE))
   FAOqd.df <- FAO.lst$entity; rm(dwnldQD); rm(FAO.lst)
   ## ...update list
-  save(x = FAOqd.df, file = paste0("./output_data/",date,"/FAOqd", date, ".RData"))
+  save(x = FAOqd.df, file = paste0(session_path,"/FAOqd", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOqd2015-10-08.RData")
@@ -474,7 +475,7 @@ if (dwnldQL) {
                               useCHMT = FALSE))
   FAOql.df <- FAO.lst$entity; rm(dwnldQL); rm(FAO.lst)
   ## ...update list
-  save(x = FAOql.df, file = paste0("./output_data/",date,"/FAOql", date, ".RData"))
+  save(x = FAOql.df, file = paste0(session_path,"/FAOql", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOql2015-10-08.RData")
@@ -494,7 +495,7 @@ if (dwnldQP) {
                               useCHMT = FALSE))
   FAOqp.df <- FAO.lst$entity; rm(dwnldQP); rm(FAO.lst)
   ## ...update list
-  save(x = FAOqp.df, file = paste0("./output_data/",date,"/FAOqp", date, ".RData"))
+  save(x = FAOqp.df, file = paste0(session_path,"/FAOqp", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOqp2015-10-08.RData")
@@ -514,7 +515,7 @@ if (dwnldQV) {
                               useCHMT = FALSE))
   FAOqv.df <- FAO.lst$entity; rm(dwnldQV); rm(FAO.lst)
   ## ...update list
-  save(x = FAOqv.df, file = paste0("./output_data/",date,"/FAOqv", date, ".RData"))
+  save(x = FAOqv.df, file = paste0(session_path,"/FAOqv", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOqv2015-10-08.RData")
@@ -534,7 +535,7 @@ if (dwnldQI) {
                               useCHMT = FALSE))
   FAOqi.df <- FAO.lst$entity; rm(dwnldQI); rm(FAO.lst)
   ## ...update list
-  save(x = FAOqi.df, file = paste0("./output_data/",date,"/FAOqi", date, ".RData"))
+  save(x = FAOqi.df, file = paste0(session_path,"/FAOqi", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOqi2015-10-08.RData")
@@ -554,7 +555,7 @@ if (dwnldTP) {
                               useCHMT = FALSE))
   FAOtp.df <- FAO.lst$entity; rm(dwnldTP); rm(FAO.lst)
   ## ...update list
-  save(x = FAOtp.df, file = paste0("./output_data/",date,"/FAOtp", date, ".RData"))
+  save(x = FAOtp.df, file = paste0(session_path,"/FAOtp", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOtp2015-10-08.RData")
@@ -574,7 +575,7 @@ if (dwnldTI) {
                               useCHMT = FALSE))
   FAOti.df <- FAO.lst$entity; rm(dwnldTI); rm(FAO.lst)
   ## ...update list
-  save(x = FAOti.df, file = paste0("./output_data/",date,"/FAOti", date, ".RData"))
+  save(x = FAOti.df, file = paste0(session_path,"/FAOti", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOti2015-10-08.RData")
@@ -594,7 +595,7 @@ if (dwnldFO) {
                               useCHMT = FALSE))
   FAOfo.df <- FAO.lst$entity; rm(dwnldFO); rm(FAO.lst)
   ## ...update list
-  save(x = FAOfo.df, file = paste0("./output_data/",date,"/FAOfo", date, ".RData"))
+  save(x = FAOfo.df, file = paste0(session_path,"/FAOfo", date, ".RData"))
 } else {
   ## ...open list
   load(file = "./output_data/2015-12-28-01/FAOfo2015-12-28-01.RData")
@@ -617,7 +618,7 @@ if (dwnldGHG) {
     FAOghg.df[, i] <- as.numeric(FAOghg.df[, i])
   }
   ## ...update list
-  save(x = FAOghg.df, file = paste0("./output_data/",date,"/FAOghg", date, ".RData"))
+  save(x = FAOghg.df, file = paste0(session_path,"/FAOghg", date, ".RData"))
 } else {
   ## ...open list
   load(file = "./output_data/2015-12-28-01/FAOghg2015-12-28-01.RData") # use this to get the data for forest net-emissions!
@@ -636,7 +637,7 @@ if (dwnldGHG) {
 #                               useCHMT = FALSE))
 #   FAOoa.df <- FAO.lst$entity; rm(dwnldOA); rm(FAO.lst)
 #   ## ...update list
-#   save(x = FAOoa.df, file = paste0("./output_data/",date,"/FAOoa", date, ".RData"))
+#   save(x = FAOoa.df, file = paste0(session_path,"/FAOoa", date, ".RData"))
 # } else {
 #   ## ...open list
 #   load(file = "./output_data/2015-10-08/FAOoa2015-10-08.RData")
@@ -657,7 +658,7 @@ if (dwnldCOF) {
     FAOcof.df[, i] <- as.numeric(FAOcof.df[, i])
   }
   ## ...update list
-  save(x = FAOcof.df, file = paste0("./output_data/",date,"/FAOcof", date, ".RData"))
+  save(x = FAOcof.df, file = paste0(session_path,"/FAOcof", date, ".RData"))
 } else {
   ## ...open list
   # load(file = "./output_data/2015-10-08/FAOcof2015-10-13.RData")
@@ -680,7 +681,7 @@ if (downloadWB) {
   WB.lst1 <- with(meta.lst[["WDI"]][1:40,],
                   getWDItoSYB(indicator = WDINAME, name = STS_ID))
   ## ...update list
-  save(x = WB.lst1, file = paste0("./output_data/",date,"/WBdata1", date, ".RData"))
+  save(x = WB.lst1, file = paste0(session_path,"/WBdata1", date, ".RData"))
 } else {
   ## ...open list
   load(file = "./output_data/2015-12-28-01/WBdata12015-12-28-01.RData")
@@ -691,7 +692,7 @@ if (downloadWB) {
   WB.lst2 <- with(meta.lst[["WDI"]][41:75,],
                   getWDItoSYB(indicator = WDINAME, name = STS_ID))
   ## ...update list
-  save(x = WB.lst2, file = paste0("./output_data/",date,"/WBdata2", date, ".RData"))
+  save(x = WB.lst2, file = paste0(session_path,"/WBdata2", date, ".RData"))
 } else {
   ## ...open list
   load(file = "./output_data/2015-12-28-01/WBdata22015-12-28-01.RData")
@@ -702,7 +703,7 @@ if (downloadWB) {
   WB.lst3 <- with(meta.lst[["WDI"]][76:nrow(meta.lst[["WDI"]]),],
                   getWDItoSYB(indicator = WDINAME, name = STS_ID))
   ## ...update list
-  save(x = WB.lst3, file = paste0("./output_data/",date,"/WBdata3", date, ".RData"))
+  save(x = WB.lst3, file = paste0(session_path,"/WBdata3", date, ".RData"))
 } else {
   ## ...open list
   load(file = "./output_data/2015-12-28-01/WBdata32015-12-28-01.RData")
@@ -728,7 +729,7 @@ WB.df <- WB.df[, -grep("ISO2_WB_CODE|Country", colnames(WB.df))]
 WB.df <- WB.df[WB.df$FAOST_CODE < 400,]
 WB.df <- WB.df[!is.na(WB.df$FAOST_CODE),]
 
-# save(x = FAO.df, file = paste0("./output_data/",date,"/FAO.RData"))
+# save(x = FAO.df, file = paste0(session_path,"/FAO.RData"))
 # load(file = "./output_data/2015-11-17/FAO.RData")
 
 
@@ -1143,19 +1144,52 @@ manScalVars <- subset(con.df, select = c("STS_ID", "SCALING"), subset = !is.na(S
 # }
 # rm(list = c("manScalVars", "i"))
 
-#####################################
+
 
 # Aggregations ------------------------------------------------------------
-# source("./Rcode/Final/aggregate_functions/EconomicAggregates.R")
-# source("./Rcode/Final/aggregate_functions/FAOAggregates.R")
-# source("./Rcode/Final/aggregate_functions/SofiAggregates.R")
-
-
 ## Country aggregation
 source("./code/aggregate_functions/CountryAggregation.R")
 
 ## China aggregation
 source("./code/aggregate_functions/ChinaAggregates.R")
+
+
+
+############# MULTICORE ################################
+
+# Save the whole lot before the time consuming 
+writeLines(session_path, con = "./input_data/session_path.txt") # This is for the paraller aggregation scripts to read at the beginning
+save.image(file = paste0(session_path,"/pre_agg_image.RData"))
+
+# system("gnome-terminal") # 1.
+# system("gnome-terminal") # 2.
+# system("gnome-terminal") # 3.
+# system("gnome-terminal") # 4.
+
+# cd ~/faosync/pocketbooks/pocketbook_database/
+
+## Economic Aggregates
+source("./code/aggregate_functions/EconomicAggregates.R")
+
+## Sofi Aggregates
+source("./code/aggregate_functions/SofiAggregates.R")
+
+## M49 aggregates
+source("./code/aggregate_functions/M49aggregates.R")
+
+## FAO aggregates
+source("./code/aggregate_functions/FAOAggregates.R")
+
+########### RE-START single-core ##################
+session_path <- readLines(con = "./input_data/session_path.txt")
+load(paste0(session_path,"/pre_agg_image.RData"))
+lapply(pkg_list, library, character.only = TRUE)
+
+# Load the computed aggregates!!
+EconomicAggregates.df <- readRDS(file = paste0("./output_data/",session_path,"EconomicAggregates.df.RDS"))
+sofiAggs.df           <- readRDS(file = paste0("./output_data/",session_path,"sofiAggs.df.RDS"))
+M49.df                <- readRDS(file = paste0("./output_data/",session_path,"M49.df.RDS"))
+FAOregions.df         <- readRDS(file = paste0("./output_data/",session_path,"FAOregions.df.RDS"))
 
 ## Check overlapping in old countries
 FAOchecked.df <- FAOcheck(var = colnames(country.df)[-grep("FAOST_CODE|Year|Area", colnames(country.df))],
@@ -1174,23 +1208,16 @@ rm(OldCountries)
 ## Add country names
 country.df <- merge(country.df, FAOcountryProfile[, c("FAOST_CODE", "FAO_TABLE_NAME")], 
                     by = "FAOST_CODE", all.x = FALSE)
-## M49 aggregates
-do49aggr <- FALSE
-if (do49aggr) {
-  source("./code/aggregate_functions/M49aggregates.R")
-} #else load()
-
-## FAO aggregates
 # Sourcehttps(source("./Rcode/Final/ComplementaryScripts/FAOAggregates.R")
-source("./code//aggregate_functions/FAOAggregates.R")
 
 # aja tänne asti!!
 ## Economic aggregates
 # Sourcehttps(source("./Rcode/Final/ComplementaryScripts/EconomicAggregates.R")
 ## rbind the datasets
 
+
 postAgg.df <- rbind(country.df, 
-                    # M49.df,
+                    M49.df,
                     FAOregions.df)
 
 # postAgg.df <- rbind(country.df, M49.df)
@@ -1209,10 +1236,10 @@ SYB.df <- postAgg.df
 # debugging ends ---
 
 
-save(x = SYB.df, file = paste0("./output_data/",date,"/SYB",date,".RData"))
+save(x = SYB.df, file = paste0(session_path,"/SYB",date,".RData"))
 # save(x = SYB.df, file = paste0("./Data/Processed/SYB",date,".RData"))
 # save(x = SYB.df, file = "./Data/Processed/SYB.RData")
-load(file = paste0("./output_data/",date,"/SYB",date,".RData"))
+load(file = paste0(session_path,"/SYB",date,".RData"))
 
 # Merge the FSI dataset ---------------------------------------------------
 
@@ -1283,7 +1310,7 @@ varname <- paste0("D",stringr::str_replace_all(date, "-", ""))
 names(fff) <- varname
 fff$STS_ID <- row.names(fff)
 gg <- left_join(check2,fff)
-write.csv(gg, file=paste0("./output_data/",date,"/missing_data.csv"))
+write.csv(gg, file=paste0(session_path,"/missing_data.csv"))
 d <- left_join(check,fff)
 
 colorize_syb <- function(x){
@@ -1321,13 +1348,13 @@ for (i in names(d[-1:-2])){
 library(htmlTable)
 ncolcols <- length(names(d)[grepl("col_", names(d))])
 print(htmlTable(as.matrix(d[1:ncolcols]), css.cell = as.matrix(d[(ncolcols+1):(2*ncolcols)])),
-      file=paste0("./output_data/",date,"/missing_data.html"))
+      file=paste0(session_path,"/missing_data.html"))
 
 
 # End timing!
 t2 <- Sys.time()
 duration <- t2 - t1
-writeLines(format(duration), con = paste0("./output_data/",date,"/duration.txt"))
+writeLines(format(duration), con = paste0(session_path,"/duration.txt"))
 
 
 

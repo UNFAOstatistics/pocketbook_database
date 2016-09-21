@@ -4,6 +4,12 @@
 ## Modified: 03-06-2014
 ###########################################################################
 
+# To allow parallel processing 
+session_path <- readLines(con = "./input_data/session_path.txt")
+load(paste0(session_path,"/pre_agg_image.RData"))
+lapply(pkg_list, library, character.only = TRUE)
+
+
 # M49 sub-regions ---------------------------------------------------------
 
 ## Relation data frame
@@ -269,3 +275,5 @@ rm(list = c("M49subReg.df", "M49subReg", "M49subRegName",
             "M49world.df", "M49world", "M49dvddvg.df", "M49dvddvg", "M49dvddvgName",
             "M49ldc.df", "M49ldc", "M49lldc.df", "M49lldc",
             "M49sids.df", "M49sids"))
+
+saveRDS(M49.df, file = paste0(session_path,"/M49.df.RDS"))

@@ -4,6 +4,11 @@
 ## Modified: 24-09-2015 by Markus
 ###########################################################################
 
+# To allow parallel processing 
+session_path <- readLines(con = "./input_data/session_path.txt")
+load(paste0(session_path,"/pre_agg_image.RData"))
+lapply(pkg_list, library, character.only = TRUE)
+
 ## NOTE (FILIPPO): For the same geographical region we can have several
 ## aggregates that are not comparable for several reasons.
 ## Let's take for example Africa. The regional office for Africa does not
@@ -372,3 +377,6 @@ FAOregions.df = rbind(RAFsubReg.df, RAFregion.df,
 #             "REUsubReg", "REUsubReg.df", "REUsubRegName", "REUregion", "REUregion.df",
 #             # "LACsubReg", "LACsubReg.df", "LACsubRegName", "LACregion", "LACregion.df",
 #             "RNEsubReg", "RNEsubReg.df", "RNEsubRegName", "RNEregion", "RNEregion.df"))
+
+
+saveRDS(FAOregions.df, file = paste0(session_path,"/FAOregions.df.RDS"))

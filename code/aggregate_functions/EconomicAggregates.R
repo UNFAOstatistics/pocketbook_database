@@ -4,6 +4,12 @@
 ## Modified: 03-02-2013
 ###########################################################################
 
+
+# To allow parallel processing 
+session_path <- readLines(con = "./input_data/session_path.txt")
+load(paste0(session_path,"/pre_agg_image.RData"))
+lapply(pkg_list, library, character.only = TRUE)
+
 # COMESA ------------------------------------------------------------------
 
 ## Relation data frame
@@ -347,3 +353,6 @@ rm(list = c("comesa", "comesa.df", "ecowas", "ecowas.df",
             "uemoa", "uemoa.df", "censad", "censad.df", 
 #             "ldc", "ldc.df", "lldc", "lldc.df", "sids", "sids.df", 
             "lie", "lie.df", "lmie", "lmie.df", "lifdc", "lifdc.df"))
+
+saveRDS(EconomicAggregates.df, file = paste0(session_path,"/EconomicAggregates.df.RDS"))
+
