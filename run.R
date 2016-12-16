@@ -1186,10 +1186,10 @@ load(paste0(session_path,"/pre_agg_image.RData"))
 lapply(pkg_list, library, character.only = TRUE)
 
 # Load the computed aggregates!!
-EconomicAggregates.df <- readRDS(file = paste0("./output_data/",session_path,"EconomicAggregates.df.RDS"))
-sofiAggs.df           <- readRDS(file = paste0("./output_data/",session_path,"sofiAggs.df.RDS"))
-M49.df                <- readRDS(file = paste0("./output_data/",session_path,"M49.df.RDS"))
-FAOregions.df         <- readRDS(file = paste0("./output_data/",session_path,"FAOregions.df.RDS"))
+EconomicAggregates.df <- readRDS(file = paste0(session_path,"/EconomicAggregates.df.RDS"))
+sofiAggs.df           <- readRDS(file = paste0(session_path,"/sofiAggs.df.RDS"))
+M49.df                <- readRDS(file = paste0(session_path,"/M49.df.RDS"))
+FAOregions.df         <- readRDS(file = paste0(session_path,"/FAOregions.df.RDS"))
 
 ## Check overlapping in old countries
 FAOchecked.df <- FAOcheck(var = colnames(country.df)[-grep("FAOST_CODE|Year|Area", colnames(country.df))],
@@ -1215,10 +1215,11 @@ country.df <- merge(country.df, FAOcountryProfile[, c("FAOST_CODE", "FAO_TABLE_N
 # Sourcehttps(source("./Rcode/Final/ComplementaryScripts/EconomicAggregates.R")
 ## rbind the datasets
 
-
 postAgg.df <- rbind(country.df, 
                     M49.df,
-                    FAOregions.df)
+                    FAOregions.df,
+                    EconomicAggregates.df,
+                    sofiAggs.df)
 
 # postAgg.df <- rbind(country.df, M49.df)
 # rm(list = c("country.df", "M49.df")) # because M49.df takes a loooooong time to run
