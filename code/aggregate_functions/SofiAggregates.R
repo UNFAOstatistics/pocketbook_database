@@ -1,3 +1,4 @@
+#!/usr/bin/env r
 ###########################################################################
 ## Title: This script compute the SOFI aggregates
 ## Created: 01-09-2013
@@ -5,7 +6,7 @@
 ###########################################################################
 
 # To allow parallel processing 
-session_path <- readLines(con = "./input_data/session_path.txt")
+session_path <- readLines(con = "~/faosync/pocketbooks/pocketbook_database/input_data/session_path.txt")
 load(paste0(session_path,"/pre_agg_image.RData"))
 lapply(pkg_list, library, character.only = TRUE)
 

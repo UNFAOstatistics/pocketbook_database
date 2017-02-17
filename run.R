@@ -8,14 +8,50 @@ root.dir <- "~/faosync/pocketbooks/pocketbook_database/"
 setwd(root.dir)
 
 
+# Needed libraries --------------------------------------------------------
+pkg_list <- c("plyr","dplyr","reshape2","data.table","readr","RJSONIO","FAOSTAT")
+lapply(pkg_list, library, character.only = TRUE)
+
+
 ###########################################################################
 ## Settings
 ###########################################################################
 
+# temptemp
+addnewmetavars <- FALSE
+if (addnewmetavars){
+  mm <- read_csv("./input_data/Metadata2015.csv")
+  mm <- mm %>% filter(!STS_ID %in% c("ILO_EMP_2EMP_SEX_AGE_NB","ILO_female_emp_agri")) %>% select(-OWNED)
+  cc <- read_csv("./input_data/Construction2015.csv")
+  cc <- cc %>% filter(!STS_ID %in% c("ILO_EMP_2EMP_SEX_AGE_NB","ILO_female_emp_agri"))
 
-# Needed libraries --------------------------------------------------------
-pkg_list <- c("plyr","dplyr","reshape2","data.table","readr","RJSONIO","FAOSTAT")
-lapply(pkg_list, library, character.only = TRUE)
+  ilorow <- data_frame(STS_ID = c("ILO_EMP_2EMP_SEX_AGE_NB","ILO_female_emp_agri"),
+                       TITLE_STS = c("Employed people in 1000","Share of femele employment in agriculture of total female employment"),
+                       UNIT_MULT  = c("NA","NA"),
+                       UNIT_MEASURE = c("people","percent"),
+                       OWNER = c("ILO","ILO"),
+                       SOURCE = c("ILO","ILO"),
+                       DATA_TYPE = c("processed","processed"),
+                       TOPIC = c("demography","demography")
+  )
+  
+  mm %>% 
+    bind_rows(.,ilorow) %>%
+    write.csv(., "./input_data/Metadata2015.csv", row.names = FALSE)
+  
+  # Employment by sex and age -- ILO estimates and projections, Nov. 2016 (thousands)
+  # Employment by sex and economic activity -- ILO estimates and projections, Nov. 2016 (thousands)
+  
+  ilorow <- data_frame(STS_ID = c("ILO_EMP_2EMP_SEX_AGE_NB","ILO_female_emp_agri"),
+                       STS_ID_WEIGHT = c(NA,"OA.TPBS.POP.PPL.NO"),
+                       AGGREGATION = c("sum","weighted.mean"))
+
+  cc %>% 
+    bind_rows(.,ilorow) %>%
+    write.csv(., "./input_data/Construction2015.csv", row.names = FALSE)
+}
+
+
 
 
 
@@ -28,36 +64,37 @@ source("./code/read_functions/ReadMetadata.R")
 source("./code/read_functions/ReadConstruction.R")
 
 
-# source("./code/FAOSTAT_functions/chConstruct.R")
-# source("./code/FAOSTAT_functions/chgr.R")
-# source("./code/FAOSTAT_functions/constructSYB.R")
-# source("./code/FAOSTAT_functions/geogr.R")
-# source("./code/FAOSTAT_functions/getFAO.R")
-# source("./code/FAOSTAT_functions/getFAOtoSYB.R")
-# source("./code/FAOSTAT_functions/getWDI.R")
-# source("./code/FAOSTAT_functions/getWDImetaData.R")
-# source("./code/FAOSTAT_functions/getWDItoSYB.R")
-# source("./code/FAOSTAT_functions/grConstruct.R")
-# source("./code/FAOSTAT_functions/printLab.R")
-# source("./code/FAOSTAT_functions/scaleUnit.R")
-# source("./code/FAOSTAT_functions/shConstruct.R")
-# source("./code/FAOSTAT_functions/translateCountryCode.R")
-# source("./code/FAOSTAT_functions/translateUnit.R")
+
+source("./code/FAOSTAT_functions/chConstruct.R")
+source("./code/FAOSTAT_functions/chgr.R")
+source("./code/FAOSTAT_functions/constructSYB.R")
+source("./code/FAOSTAT_functions/geogr.R")
+source("./code/FAOSTAT_functions/getFAO.R")
+source("./code/FAOSTAT_functions/getFAOtoSYB.R")
+source("./code/FAOSTAT_functions/getWDI.R")
+source("./code/FAOSTAT_functions/getWDImetaData.R")
+source("./code/FAOSTAT_functions/getWDItoSYB.R")
+source("./code/FAOSTAT_functions/grConstruct.R")
+source("./code/FAOSTAT_functions/printLab.R")
+source("./code/FAOSTAT_functions/scaleUnit.R")
+source("./code/FAOSTAT_functions/shConstruct.R")
+source("./code/FAOSTAT_functions/translateCountryCode.R")
+source("./code/FAOSTAT_functions/translateUnit.R")
 # 
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/Aggregation.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/CHMT.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/ebind.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/FAOcheck.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/FAOcountryProfile.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/FAOmetaTable.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/FAOregionProfile.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/FAOsearch.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/FAOSTAT-package.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/fillCountryCode.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/indConstruct.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/lsgr.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/mergeSYB.R")
-# source("./code/FAOSTAT_functions//FAOSTAT_functions/overlap.R")
+source("./code/FAOSTAT_functions/Aggregation.R")
+source("./code/FAOSTAT_functions/CHMT.R")
+source("./code/FAOSTAT_functions/ebind.R")
+source("./code/FAOSTAT_functions/FAOcheck.R")
+source("./code/FAOSTAT_functions/FAOcountryProfile.R")
+source("./code/FAOSTAT_functions/FAOmetaTable.R")
+source("./code/FAOSTAT_functions/FAOregionProfile.R")
+source("./code/FAOSTAT_functions/FAOsearch.R")
+source("./code/FAOSTAT_functions/FAOSTAT-package.R")
+source("./code/FAOSTAT_functions/fillCountryCode.R")
+source("./code/FAOSTAT_functions/indConstruct.R")
+source("./code/FAOSTAT_functions/lsgr.R")
+source("./code/FAOSTAT_functions/mergeSYB.R")
+source("./code/FAOSTAT_functions/overlap.R")
 # 
 # 
 # library(RJSONIO)
@@ -193,6 +230,210 @@ session_path <- paste0("./output_data/",date)
 dir.create(session_path)
 
 
+
+###########################################################################
+## BULKDOWNLOAD WHOLE LOT
+###########################################################################
+
+#  ____  _   _ _     _  ______   _____        ___   _ _     ___    _    ____  
+# | __ )| | | | |   | |/ |  _ \ / _ \ \      / | \ | | |   / _ \  / \  |  _ \ 
+# |  _ \| | | | |   | ' /| | | | | | \ \ /\ / /|  \| | |  | | | |/ _ \ | | | |
+# | |_) | |_| | |___| . \| |_| | |_| |\ V  V / | |\  | |__| |_| / ___ \| |_| |
+# |____/ \___/|_____|_|\_|____/ \___/  \_/\_/  |_| \_|_____\___/_/   \_|____/ 
+#                                                                              
+
+
+want_to_bulk <- FALSE
+library(tidyverse)
+library(stringr)
+
+if (want_to_bulk){
+  
+  # _____  _     ___   ____  _____   _   _____ 
+  # |  ___|/ \   / _ \ / ___||_   _| / \ |_   _|
+  # | |_  / _ \ | | | |\___ \  | |  / _ \  | |  
+  # |  _|/ ___ \| |_| | ___) | | | / ___ \ | |  
+  # |_| /_/   \_\\___/ |____/  |_|/_/   \_\|_|  
+  
+  
+  #' Download the zipfile from FAOSTAT
+    dir.create("~/local_data/faostat/csv/", showWarnings = FALSE, recursive = TRUE)
+    dir.create("~/local_data/faostat/rds/", showWarnings = FALSE, recursive = TRUE)
+    dir.create("~/local_data/faostat/metadata/", showWarnings = FALSE, recursive = TRUE)
+    
+    download.file("http://fenixservices.fao.org/faostat/static/bulkdownloads/FAOSTAT.zip", 
+                  destfile = paste0("~/local_data/faostat/FAOSTAT",Sys.Date(),".zip"))
+    unzip(zipfile = "~/local_data/faostat/FAOSTAT2017-02-09.zip", exdir = "~/local_data/faostat/csv")
+    zipps <- list.files("~/local_data/faostat/csv/", ".zip", full.names = TRUE)
+    for (i in zipps){
+      unzip(zipfile = i, exdir = "~/local_data/faostat/csv")
+    }
+    #' lowercase filenames
+    csvs <- list.files("~/local_data/faostat/csv/", ".csv", full.names = TRUE)
+    for (i in csvs){
+      file.rename(from = i, to = tolower(i))
+    }
+    for (i in zipps){
+      file.remove(i)
+    }
+
+  # read FAOSTAT
+  path <- list.files("~/local_data/faostat/csv/", ".csv", full.names = TRUE)
+  name <- sub(".csv", "", list.files("~/local_data/faostat/csv/", ".csv", full.names = FALSE))
+  cat <- sub("_.+","",name)
+  subcat <- sub("E_.+","",name)
+  subcat <- sub("_$","",subcat)
+  
+  # 'create data with datafile names for the following loops-by-file processes
+  csv_data <- data_frame(cat=cat,
+                         subcat=subcat,
+                         filename=name,
+                         filepath=path)
+  csv_data$id <- 1:nrow(csv_data)
+  
+  saveRDS(csv_data, file = "~/local_data/faostat/metadata/csv_data.RDS")
+  
+  #' first, the key table
+  vardata <- tribble(
+    ~old, ~new,
+    "area","country",
+    "areacode","countrycode",
+    "months","element",
+    "source","element",
+    "sourcecode","elementcode",
+    "indicator","item",
+    "indicatorcode","itemcode",
+    "monthscode","elementcode",
+    "currency","element",
+    "isocurrencycode","elementcode"
+  )
+  
+  #' 1st loop: load all files, extract column names for sanitation AND 
+  #' save original files as RDS to speed up the rest of the process.
+  #' 
+  #' we create a one line per data with list column consisting of the vars names
+  dat <- data_frame()
+  meta_base <- data_frame()
+  for(i in 60:nrow(csv_data)){
+  # for(i in 1:nrow(csv_data)){
+    if (i %in% c(36 # excange rate
+                 )) next()
+    df <- read_csv(csv_data$filepath[i])
+    names(df) <- tolower(gsub(" |\\.", "", names(df)))
+    names(df) <- ifelse(names(df) %in% vardata$old, 
+                        vardata$new[match(names(df), vardata$old)],names(df))
+    
+    df %>% select(-contains("year"), -contains("country"),-contains("flag")) %>% 
+      distinct() %>% 
+      mutate(unit = as.character(unit)) %>% 
+      bind_rows(meta_base, .) -> meta_base
+    
+    if ("year" %in% names(df)){
+      df <- df %>% select(ends_with("code"),year,value,unit)
+    } else {
+      df <- df %>% select(ends_with("code"),value,unit)
+    }
+    df %>% 
+      mutate(value = as.numeric(value),
+             id = csv_data$id[i]) %>% 
+      mutate_if(is.integer, as.character) -> df
+    df <- df %>% mutate_if(grepl("code", names(.)), as.integer) %>% 
+      mutate(id = as.integer(id))
+    dat <- bind_rows(dat,df)
+  }
+  dat %>% mutate(year = as.integer(year)) -> dat
+  saveRDS(dat, "~/local_data/faostat/rds/faostat.RDS")
+  
+  #' there are many not necessary variables, get rid of them and find the distinctive cases
+  meta_base %>% 
+    select(-value,-flag,-note,-x1,-reportercountries,-partnercountries,-survey,-breakdownvariablecode,-breakdownvariable,-breadownbysexofthehouseholdheadcode,-breadownbysexofthehouseholdhead,-measurecode,-measure) %>% 
+    distinct() %>% saveRDS(., "~/local_data/faostat/metadata/meta_faostat.RDS")
+  
+#  __        __ ___   ____   _      ____    ____     _     _   _  _  __
+#  \ \      / // _ \ |  _ \ | |    |  _ \  | __ )   / \   | \ | || |/ /
+#   \ \ /\ / /| | | || |_) || |    | | | | |  _ \  / _ \  |  \| || ' / 
+#    \ V  V / | |_| ||  _ < | |___ | |_| | | |_) |/ ___ \ | |\  || . \ 
+#     \_/\_/   \___/ |_| \_\|_____||____/  |____//_/   \_\|_| \_||_|\_\
+
+    dir.create("~/local_data/wdi/csv/", showWarnings = FALSE, recursive = TRUE)
+    dir.create("~/local_data/wdi/rds/", showWarnings = FALSE, recursive = TRUE)
+    download.file("http://databank.worldbank.org/data/download/WDI_csv.zip", 
+                  destfile = paste0("~/local_data/wdi/WDI_csv",Sys.Date(),".zip"))  
+
+    unzip("~/local_data/wdi/WDI_csv2017-02-04.zip", 
+          exdir = "~/local_data/wdi/csv/")
+
+  # read WDI
+  wdi_raw <- read_csv("~/local_data/wdi/csv/WDI_Data.csv")
+  names(wdi_raw) <- tolower(names(wdi_raw))
+  names(wdi_raw) <- str_replace_all(names(wdi_raw), " ", ".")
+  wdi_raw$indicator.name <- NULL
+  wdi_raw$country.name <- NULL
+  wdi_raw <- gather(wdi_raw,
+                    Year,
+                    value,
+                    3:ncol(wdi_raw))
+  wdi_raw <- wdi_raw[!is.na(wdi_raw$value),]
+  wdi_raw <- spread(wdi_raw, 
+                    indicator.code,
+                    value)
+  wdi_raw$Year <- as.integer(wdi_raw$Year)
+  wdi_data <- wdi_raw
+  # file.remove("~/local_data/wdi/csv/WDI_Data.csv")
+  
+  saveRDS(wdi_data, file="~/local_data/wdi/rds/WDI_Data.RDS")
+  
+  #  ___  _      ___  
+  # |_ _|| |    / _ \ 
+  #  | | | |   | | | |
+  #  | | | |___| |_| |
+  # |___||_____|\___/ 
+
+  dir.create("~/local_data/ilo/csv/", showWarnings = FALSE, recursive = TRUE)
+  dir.create("~/local_data/ilo/rds/", showWarnings = FALSE, recursive = TRUE)
+  download.file("http://www.ilo.org/ilostat-files/WEB_bulk_download/bulk_ILOEST_EN.7z", 
+                destfile = paste0("~/local_data/ilo/bulk_ILOEST_EN",Sys.Date(),".7z"))  
+  system("dtrx -n -f ~/local_data/ilo/bulk_ILOEST_EN2017-02-16.7z")
+  file.copy("./bulk_ILOEST_EN.csv", "~/local_data/ilo/csv/")
+  file.remove("./bulk_ILOEST_EN.csv")
+# PROCESS ILO
+
+d <- read_csv("~/local_data/ilo/csv/bulk_ILOEST_EN.csv")
+# "Employment by sex and age -- ILO estimates and projections, Nov. 2016 (thousands)"
+d %>% filter(indicator == "EMP_2EMP_SEX_AGE_NB",
+             !grepl("^X", ref_area),
+             sex =="SEX_T",
+             classif1 == "AGE_YTHADULT_YGE25") %>% 
+  # select(collection.label) %>% distinct() %>% View()
+  select(ref_area,time,obs_value) %>% 
+  mutate(FAOST_CODE = countrycode::countrycode(ref_area, 
+                                               origin = "iso3c", 
+                                               destination = "fao")) %>% 
+  rename(Year = time,
+         ILO_EMP_2EMP_SEX_AGE_NB = obs_value) %>% 
+  select(-ref_area) -> ilo1
+
+# Employment by sex and economic activity -- ILO estimates and projections, Nov. 2016 (thousands)
+d %>% filter(indicator == "EMP_2EMP_SEX_ECO_NB",
+             !grepl("^X", ref_area),
+             sex =="SEX_F",
+             classif1 %in% c("ECO_SECTOR_AGR","ECO_SECTOR_TOTAL")) %>% 
+  select(ref_area,classif1,time,obs_value) %>% 
+  spread(., classif1, obs_value) %>% 
+  mutate(ILO_female_emp_agri = ECO_SECTOR_AGR / ECO_SECTOR_TOTAL * 100,
+         FAOST_CODE = countrycode::countrycode(ref_area, 
+                                                            origin = "iso3c", 
+                                                            destination = "fao")) %>% 
+  rename(Year = time) %>% 
+  select(FAOST_CODE,Year,ILO_female_emp_agri) -> ilo2
+
+ilo_data <- left_join(ilo1,ilo2)
+saveRDS(ilo_data, file="~/local_data/ilo/rds/ilo_data.RDS")
+
+}
+    
+
+
 #   ____                          _                    _   _____  _     ___   ____  _____ 
 #  |  _ \   ___ __      __ _ __  | |  ___    __ _   __| | |  ___|/ \   / _ \ / ___||_   _|
 #  | | | \ / _ \\ \ /\ / /| '_ \ | | / _ \  / _` | / _` | | |_  / _ \ | | | |\___ \  | |  
@@ -208,6 +449,7 @@ dir.create(session_path)
 # Download variables from FAOSTAT, parameters -----------------------------
 
 faostatData.df <- meta.lst[["FAOSTAT"]]
+meta_full <- meta.lst[["FULL"]]
 dwnldOA  <- FALSE # Population # FALSE DEFAULT
 dwnldFO  <- FALSE # Forestry # FALSE DEFAULT
 dwnldGHG <- FALSE # Greenhouse gases # FALSE DEFAULT
@@ -216,9 +458,9 @@ dwnldFB  <- FALSE # Food balance sheets # FALSE DEFAULT
 dwnldRL  <- TRUE # Resources, Resources - Land
 dwnldRF  <- TRUE # Resources - Fertilizers
 dwnldRP  <- TRUE # Resources - Pesticides
-dwnldCS  <- TRUE # Investments - Capital stock
-dwnldRM  <- TRUE # Investments - Machinery
-dwnldIG  <- TRUE # Government expenditures
+dwnldCS  <- FALSE # Investments - Capital stock
+dwnldRM  <- FALSE # Investments - Machinery
+dwnldIG  <- FALSE # Government expenditures
 dwnldA   <- TRUE # ASTI
 dwnldQC  <- TRUE # Production - Crops
 dwnldQA  <- TRUE # Production - Live animals
@@ -229,442 +471,137 @@ dwnldQV  <- TRUE # Production - Value of agricultural production
 dwnldQI  <- TRUE # Production indices
 dwnldTP  <- TRUE # Trade - Crops and livestock products
 dwnldTI  <- TRUE # Trade - Trade indices
-
-dwnldCOF <- TRUE # Coffeebook indicators
-
+dwnldCOF <- FALSE # Coffeebook indicators
 downloadWB <- TRUE; CheckLogical(downloadWB)
 
-
-replication_date <- "2016-09-15-09" # used to work
+# replication_date <- "2016-09-15-09" # used to work
+replication_date <- "2016-12-15-20" # used to work
 # replication_date <- "2016-02-08-23" 
 
 
-
-# paste0("./output_data/",date)
-
-# FAOSTAT, Population - Annual population ---------------------------------
-
-if (dwnldOA) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "OA",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOoa.df <- FAO.lst$entity; rm(dwnldOA); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOoa.df, file = paste0("./output_data/",date,"/FAOoa", date, ".RData"))
-} else {
-  ## ...open list
-  load(file = "./output_data/2015-10-08/FAOoa2015-08-18.RData") # to get the pop in employment..
-  # load(file = paste0("./output_data/",replication_date,"/FAOoa",replication_date,".RData"))
-}
-
-# FAOSTAT, Resources - Land -----------------------------------------------
-
-if (dwnldRL) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "RL",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOrl.df <- FAO.lst$entity; rm(dwnldRL); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOrl.df, file = paste0("./output_data/",date,"/FAOrl", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOrl2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOrl",replication_date,".RData"))
-}
-
-# FAOSTAT, Resources - Fertilizers ----------------------------------------
-
-if (dwnldRF) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "RF",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOrf.df <- FAO.lst$entity; rm(dwnldRF); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOrf.df, file = paste0("./output_data/",date,"/FAOrf", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOrf2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOrf",replication_date,".RData"))
-}
-
-# FAOSTAT, Resources - Pesticides -----------------------------------------
-
-if (dwnldRP) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] %in% c("RP","EP"),],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOrp.df <- FAO.lst$entity; rm(dwnldRP); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOrp.df, file = paste0(session_path,"/FAOrp", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOrp2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOrp",replication_date,".RData"))
-}
-
-# FAOSTAT, Investments - Capital stock ------------------------------------
-
-if (dwnldCS) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "CS",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOcs.df <- FAO.lst$entity; rm(dwnldCS); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOcs.df, file = paste0(session_path,"/FAOcs", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOcs2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOcs",replication_date,".RData"))
-}
-
-# FAOSTAT, Investments - Machinery ----------------------------------------
-
-if (dwnldRM) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "RM",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOrm.df <- FAO.lst$entity; rm(dwnldRM); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOrm.df, file = paste0(session_path,"/FAOrm", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOrm2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOrm",replication_date,".RData"))
-}
-
-# FAOSTAT, Government expenditures ----------------------------------------
-
-if (dwnldIG) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "IG",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOig.df <- FAO.lst$entity; rm(dwnldIG); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOig.df, file = paste0(session_path,"/FAOig", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOig2014-12-05.RData") # so the last time this was built succesfully
-  load(file = paste0("./output_data/",replication_date,"/FAOig",replication_date,".RData"))
-}
-
-# FAOSTAT, ASTI -----------------------------------------------------------
-
-if (dwnldA) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] %in% c("AA", "AE", "AR"),],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOa.df <- FAO.lst$entity; rm(dwnldA); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOa.df, file = paste0(session_path,"/FAOa", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOa2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOa",replication_date,".RData"))
-}
-
-# FAOSTAT, Production - Crops ---------------------------------------------
-
-if (dwnldQC) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "QC",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOqc.df <- FAO.lst$entity; rm(dwnldQC); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOqc.df, file = paste0(session_path,"/FAOqc", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOqc2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOqc",replication_date,".RData"))
-}
-
-# FAOSTAT, Production - Live animals --------------------------------------
-
-if (dwnldQA) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "QA",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOqa.df <- FAO.lst$entity; rm(dwnldQA); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOqa.df, file = paste0(session_path,"/FAOqa", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOqa2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOqa",replication_date,".RData"))
-}
-
-# FAOSTAT, Production - Crops processed -----------------------------------
-
-if (dwnldQD) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "QD",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOqd.df <- FAO.lst$entity; rm(dwnldQD); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOqd.df, file = paste0(session_path,"/FAOqd", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOqd2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOqd",replication_date,".RData"))
-}
-
-# FAOSTAT, Production - Livestock primary ---------------------------------
-
-if (dwnldQL) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "QL",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOql.df <- FAO.lst$entity; rm(dwnldQL); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOql.df, file = paste0(session_path,"/FAOql", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOql2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOql",replication_date,".RData"))
-}
-
-# FAOSTAT, Production - Livestock processed -------------------------------
-
-if (dwnldQP) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "QP",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOqp.df <- FAO.lst$entity; rm(dwnldQP); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOqp.df, file = paste0(session_path,"/FAOqp", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOqp2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOqp",replication_date,".RData"))
-}
-
-# FAOSTAT, Production - Value of agricultural production ------------------
-
-if (dwnldQV) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "QV",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOqv.df <- FAO.lst$entity; rm(dwnldQV); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOqv.df, file = paste0(session_path,"/FAOqv", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOqv2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOqv",replication_date,".RData"))
-}
-
-# FAOSTAT, Production - Production indices --------------------------------
-
-if (dwnldQI) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "QI",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOqi.df <- FAO.lst$entity; rm(dwnldQI); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOqi.df, file = paste0(session_path,"/FAOqi", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOqi2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOqi",replication_date,".RData"))
-}
-
-# FAOSTAT, Trade - Crops and livestock products ---------------------------
-
-if (dwnldTP) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "TP",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOtp.df <- FAO.lst$entity; rm(dwnldTP); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOtp.df, file = paste0(session_path,"/FAOtp", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOtp2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOtp",replication_date,".RData"))
-}
-
-# FAOSTAT, Trade - Trade indices ------------------------------------------
-
-if (dwnldTI) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "TI",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOti.df <- FAO.lst$entity; rm(dwnldTI); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOti.df, file = paste0(session_path,"/FAOti", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOti2015-10-08.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOti",replication_date,".RData"))
-}
-
-# FAOSTAT, Forestry -------------------------------------------------------
-
-if (dwnldFO) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "FO",],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOfo.df <- FAO.lst$entity; rm(dwnldFO); rm(FAO.lst)
-  ## ...update list
-  save(x = FAOfo.df, file = paste0(session_path,"/FAOfo", date, ".RData"))
-} else {
-  ## ...open list
-  load(file = "./output_data/2015-12-28-01/FAOfo2015-12-28-01.RData")
-  # load(file = paste0("./output_data/",replication_date,"/FAOfo",replication_date,".RData"))
-}
-
-# FAOSTAT, Greenhouse gases -----------------------------------------------
-
-if (dwnldGHG) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] %in% c("GT", "GF", "GL", "GN", "GI"),],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOghg.df <- FAO.lst$entity; rm(dwnldGHG); rm(FAO.lst)
-  for (i in 3:NCOL(FAOghg.df)) {
-    FAOghg.df[, i] <- as.numeric(FAOghg.df[, i])
+if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
+  
+  ## New bulk download function
+  fao <- readRDS("~/local_data/faostat/rds/faostat.RDS")
+  meta <- readRDS("~/faosync/syb_bulk_database/metadata/meta_faostat.RDS")
+  csv_data <- readRDS("~/faosync/syb_bulk_database/metadata/csv_data.RDS")
+  meta$elementcode <- as.character(meta$elementcode)
+  meta$itemcode <- as.character(meta$itemcode)
+  # For FAOST_CODEs
+  faostcodedata <- readRDS("~/local_data/faostat/rds/inputs_fertilizers_e_all_data_(normalized).RDS")
+  
+  fao$subcat <- ifelse(grepl("emissions", fao$subcat), "emissions", fao$subcat)
+  
+  vars <- faostatData.df# [faostatData.df[, "SQL_DOMAIN_CODE"] %in% "TP",]
+  
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "OA"] <- "population_e_all_data_(norm)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "RL"] <- "inputs_land_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "RF"] <- "inputs_fertilizers_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "RP"] <- "inputs_pesticides_use_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "EP"] <- "inputs_pesticides_use_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "CS"] <- "investment_capitalstock_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "RM"] <- "investment_machinery_e_all_data"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "IG"] <- "investment_governmentexpenditure_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "AA"] <- "asti_researchers_e_all_data_(norm)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "AE"] <- "asti_research_spending_e_all_data_(norm)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "AR"] <- "asti_researchers_e_all_data_(norm)" # a LOT less
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "QC"] <- "production_crops_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "QA"] <- "production_livestock_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "QD"] <- "production_cropsprocessed_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "QL"] <- "production_livestockprimary_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "QP"] <- "production_livestockprocessed_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "QV"] <- "value_of_production_e_all_data_(norm)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "QI"] <- "production_indices_e_all_data_(norm)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "TP"] <- "trade_crops_livestock_e_all_data_(norm)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "TI"] <- "trade_indices_e_all_data_(norm)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "FO"] <- "forestry_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "GT"] <- "emissions"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "GF"] <- "emissions"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "GL"] <- "emissions"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "GN"] <- "emissions"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "GI"] <- "emissions"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "CP"] <- "prices_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "PP"] <- "prices_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "PI"] <- "price_indices_e_all_data_(normalized)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "CC"] <- "food_security_data_e_all_data_(norm)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "CL"] <- "food_security_data_e_all_data_(norm)"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "EE"] <- "environment_energy_e_all_data"
+  
+  fao$subcat <- csv_data$subcat[match(fao$id, csv_data$id)]
+  
+  slice_fao <- function(name="RF.FERT.NI.TN.NO", 
+                        elementCode=5155,
+                        itemCode=3102, 
+                        subcat="inputs_fertilizers_e_all_data_(normalized)") {
+    require(dplyr)
+    tmpp <- fao %>% filter(itemcode == itemCode,
+                           elementcode == elementCode,
+                           subcat == subcat)
+    if (nrow(tmpp) == 0){
+      tmpp <- data_frame(countrycode = unique(faostcodedata$countrycode),
+                         year = unique(faostcodedata$countrycode),
+                         value = NA)
+    }
+    tmpp <- tmpp[c("countrycode","year","value")]
+    names(tmpp) <- c("FAOST_CODE","Year",name)
+    tmpp <- tmpp %>% filter(FAOST_CODE <= 400) %>%  
+      mutate(Year = as.integer(Year)) #%>% 
+    #filter(Year >= 2010:2016)
+    return(tmpp)
   }
-  ## ...update list
-  save(x = FAOghg.df, file = paste0(session_path,"/FAOghg", date, ".RData"))
-} else {
-  ## ...open list
-  load(file = "./output_data/2015-12-28-01/FAOghg2015-12-28-01.RData") # use this to get the data for forest net-emissions!
-  # load(file = paste0("./output_data/",replication_date,"/FAOghg",replication_date,".RData"))
-}
-
-# FAOSTAT, Food balance sheets --------------------------------------------
-# if (dwnldOA) {
-#   ## Download data from FAOSTAT
-#   FAO.lst <- with(faostatData.df[faostatData.df[, "SQL_DOMAIN_CODE"] == "OA",],
-#                   getFAOtoSYB(name = STS_ID,
-#                               domainCode = SQL_DOMAIN_CODE,
-#                               elementCode = SQL_ELEMENT_CODE,
-#                               itemCode = SQL_ITEM_CODE,
-#                               # productionDB = FALSE,
-#                               useCHMT = FALSE))
-#   FAOoa.df <- FAO.lst$entity; rm(dwnldOA); rm(FAO.lst)
-#   ## ...update list
-#   save(x = FAOoa.df, file = paste0(session_path,"/FAOoa", date, ".RData"))
-# } else {
-#   ## ...open list
-#   load(file = "./output_data/2015-10-08/FAOoa2015-10-08.RData")
-# }
-
-# FAOSTAT, Coffee - Coffee book variables ---------------------------------
-if (dwnldCOF) {
-  ## Download data from FAOSTAT
-  FAO.lst <- with(faostatData.df[faostatData.df[, "TOPIC"] %in% c("coffee"),],
-                  getFAOtoSYB(name = STS_ID,
-                              domainCode = SQL_DOMAIN_CODE,
-                              elementCode = SQL_ELEMENT_CODE,
-                              itemCode = SQL_ITEM_CODE,
-                              # productionDB = FALSE,
-                              useCHMT = FALSE))
-  FAOcof.df <- FAO.lst$entity; rm(dwnldFB); rm(FAO.lst)
-  for (i in 3:NCOL(FAOcof.df)) {
-    FAOcof.df[, i] <- as.numeric(FAOcof.df[, i])
+  
+  
+  for (i in 1:100) {
+    new <- slice_fao(name = vars$STS_ID[i],
+                     elementCode = vars$SQL_ELEMENT_CODE[i], 
+                     itemCode = vars$SQL_ITEM_CODE[i],
+                     subcat= vars$subcat[i])
+    # meta[meta$itemcode %in% vars$SQL_ITEM_CODE[1] & meta$elementcode %in% vars$SQL_ELEMENT_CODE[1],]
+    if (i == 1) {
+      dat <- new
+    } else {
+      dat <- left_join(dat,new,by = c("FAOST_CODE" = "FAOST_CODE","Year" = "Year"))  
+    }
   }
-  ## ...update list
-  save(x = FAOcof.df, file = paste0(session_path,"/FAOcof", date, ".RData"))
-} else {
-  ## ...open list
-  # load(file = "./output_data/2015-10-08/FAOcof2015-10-13.RData")
-  load(file = paste0("./output_data/",replication_date,"/FAOcof",replication_date,".RData"))
+  # [1] 66823   102
+  dat <- dat[!duplicated(dat[c("FAOST_CODE","Year")]),]
+  saveRDS(dat, "~/local_data/faostat/rds/faostat_dat1.RDS")
+  for (i in 101:200) {
+    new <- slice_fao(name = vars$STS_ID[i],
+                     elementCode = vars$SQL_ELEMENT_CODE[i], 
+                     itemCode = vars$SQL_ITEM_CODE[i],
+                     subcat= vars$subcat[i])
+    # meta[meta$itemcode %in% vars$SQL_ITEM_CODE[1] & meta$elementcode %in% vars$SQL_ELEMENT_CODE[1],]
+    if (i == 101) {
+      dat <- new
+    } else {
+      dat <- left_join(dat,new,by = c("FAOST_CODE" = "FAOST_CODE","Year" = "Year"))  
+    }
+  }
+  dat <- dat[!duplicated(dat[c("FAOST_CODE","Year")]),]
+  saveRDS(dat, "~/local_data/faostat/rds/faostat_dat2.RDS")
+  for (i in 201:nrow(vars)) {
+    new <- slice_fao(name = vars$STS_ID[i],
+                     elementCode = vars$SQL_ELEMENT_CODE[i], 
+                     itemCode = vars$SQL_ITEM_CODE[i],
+                     subcat= vars$subcat[i])
+    # meta[meta$itemcode %in% vars$SQL_ITEM_CODE[1] & meta$elementcode %in% vars$SQL_ELEMENT_CODE[1],]
+    if (i == 201) {
+      dat <- new
+    } else {
+      dat <- left_join(dat,new,by = c("FAOST_CODE" = "FAOST_CODE","Year" = "Year"))  
+    }
+  }
+  dat <- dat[!duplicated(dat[c("FAOST_CODE","Year")]),]
+  saveRDS(dat, "~/local_data/faostat/rds/faostat_dat3.RDS")
 }
 
+
+
+library(dplyr)
+readRDS("~/local_data/faostat/rds/faostat_dat1.RDS") %>% 
+  left_join(.,readRDS("~/local_data/faostat/rds/faostat_dat2.RDS")) %>% 
+  left_join(.,readRDS("~/local_data/faostat/rds/faostat_dat3.RDS")) -> faost_all.df
 
 #   ____                          _                    _  __        __ ____  
 #  |  _ \   ___ __      __ _ __  | |  ___    __ _   __| | \ \      / /| __ ) 
@@ -675,62 +612,41 @@ if (dwnldCOF) {
 
 # Download variables from WB ----------------------------------------------
 
+wdi_df <- readRDS("~/local_data/wdi/rds/WDI_Data.RDS")
+wdi_vars <- meta.lst[["WDI"]]
 
-if (downloadWB) {
-  ## Download data from WDI
-  WB.lst1 <- with(meta.lst[["WDI"]][1:40,],
-                  getWDItoSYB(indicator = WDINAME, name = STS_ID))
-  ## ...update list
-  save(x = WB.lst1, file = paste0(session_path,"/WBdata1", date, ".RData"))
-} else {
-  ## ...open list
-  load(file = "./output_data/2015-12-28-01/WBdata12015-12-28-01.RData")
-  # load(file = paste0("./output_data/",replication_date,"/WBdata1",replication_date,".RData"))
-}
-if (downloadWB) {
-  ## Download data from WDI
-  WB.lst2 <- with(meta.lst[["WDI"]][41:75,],
-                  getWDItoSYB(indicator = WDINAME, name = STS_ID))
-  ## ...update list
-  save(x = WB.lst2, file = paste0(session_path,"/WBdata2", date, ".RData"))
-} else {
-  ## ...open list
-  load(file = "./output_data/2015-12-28-01/WBdata22015-12-28-01.RData")
-  # load(file = paste0("./output_data/",replication_date,"/WBdata2",replication_date,".RData"))
-}
-if (downloadWB) {
-  ## Download data from WDI
-  WB.lst3 <- with(meta.lst[["WDI"]][76:nrow(meta.lst[["WDI"]]),],
-                  getWDItoSYB(indicator = WDINAME, name = STS_ID))
-  ## ...update list
-  save(x = WB.lst3, file = paste0(session_path,"/WBdata3", date, ".RData"))
-} else {
-  ## ...open list
-  load(file = "./output_data/2015-12-28-01/WBdata32015-12-28-01.RData")
-  # load(file = paste0("./output_data/",replication_date,"/WBdata3",replication_date,".RData"))
-}
-WB.df1 <- WB.lst1$entity
-WB.df2 <- WB.lst2$entity
-WB.df3 <- WB.lst3$entity
+wdi_vars %>% filter(!WDINAME %in% c('SP.POP.1564.FE.IN', 'SP.POP.65UP.FE.IN', 'SP.POP.1564.MA.IN', 'SP.POP.65UP.MA.IN','EE.BOD.TOTL.KG')) -> wdi_vars
 
-WB.df <- dplyr::left_join(WB.df1,WB.df2)
-WB.df <- dplyr::left_join(WB.df,WB.df3)
+wdi_df[c("country.code","Year",wdi_vars$WDINAME[1:40])] -> tmp1
+wdi_df[c("country.code","Year",wdi_vars$WDINAME[41:nrow(wdi_vars)])] -> tmp2
 
-WB.df <- WB.df[!duplicated(WB.df[c("ISO2_WB_CODE","Year")]),]
+WB.df <- dplyr::left_join(tmp1,tmp2)
+
+WB.df <- WB.df[!duplicated(WB.df[c("country.code","Year")]),]
 ##
+WB.df2 <- translateCountryCode(data = WB.df,
+                              from = "ISO2_WB_CODE", 
+                              to = "FAOST_CODE", oldCode = "country.code")
+WB.df$FAOST_CODE <- countrycode::countrycode(sourcevar = WB.df$country.code, origin = "wb", destination = "fao")
 
-
-
-WB.df <- translateCountryCode(data = WB.df, 
-                              from = "ISO2_WB_CODE", to = "FAOST_CODE")
-WB.df <- WB.df[, -grep("ISO2_WB_CODE|Country", colnames(WB.df))]
+WB.df <- WB.df %>% select(-country.code)
 
 # Markus fixes just to get thing working
 WB.df <- WB.df[WB.df$FAOST_CODE < 400,]
 WB.df <- WB.df[!is.na(WB.df$FAOST_CODE),]
 
+saveRDS(WB.df, "~/local_data/wdi/rds/WB_tmp.RDS")
+
 # save(x = FAO.df, file = paste0(session_path,"/FAO.RData"))
 # load(file = "./output_data/2015-11-17/FAO.RData")
+
+
+ilo.df <- readRDS("~/local_data/ilo/rds/ilo_data.RDS")
+ilo.df <- ilo.df[c(3,1,2,4)]
+ilo.df <- na.omit(ilo.df)
+# lets add the ilo files to metadata
+
+
 
 
 # Source manual data functions ------------------------------------------------
@@ -765,41 +681,43 @@ if (!file.exists("./input_data/processed/wbManualData.RData"))     source(paste0
 # Merging -----------------------------------------------------------------
 
 initial.df = Reduce(function(x, y) merge(x, y, all = TRUE),
-                    x = list(FAOoa.df, # FAOSTAT, Population - Annual population
-                             FAOrl.df, # FAOSTAT, Resources - Land
-                             FAOrf.df, # FAOSTAT, Resources - Fertilizers
-                             FAOrp.df, # FAOSTAT, Resources - Pesticides
-                             FAOcs.df, # FAOSTAT, Investments - Capital stock
-                             FAOrm.df, # FAOSTAT, Investments - Machinery
-                             FAOig.df, # FAOSTAT, Government expenditures
-                             FAOa.df, # FAOSTAT, ASTI
-                             FAOqc.df, # FAOSTAT, Production - Crops
-                             FAOqa.df, # FAOSTAT, Production - Live animals
-                             FAOqd.df, # FAOSTAT, Production - Crops processed
-                             FAOql.df, # FAOSTAT, Production - Livestock primary
-                             FAOqp.df, # FAOSTAT, Production - Livestock processed
-                             FAOqv.df, # FAOSTAT, Production - Value of agricultural production
-                             FAOqi.df, # FAOSTAT, Production - Production indices
-                             FAOtp.df, # FAOSTAT, Trade - Crops and livestock products
-                             FAOti.df, # FAOSTAT, Trade - Trade indices
-                             FAOfo.df, # FAOSTAT, Forestry
-                             FAOghg.df,# FAOSTAT, Greenhouse gases
-                             # FAOfb.df, # FAOSTAT, Food balance sheets
-                             FAOcof.df, # FAOSTAT, coffee
-                             WBManualData.df, # not_update
-                             AquastatManualData.df, # updated 2015
-                             fra2015.df,
-                             regional1.df,
-                             prod_ind_2015.df,
-                             df_area_harvested.df,
-                             fish2015.df,
-                             fertilizers.df,
-                             prod_ind_weights.df,
-                             oda_brian_2015.df,
-                             # gfra.df, # not updated
-                             BiofuelProduction.df, # not update
-                             # Fishery.df, # not updated
-                             UNPopManualData.df), # added by Markus 20150401
+                    x = list(# FAOoa.df, # FAOSTAT, Population - Annual population
+                      # FAOrl.df, # FAOSTAT, Resources - Land
+                      # FAOrf.df, # FAOSTAT, Resources - Fertilizers
+                      # FAOrp.df, # FAOSTAT, Resources - Pesticides
+                      # FAOcs.df, # FAOSTAT, Investments - Capital stock
+                      # FAOrm.df, # FAOSTAT, Investments - Machinery
+                      # FAOig.df, # FAOSTAT, Government expenditures
+                      # FAOa.df, # FAOSTAT, ASTI
+                      # FAOqc.df, # FAOSTAT, Production - Crops
+                      # FAOqa.df, # FAOSTAT, Production - Live animals
+                      # FAOqd.df, # FAOSTAT, Production - Crops processed
+                      # FAOql.df, # FAOSTAT, Production - Livestock primary
+                      # FAOqp.df, # FAOSTAT, Production - Livestock processed
+                      # FAOqv.df, # FAOSTAT, Production - Value of agricultural production
+                      # FAOqi.df, # FAOSTAT, Production - Production indices
+                      # FAOtp.df, # FAOSTAT, Trade - Crops and livestock products
+                      # FAOti.df, # FAOSTAT, Trade - Trade indices
+                      # FAOfo.df, # FAOSTAT, Forestry
+                      # FAOghg.df,# FAOSTAT, Greenhouse gases
+                      # # FAOfb.df, # FAOSTAT, Food balance sheets
+                      # FAOcof.df, # FAOSTAT, coffee
+                     ilo.df,
+                      faost_all.df,
+                      WBManualData.df, # not_update
+                      AquastatManualData.df, # updated 2015
+                      fra2015.df,
+                      regional1.df,
+                      prod_ind_2015.df,
+                      df_area_harvested.df,
+                      fish2015.df,
+                      fertilizers.df,
+                      prod_ind_weights.df,
+                      oda_brian_2015.df,
+                      # gfra.df, # not updated
+                      BiofuelProduction.df, # not update
+                      # Fishery.df, # not updated
+                      UNPopManualData.df), # added by Markus 20150401
                     init = WB.df)
 # rm(list = c("dwnldA", "dwnldCS", "dwnldFB", "dwnldFO", "dwnldGHG", "dwnldIG",
 #             "dwnldOA", "dwnldQA", "dwnldQC", "dwnldQD", "dwnldQI", "dwnldQL",
@@ -817,6 +735,8 @@ initial.df <- initial.df[initial.df[, "FAOST_CODE"] <= 400,]
 
 # Scale data to basic unit ------------------------------------------------
 ## -- Convert the characters formats as "thousand" into 1000
+
+# meta.lst[["UNIT_MULT"]]$UNIT_MULT <- ifelse(meta.lst[["UNIT_MULT"]]$UNIT_MULT == "NA", NA, meta.lst[["UNIT_MULT"]]$UNIT_MULT)
 
 meta.lst[["UNIT_MULT"]][, "UNIT_MULT"] <- as.numeric(translateUnit(meta.lst[["UNIT_MULT"]]$UNIT_MULT))
 
@@ -1112,7 +1032,9 @@ preConstr.df[, "GN.UI.EA.TJPIN.NO"] <-
 ###########################################################################
 
 
+con.df <- con.df %>% filter(!grepl("CH$|CH1$", STS_ID))
 
+# View(con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "growth", "change", "index"),])
 
 ## Automatic
 postConstr.lst <- with(con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "growth", "change", "index"),], # leave the manual construction outside
@@ -1125,7 +1047,7 @@ postConstr.lst <- with(con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "gro
                                     grType = GROWTH_TYPE, 
                                     baseYear = 2000))
 preAgg.df <- postConstr.lst$data 
-rm(list = c("preConstr.df", "postConstr.lst"))
+#rm(list = c("preConstr.df", "postConstr.lst"))
 
 preAgg.df <- preAgg.df[preAgg.df$FAOST_CODE <= 351,]
 
@@ -1158,8 +1080,13 @@ source("./code/aggregate_functions/ChinaAggregates.R")
 ############# MULTICORE ################################
 
 # Save the whole lot before the time consuming 
+session_path <- paste0("~/faosync/pocketbooks/pocketbook_database",sub("\\.", "", session_path))
 writeLines(session_path, con = "./input_data/session_path.txt") # This is for the paraller aggregation scripts to read at the beginning
 save.image(file = paste0(session_path,"/pre_agg_image.RData"))
+
+
+
+# session_path <- "./output_data/2017-02-06-19"
 
 # system("gnome-terminal") # 1.
 # system("gnome-terminal") # 2.
@@ -1168,17 +1095,20 @@ save.image(file = paste0(session_path,"/pre_agg_image.RData"))
 
 # cd ~/faosync/pocketbooks/pocketbook_database/
 
-## Economic Aggregates
-source("./code/aggregate_functions/EconomicAggregates.R")
+system("~/faosync/pocketbooks/pocketbook_database/code/aggregate_functions/parallel_aggregate.sh")
 
-## Sofi Aggregates
-source("./code/aggregate_functions/SofiAggregates.R")
-
-## M49 aggregates
-source("./code/aggregate_functions/M49aggregates.R")
-
-## FAO aggregates
-source("./code/aggregate_functions/FAOAggregates.R")
+# 
+# ## Economic Aggregates
+# source("./code/aggregate_functions/EconomicAggregates.R")
+# 
+# ## Sofi Aggregates
+# source("./code/aggregate_functions/SofiAggregates.R")
+# 
+# ## M49 aggregates
+# source("./code/aggregate_functions/M49aggregates.R")
+# 
+# ## FAO aggregates
+# source("./code/aggregate_functions/FAOAggregates.R")
 
 ########### RE-START single-core ##################
 session_path <- readLines(con = "./input_data/session_path.txt")
@@ -1218,8 +1148,8 @@ country.df <- merge(country.df, FAOcountryProfile[, c("FAOST_CODE", "FAO_TABLE_N
 postAgg.df <- rbind(country.df, 
                     M49.df,
                     FAOregions.df,
-                    EconomicAggregates.df,
-                    sofiAggs.df)
+                    EconomicAggregates.df#,sofiAggs.df
+)
 
 # postAgg.df <- rbind(country.df, M49.df)
 # rm(list = c("country.df", "M49.df")) # because M49.df takes a loooooong time to run
@@ -1295,14 +1225,14 @@ all_missing_datas <- list.files(path = "./output_data",pattern = "missing_data.c
 check <- meta.lst$FULL[1:2]
 check2 <- meta.lst$FULL[1:2]
 for (i in all_missing_datas){
- d <- read.csv(i, stringsAsFactors = FALSE)
- varname <- stringr::str_replace_all(i, "/missing_data.csv", "")
- varname <- stringr::str_replace_all(varname, "./output_data/", "")
- varname <- stringr::str_replace_all(varname, "-", "")
- d$X <- NULL
- names(d)[3] <- paste0("D",varname)
- check <- left_join(check,d[1:3], by = c("STS_ID" = "STS_ID",
-                                         "TITLE_STS" = "TITLE_STS"))
+  d <- read.csv(i, stringsAsFactors = FALSE)
+  varname <- stringr::str_replace_all(i, "/missing_data.csv", "")
+  varname <- stringr::str_replace_all(varname, "./output_data/", "")
+  varname <- stringr::str_replace_all(varname, "-", "")
+  d$X <- NULL
+  names(d)[3] <- paste0("D",varname)
+  check <- left_join(check,d[1:3], by = c("STS_ID" = "STS_ID",
+                                          "TITLE_STS" = "TITLE_STS"))
 }
 
 ff <- apply(SYB.df[,3:ncol(SYB.df)-1], 2, function(x) tail(table(x, useNA="ifany"),1)/nrow(SYB.df)*100)

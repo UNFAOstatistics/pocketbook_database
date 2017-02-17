@@ -735,3 +735,5 @@ bilat_don_agr,"Bilateral Aid commitment flow to Agriculture, Forestry and Fishin
 multilat_don_agr,"Multilateral Aid commitment flow to Agriculture, Forestry and Fishing",regional,,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
 privat_don_agr,"Private Aid commitment flow to Agriculture, Forestry and Fishing",regional,,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
 total_oda_usd2013,total ODA,regional,,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
+ILO_EMP_2EMP_SEX_AGE_NB,Employed people in 1000,regional,thousand,people,regional,regional,ILO,processed,,,,,,regional
+ILO_female_emp_agri,Share of femele employment in agriculture of total female employment,regional,,percent,regional,regional,ILO,processed,,,,,,regional
