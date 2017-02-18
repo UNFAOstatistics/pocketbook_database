@@ -1033,23 +1033,41 @@ preConstr.df[, "GN.UI.EA.TJPIN.NO"] <-
 
 
 con.df <- con.df %>% filter(!grepl("CH$|CH1$", STS_ID))
+# 
+# # View(con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "growth", "change", "index"),])
+# 
+# ## Automatic
+# postConstr.lst <- with(con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "growth", "change", "index"),], # leave the manual construction outside
+#                        constructSYB(data = preConstr.df,
+#                                     origVar1 = STS_ID_CONSTR1,
+#                                     origVar2 = STS_ID_CONSTR2,
+#                                     newVarName = STS_ID,
+#                                     constructType = CONSTRUCTION_TYPE,
+#                                     grFreq = GROWTH_RATE_FREQ,
+#                                     grType = GROWTH_TYPE, 
+#                                     baseYear = 2000))
 
-# View(con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "growth", "change", "index"),])
+tmpx <- con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "growth", "change", "index"),] # leave the manual construction outside
+postConstr.lst <- constructSYB(data = preConstr.df,
+                                    origVar1 = tmpx$STS_ID_CONSTR1,
+                                    origVar2 = tmpx$STS_ID_CONSTR2,
+                                    newVarName = tmpx$STS_ID,
+                                    constructType = tmpx$CONSTRUCTION_TYPE,
+                                    grFreq = tmpx$GROWTH_RATE_FREQ,
+                                    grType = tmpx$GROWTH_TYPE, 
+                                    baseYear = 2000)
 
-## Automatic
-postConstr.lst <- with(con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "growth", "change", "index"),], # leave the manual construction outside
-                       constructSYB(data = preConstr.df,
-                                    origVar1 = STS_ID_CONSTR1,
-                                    origVar2 = STS_ID_CONSTR2,
-                                    newVarName = STS_ID,
-                                    constructType = CONSTRUCTION_TYPE,
-                                    grFreq = GROWTH_RATE_FREQ,
-                                    grType = GROWTH_TYPE, 
-                                    baseYear = 2000))
+
+
 preAgg.df <- postConstr.lst$data 
 #rm(list = c("preConstr.df", "postConstr.lst"))
 
 preAgg.df <- preAgg.df[preAgg.df$FAOST_CODE <= 351,]
+
+# preAgg.df2 <- preAgg.df
+
+setdiff(preAgg.df,preAgg.df2)
+
 
 # preAgg.df <- preAgg.df[!duplicated(preAgg.df[c("FAOST_CODE","Year")]),]
 
@@ -1168,6 +1186,13 @@ SYB.df <- postAgg.df
 
 
 save(x = SYB.df, file = paste0(session_path,"/SYB",date,".RData"))
+# remove other files from output_data
+flies <- list.files(session_path, full.names = TRUE)
+file.remove(flies[!grepl("SYB", flies)])
+
+flies <- list.files("./output_data/", recursive = TRUE, full.names = TRUE)
+file.remove(flies[!grepl("SYB", flies)])
+
 # save(x = SYB.df, file = paste0("./Data/Processed/SYB",date,".RData"))
 # save(x = SYB.df, file = "./Data/Processed/SYB.RData")
 load(file = paste0(session_path,"/SYB",date,".RData"))

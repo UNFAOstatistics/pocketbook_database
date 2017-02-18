@@ -7,7 +7,8 @@
 ###########################################################################
 
 country.df <- 
-  Aggregation(data = preAgg.df, aggVar = con.df[,"STS_ID"], 
+  Aggregation(data = preAgg.df, 
+              aggVar = con.df[,"STS_ID"], 
               thresholdProp = con.df[,"THRESHOLD_PROP"], 
               weightVar = con.df[,"STS_ID_WEIGHT"], 
               relationDF = na.omit(FAOcountryProfile[, c("FAOST_CODE", "M49_FAOST_CODE")]), 
