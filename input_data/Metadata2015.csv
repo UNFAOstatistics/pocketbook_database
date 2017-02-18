@@ -737,3 +737,7 @@ privat_don_agr,"Private Aid commitment flow to Agriculture, Forestry and Fishing
 total_oda_usd2013,total ODA,regional,,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",processed,,,,,,regional
 ILO_EMP_2EMP_SEX_AGE_NB,Employed people in 1000,regional,thousand,people,regional,regional,ILO,processed,,,,,,regional
 ILO_female_emp_agri,Share of femele employment in agriculture of total female employment,regional,,percent,regional,regional,ILO,processed,,,,,,regional
+NY.GDP.PCAP.PP.KD,"GDP per capita, PPP (constant 2011 international $)",regional,,I$,regional,regional,World Bank (WDI),raw,,,,NY.GDP.PCAP.PP.KD,,regional
+T.V.FEFS.PCT3D,Value of food imports over total merchandise exports (%) (3-year average),regional,,percent,regional,regional,"FAO, Statistics Division (FAOSTAT)",raw,CC,21033,6121,,,regional
+total_merchandise_trade_export_value,Total Merchandise Trade – export value,regional,thousand,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",raw,TP,5922,10,,,regional
+G.GD.PSAVT.IN,Political stability and absence of violence/terrorism (index),regional,,percent,regional,regional,"FAO, Statistics Division (FAOSTAT)",raw,FS,6125,21032,,,regional
