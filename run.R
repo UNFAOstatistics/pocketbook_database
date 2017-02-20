@@ -257,13 +257,15 @@ if (want_to_bulk){
   
   
   #' Download the zipfile from FAOSTAT
+
+    unlink("~/local_data/faostat/csv/", recursive = TRUE, force = TRUE)
     dir.create("~/local_data/faostat/csv/", showWarnings = FALSE, recursive = TRUE)
     dir.create("~/local_data/faostat/rds/", showWarnings = FALSE, recursive = TRUE)
     dir.create("~/local_data/faostat/metadata/", showWarnings = FALSE, recursive = TRUE)
     
     download.file("http://fenixservices.fao.org/faostat/static/bulkdownloads/FAOSTAT.zip", 
                   destfile = paste0("~/local_data/faostat/FAOSTAT",Sys.Date(),".zip"))
-    unzip(zipfile = "~/local_data/faostat/FAOSTAT2017-02-09.zip", exdir = "~/local_data/faostat/csv")
+    unzip(zipfile = "~/local_data/faostat/FAOSTAT2017-02-19.zip", exdir = "~/local_data/faostat/csv")
     zipps <- list.files("~/local_data/faostat/csv/", ".zip", full.names = TRUE)
     for (i in zipps){
       unzip(zipfile = i, exdir = "~/local_data/faostat/csv")
@@ -314,16 +316,17 @@ if (want_to_bulk){
   #' we create a one line per data with list column consisting of the vars names
   dat <- data_frame()
   meta_base <- data_frame()
-  for(i in 60:nrow(csv_data)){
-  # for(i in 1:nrow(csv_data)){
+  # for(i in 60:nrow(csv_data)){
+  for(i in 1:nrow(csv_data)){
     if (i %in% c(36 # excange rate
                  )) next()
     df <- read_csv(csv_data$filepath[i])
     names(df) <- tolower(gsub(" |\\.", "", names(df)))
     names(df) <- ifelse(names(df) %in% vardata$old, 
                         vardata$new[match(names(df), vardata$old)],names(df))
-    
-    df %>% select(-contains("year"), -contains("country"),-contains("flag")) %>% 
+    if (any(grepl("-",df$year))) df$year <- as.integer(gsub("-.+$", "", df$year)) + 1
+    df %>% 
+      select(-contains("year"), -contains("country"),-contains("flag")) %>% 
       distinct() %>% 
       mutate(unit = as.character(unit)) %>% 
       bind_rows(meta_base, .) -> meta_base
@@ -346,7 +349,7 @@ if (want_to_bulk){
   
   #' there are many not necessary variables, get rid of them and find the distinctive cases
   meta_base %>% 
-    select(-value,-flag,-note,-x1,-reportercountries,-partnercountries,-survey,-breakdownvariablecode,-breakdownvariable,-breadownbysexofthehouseholdheadcode,-breadownbysexofthehouseholdhead,-measurecode,-measure) %>% 
+    select(-value,-note,-reportercountries,-partnercountries,-survey,-breakdownvariablecode,-breakdownvariable,-breadownbysexofthehouseholdheadcode,-breadownbysexofthehouseholdhead,-measurecode,-measure) %>% 
     distinct() %>% saveRDS(., "~/local_data/faostat/metadata/meta_faostat.RDS")
   
 #  __        __ ___   ____   _      ____    ____     _     _   _  _  __
@@ -355,12 +358,13 @@ if (want_to_bulk){
 #    \ V  V / | |_| ||  _ < | |___ | |_| | | |_) |/ ___ \ | |\  || . \ 
 #     \_/\_/   \___/ |_| \_\|_____||____/  |____//_/   \_\|_| \_||_|\_\
 
-    dir.create("~/local_data/wdi/csv/", showWarnings = FALSE, recursive = TRUE)
+  unlink("~/local_data/wdi/csv/", force = TRUE, recursive = TRUE)  
+  dir.create("~/local_data/wdi/csv/", showWarnings = FALSE, recursive = TRUE)
     dir.create("~/local_data/wdi/rds/", showWarnings = FALSE, recursive = TRUE)
-    download.file("http://databank.worldbank.org/data/download/WDI_csv.zip", 
-                  destfile = paste0("~/local_data/wdi/WDI_csv",Sys.Date(),".zip"))  
+    download.file("http://databank.worldbank.org/data/download/WDI_csv.zip",
+                  destfile = paste0("~/local_data/wdi/WDI_csv",Sys.Date(),".zip"))
 
-    unzip("~/local_data/wdi/WDI_csv2017-02-04.zip", 
+    unzip("~/local_data/wdi/WDI_csv2017-02-19.zip", 
           exdir = "~/local_data/wdi/csv/")
 
   # read WDI
@@ -393,7 +397,7 @@ if (want_to_bulk){
   dir.create("~/local_data/ilo/rds/", showWarnings = FALSE, recursive = TRUE)
   download.file("http://www.ilo.org/ilostat-files/WEB_bulk_download/bulk_ILOEST_EN.7z", 
                 destfile = paste0("~/local_data/ilo/bulk_ILOEST_EN",Sys.Date(),".7z"))  
-  system("dtrx -n -f ~/local_data/ilo/bulk_ILOEST_EN2017-02-16.7z")
+  system("dtrx -n -f ~/local_data/ilo/bulk_ILOEST_EN2017-02-19.7z")
   file.copy("./bulk_ILOEST_EN.csv", "~/local_data/ilo/csv/")
   file.remove("./bulk_ILOEST_EN.csv")
 # PROCESS ILO
@@ -490,9 +494,12 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
   # For FAOST_CODEs
   faostcodedata <- readRDS("~/local_data/faostat/rds/inputs_fertilizers_e_all_data_(normalized).RDS")
   
+  fao$subcat <- csv_data$subcat[match(fao$id, csv_data$id)]
   fao$subcat <- ifelse(grepl("emissions", fao$subcat), "emissions", fao$subcat)
   
   vars <- faostatData.df# [faostatData.df[, "SQL_DOMAIN_CODE"] %in% "TP",]
+  varz <- lapply(vars, as.character)
+  ff <- readRDS("~/local_data/faostat/rds/food_security_data_e_all_data_(norm).RDS")
   
   vars$subcat[vars$SQL_DOMAIN_CODE %in% "OA"] <- "population_e_all_data_(norm)"
   vars$subcat[vars$SQL_DOMAIN_CODE %in% "RL"] <- "inputs_land_e_all_data_(normalized)"
@@ -526,13 +533,12 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
   vars$subcat[vars$SQL_DOMAIN_CODE %in% "CC"] <- "food_security_data_e_all_data_(norm)"
   vars$subcat[vars$SQL_DOMAIN_CODE %in% "CL"] <- "food_security_data_e_all_data_(norm)"
   vars$subcat[vars$SQL_DOMAIN_CODE %in% "EE"] <- "environment_energy_e_all_data"
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "FS"] <- "food_security_data_e_all_data_(norm)"
   
-  fao$subcat <- csv_data$subcat[match(fao$id, csv_data$id)]
-  
-  slice_fao <- function(name="RF.FERT.NI.TN.NO", 
-                        elementCode=5155,
-                        itemCode=3102, 
-                        subcat="inputs_fertilizers_e_all_data_(normalized)") {
+  slice_fao <- function(name="T.V.FEFS.PCT3D", 
+                        elementCode=6121,
+                        itemCode=21033, 
+                        subcat="food_security_data_e_all_data_(norm)") {
     require(dplyr)
     tmpp <- fao %>% filter(itemcode == itemCode,
                            elementcode == elementCode,
@@ -598,10 +604,17 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
 
 
 
-library(dplyr)
+library(tidyverse)
 readRDS("~/local_data/faostat/rds/faostat_dat1.RDS") %>% 
   left_join(.,readRDS("~/local_data/faostat/rds/faostat_dat2.RDS")) %>% 
   left_join(.,readRDS("~/local_data/faostat/rds/faostat_dat3.RDS")) -> faost_all.df
+
+metameta <- gather(faost_all.df, key = var, value = value, 3:ncol(faost_all.df)) %>% 
+  mutate(FAOST_CODE = as.character(FAOST_CODE),
+         Year = as.character(Year)) %>% 
+  filter(!is.na(value))
+
+
 
 #   ____                          _                    _  __        __ ____  
 #  |  _ \   ___ __      __ _ __  | |  ___    __ _   __| | \ \      / /| __ ) 
@@ -1063,10 +1076,6 @@ preAgg.df <- postConstr.lst$data
 #rm(list = c("preConstr.df", "postConstr.lst"))
 
 preAgg.df <- preAgg.df[preAgg.df$FAOST_CODE <= 351,]
-
-# preAgg.df2 <- preAgg.df
-
-setdiff(preAgg.df,preAgg.df2)
 
 
 # preAgg.df <- preAgg.df[!duplicated(preAgg.df[c("FAOST_CODE","Year")]),]
