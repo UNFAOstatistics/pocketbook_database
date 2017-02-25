@@ -324,7 +324,7 @@ if (want_to_bulk){
     names(df) <- tolower(gsub(" |\\.", "", names(df)))
     names(df) <- ifelse(names(df) %in% vardata$old, 
                         vardata$new[match(names(df), vardata$old)],names(df))
-    if (any(grepl("-",df$year))) df$year <- as.integer(gsub("-.+$", "", df$year)) + 1
+    if (any(grepl("-",df$year))) df$year <- as.character(as.integer(gsub("-.+$", "", df$year)) + 1)
     df %>% 
       select(-contains("year"), -contains("country"),-contains("flag")) %>% 
       distinct() %>% 
@@ -431,7 +431,7 @@ d %>% filter(indicator == "EMP_2EMP_SEX_ECO_NB",
   rename(Year = time) %>% 
   select(FAOST_CODE,Year,ILO_female_emp_agri) -> ilo2
 
-ilo_data <- left_join(ilo1,ilo2)
+ilo_data <- full_join(ilo1,ilo2)
 saveRDS(ilo_data, file="~/local_data/ilo/rds/ilo_data.RDS")
 
 }
@@ -481,6 +481,9 @@ downloadWB <- TRUE; CheckLogical(downloadWB)
 # replication_date <- "2016-09-15-09" # used to work
 replication_date <- "2016-12-15-20" # used to work
 # replication_date <- "2016-02-08-23" 
+
+fao %>% filter(elementcode == 72184,
+               itemcode == 6806, year > 2010) 
 
 
 if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
@@ -566,7 +569,7 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
     if (i == 1) {
       dat <- new
     } else {
-      dat <- left_join(dat,new,by = c("FAOST_CODE" = "FAOST_CODE","Year" = "Year"))  
+      dat <- full_join(dat,new,by = c("FAOST_CODE" = "FAOST_CODE","Year" = "Year"))  
     }
   }
   # [1] 66823   102
@@ -581,7 +584,7 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
     if (i == 101) {
       dat <- new
     } else {
-      dat <- left_join(dat,new,by = c("FAOST_CODE" = "FAOST_CODE","Year" = "Year"))  
+      dat <- full_join(dat,new,by = c("FAOST_CODE" = "FAOST_CODE","Year" = "Year"))  
     }
   }
   dat <- dat[!duplicated(dat[c("FAOST_CODE","Year")]),]
@@ -595,7 +598,7 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
     if (i == 201) {
       dat <- new
     } else {
-      dat <- left_join(dat,new,by = c("FAOST_CODE" = "FAOST_CODE","Year" = "Year"))  
+      dat <- full_join(dat,new,by = c("FAOST_CODE" = "FAOST_CODE","Year" = "Year"))  
     }
   }
   dat <- dat[!duplicated(dat[c("FAOST_CODE","Year")]),]
@@ -606,14 +609,8 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
 
 library(tidyverse)
 readRDS("~/local_data/faostat/rds/faostat_dat1.RDS") %>% 
-  left_join(.,readRDS("~/local_data/faostat/rds/faostat_dat2.RDS")) %>% 
-  left_join(.,readRDS("~/local_data/faostat/rds/faostat_dat3.RDS")) -> faost_all.df
-
-metameta <- gather(faost_all.df, key = var, value = value, 3:ncol(faost_all.df)) %>% 
-  mutate(FAOST_CODE = as.character(FAOST_CODE),
-         Year = as.character(Year)) %>% 
-  filter(!is.na(value))
-
+  full_join(.,readRDS("~/local_data/faostat/rds/faostat_dat2.RDS")) %>% 
+  full_join(.,readRDS("~/local_data/faostat/rds/faostat_dat3.RDS")) -> faost_all.df
 
 
 #   ____                          _                    _  __        __ ____  
@@ -633,7 +630,7 @@ wdi_vars %>% filter(!WDINAME %in% c('SP.POP.1564.FE.IN', 'SP.POP.65UP.FE.IN', 'S
 wdi_df[c("country.code","Year",wdi_vars$WDINAME[1:40])] -> tmp1
 wdi_df[c("country.code","Year",wdi_vars$WDINAME[41:nrow(wdi_vars)])] -> tmp2
 
-WB.df <- dplyr::left_join(tmp1,tmp2)
+WB.df <- dplyr::full_join(tmp1,tmp2)
 
 WB.df <- WB.df[!duplicated(WB.df[c("country.code","Year")]),]
 ##
@@ -1077,6 +1074,9 @@ preAgg.df <- postConstr.lst$data
 
 preAgg.df <- preAgg.df[preAgg.df$FAOST_CODE <= 351,]
 
+# Some odd countries appeared from the bulk data with FAOST_CODES 261 266 268 269 297 348 - EXLCUIND THEM
+
+preAgg.df <- preAgg.df[!preAgg.df$FAOST_CODE %in% c(261,266,268,269,297,348),]
 
 # preAgg.df <- preAgg.df[!duplicated(preAgg.df[c("FAOST_CODE","Year")]),]
 
@@ -1095,14 +1095,13 @@ manScalVars <- subset(con.df, select = c("STS_ID", "SCALING"), subset = !is.na(S
 
 
 
+
 # Aggregations ------------------------------------------------------------
 ## Country aggregation
 source("./code/aggregate_functions/CountryAggregation.R")
 
 ## China aggregation
 source("./code/aggregate_functions/ChinaAggregates.R")
-
-
 
 ############# MULTICORE ################################
 
@@ -1199,8 +1198,8 @@ save(x = SYB.df, file = paste0(session_path,"/SYB",date,".RData"))
 flies <- list.files(session_path, full.names = TRUE)
 file.remove(flies[!grepl("SYB", flies)])
 
-flies <- list.files("./output_data/", recursive = TRUE, full.names = TRUE)
-file.remove(flies[!grepl("SYB", flies)])
+# flies <- list.files("./output_data/", recursive = TRUE, full.names = TRUE)
+# file.remove(flies[!grepl("SYB", flies)])
 
 # save(x = SYB.df, file = paste0("./Data/Processed/SYB",date,".RData"))
 # save(x = SYB.df, file = "./Data/Processed/SYB.RData")

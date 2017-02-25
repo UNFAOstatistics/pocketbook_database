@@ -93,5 +93,5 @@ china351.df[, "Area"] <- "Territory"
 ## Replace the values in the database
 country.df <- country.df[country.df[,"FAOST_CODE"] != 351,]
 country.df <- rbind(country.df, china351.df)
-rm(list = c("china351.df", "china351"))
+# rm(list = c("china351.df", "china351"))
 

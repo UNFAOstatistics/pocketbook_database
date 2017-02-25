@@ -741,3 +741,5 @@ NY.GDP.PCAP.PP.KD,"GDP per capita, PPP (constant 2011 international $)",regional
 T.V.FEFS.PCT3D,Value of food imports over total merchandise exports (%) (3-year average),regional,,percent,regional,regional,"FAO, Statistics Division (FAOSTAT)",raw,FS,6121,21033,,,regional
 total_merchandise_trade_export_value,Total Merchandise Trade – export value,regional,thousand,US$,regional,regional,"FAO, Statistics Division (FAOSTAT)",raw,TP,5922,10,,,regional
 G.GD.PSAVT.IN,Political stability and absence of violence/terrorism (index),regional,,percent,regional,regional,"FAO, Statistics Division (FAOSTAT)",raw,FS,6125,21032,,,regional
+IG_6111_23131,"Agriculture, forestry, fishing (General Government)  (share of total outlays)",,,percent,See 'Government expenditure'.,FAO,"FAO, Statistics Division (FAOSTAT)",raw,IG,6111,23131,,,government expenditures
+IG_6111_23161,"Agriculture, forestry, fishing (Central Government)  (share of total outlays)",,,percent,See 'Government expenditure'.,FAO,"FAO, Statistics Division (FAOSTAT)",raw,IG,6111,23161,,,government expenditures

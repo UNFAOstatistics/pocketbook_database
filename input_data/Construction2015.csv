@@ -741,3 +741,5 @@ NY.GDP.PCAP.PP.KD,,,OA.TPBS.POP.PPL.NO,,,,weighted.mean,0.65,0,,
 T.V.FEFS.PCT3D,,,total_merchandise_trade_export_value,,,,weighted.mean,0.65,0,,
 total_merchandise_trade_export_value,,,,,,,sum,0.65,0,,
 G.GD.PSAVT.IN,,,OA.TPBS.POP.PPL.NO,,,,weighted.mean,0.65,0,,
+IG_6111_23131,,,,,,,discard,0.65,0,,no aggregation has to be done
+IG_6111_23161,,,,,,,discard,0.65,0,,no aggregation has to be done
