@@ -482,9 +482,6 @@ downloadWB <- TRUE; CheckLogical(downloadWB)
 replication_date <- "2016-12-15-20" # used to work
 # replication_date <- "2016-02-08-23" 
 
-fao %>% filter(elementcode == 72184,
-               itemcode == 6806, year > 2010) 
-
 
 if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
   
@@ -522,6 +519,8 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
   vars$subcat[vars$SQL_DOMAIN_CODE %in% "QP"] <- "production_livestockprocessed_e_all_data_(normalized)"
   vars$subcat[vars$SQL_DOMAIN_CODE %in% "QV"] <- "value_of_production_e_all_data_(norm)"
   vars$subcat[vars$SQL_DOMAIN_CODE %in% "QI"] <- "production_indices_e_all_data_(norm)"
+  # 
+  vars$subcat[vars$SQL_DOMAIN_CODE %in% "QI"] <- "production_cropsprocessed_e_all_data_(normalized)"
   vars$subcat[vars$SQL_DOMAIN_CODE %in% "TP"] <- "trade_crops_livestock_e_all_data_(norm)"
   vars$subcat[vars$SQL_DOMAIN_CODE %in% "TI"] <- "trade_indices_e_all_data_(norm)"
   vars$subcat[vars$SQL_DOMAIN_CODE %in% "FO"] <- "forestry_e_all_data_(normalized)"
@@ -559,12 +558,13 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
     return(tmpp)
   }
   
-  
+  # for (i in 1:6) {
   for (i in 1:100) {
     new <- slice_fao(name = vars$STS_ID[i],
                      elementCode = vars$SQL_ELEMENT_CODE[i], 
                      itemCode = vars$SQL_ITEM_CODE[i],
                      subcat= vars$subcat[i])
+    if (any(new$FAOST_CODE %in% new$Year)) next()
     # meta[meta$itemcode %in% vars$SQL_ITEM_CODE[1] & meta$elementcode %in% vars$SQL_ELEMENT_CODE[1],]
     if (i == 1) {
       dat <- new
@@ -575,11 +575,13 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
   # [1] 66823   102
   dat <- dat[!duplicated(dat[c("FAOST_CODE","Year")]),]
   saveRDS(dat, "~/local_data/faostat/rds/faostat_dat1.RDS")
+  # for (i in 101:105) {
   for (i in 101:200) {
     new <- slice_fao(name = vars$STS_ID[i],
                      elementCode = vars$SQL_ELEMENT_CODE[i], 
                      itemCode = vars$SQL_ITEM_CODE[i],
                      subcat= vars$subcat[i])
+    if (any(new$FAOST_CODE %in% new$Year)) next()
     # meta[meta$itemcode %in% vars$SQL_ITEM_CODE[1] & meta$elementcode %in% vars$SQL_ELEMENT_CODE[1],]
     if (i == 101) {
       dat <- new
@@ -594,6 +596,7 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
                      elementCode = vars$SQL_ELEMENT_CODE[i], 
                      itemCode = vars$SQL_ITEM_CODE[i],
                      subcat= vars$subcat[i])
+    if (any(new$FAOST_CODE %in% new$Year)) next()
     # meta[meta$itemcode %in% vars$SQL_ITEM_CODE[1] & meta$elementcode %in% vars$SQL_ELEMENT_CODE[1],]
     if (i == 201) {
       dat <- new
@@ -634,10 +637,13 @@ WB.df <- dplyr::full_join(tmp1,tmp2)
 
 WB.df <- WB.df[!duplicated(WB.df[c("country.code","Year")]),]
 ##
-WB.df2 <- translateCountryCode(data = WB.df,
-                              from = "ISO2_WB_CODE", 
-                              to = "FAOST_CODE", oldCode = "country.code")
-WB.df$FAOST_CODE <- countrycode::countrycode(sourcevar = WB.df$country.code, origin = "wb", destination = "fao")
+## Lets use basic "match" for country code mathcing
+# WB.df2 <- translateCountryCode(data = WB.df,
+#                               from = "ISO2_WB_CODE", 
+#                               to = "FAOST_CODE", oldCode = "country.code")
+# WB.df$FAOST_CODE <- countrycode::countrycode(sourcevar = WB.df$country.code, origin = "wb", destination = "fao")
+
+WB.df$FAOST_CODE <-   FAOcountryProfile$FAOST_CODE[match(WB.df$country.code, FAOcountryProfile$ISO3_WB_CODE)]
 
 WB.df <- WB.df %>% select(-country.code)
 
@@ -752,7 +758,7 @@ meta.lst[["UNIT_MULT"]][, "UNIT_MULT"] <- as.numeric(translateUnit(meta.lst[["UN
 
 
 preConstr.df <- scaleUnit(initial.df, meta.lst[["UNIT_MULT"]])
-rm(initial.df)
+# rm(initial.df)
 
 ## Manual Construction
 
@@ -1066,7 +1072,6 @@ postConstr.lst <- constructSYB(data = preConstr.df,
                                     grFreq = tmpx$GROWTH_RATE_FREQ,
                                     grType = tmpx$GROWTH_TYPE, 
                                     baseYear = 2000)
-
 
 
 preAgg.df <- postConstr.lst$data 
