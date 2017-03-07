@@ -162,6 +162,7 @@ Aggregation =
       }
     } else {
       ## No rule is applied
+      # for(i in 1:38){
       for(i in 1:n.var){
         if(aggMethod[i] == "discard"){
           ## In case the aggregation method is not specify, I just want
@@ -179,7 +180,10 @@ Aggregation =
           setnames(tmp, "V1", aggVar[i])
         }
         setkeyv(tmp, c("outCode", year))
-        final = merge(x = final, y = tmp, all.x = TRUE)
+        tmp <- as.data.frame(tmp)
+        tmp <- tmp[!duplicated(tmp[c("outCode","Year")]),]
+        final = left_join(x = final, y = tmp)
+        # final = merge(x = final, y = tmp, all.x = TRUE)
         setTxtProgressBar(pb, i)
       }
     }
@@ -196,3 +200,9 @@ Aggregation =
   }
 
 utils::globalVariables(names = c("nc", "Year", "V1", "FAOcountryProfile"))
+
+
+
+# > dim(final)
+# [1] 49197    40
+

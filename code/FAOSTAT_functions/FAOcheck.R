@@ -28,7 +28,7 @@ FAOcheck = function(var, year = "Year", data,
     type = match.arg(type)
     take = match.arg(take)
     if(type == "overlap"){
-        printLab("Check for overlap between transitional country")
+        printLab(label = "Check for overlap between transitional country")
         ## Belgium-Luxembourg (old entity, up to 1999 included) vs 
         ## Belgium, LuxemBourg (new entities, from 2000).
         data = overlap(old = 15, new = c(255, 256), 

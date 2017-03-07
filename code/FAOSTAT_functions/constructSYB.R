@@ -40,7 +40,7 @@ constructSYB = function(data, origVar1, origVar2, newVarName = NA,
         Success = logical(length(newVarName)),
         Reason = character(length(newVarName)),
         stringsAsFactors = FALSE)
-    printLab(paste("Constructing new variables (", n, " in Total)", sep = ""))
+    printLab(label=paste("Constructing new variables (", n, " in Total)", sep = ""))
     for(i in 1:n){
         cat(paste("(", i, "): ", sep = ""))
         if(origVar1[i] %in% colnames(data) &&
@@ -77,7 +77,13 @@ constructSYB = function(data, origVar1, origVar2, newVarName = NA,
                           " sucessfully constructed\n", sep = ""))
                 result[i, "Success"] = TRUE
                 result[i, "Reason"] = "Construction Successful"
+                # 20170226 added this filter as the 'data' got bloated and broke the process
+                tmp <- tmp[!duplicated(tmp[c("FAOST_CODE","Year")]),]
                 data = merge(data, tmp, by = c("FAOST_CODE", "Year"))
+                # data = full_join(data, tmp, by = c("FAOST_CODE" = "FAOST_CODE",
+                                                   # "Year" = "Year"))
+                # data <- data[!duplicated(data[c("FAOST_CODE","Year")]),]
+                
             } else {
                 cat(paste("FAIL: ", newVarName[i],
                           ", Check error message\n", sep = ""))
@@ -95,3 +101,45 @@ constructSYB = function(data, origVar1, origVar2, newVarName = NA,
               sum(result$Success), " out of ", NROW(result), "\n", sep = ""))
     list(data = data, result = result)
 }
+
+
+# function(label, span = FALSE, width = getOption("width")){
+#   nc = nchar(label)
+#   sides = (width - nc)/2 - 3
+#   if(span){
+#     pre = paste(c("\n\n", rep("-", width), "\n"), collapse = "")
+#     post = paste(c("\n", rep("-", width), "\n\n"), collapse = "")
+#   } else {
+#     pre = paste(c("\n\n", rep(" ", sides), rep("-", nc + 6),
+#                   rep(" ", sides), "\n"), collapse = "")
+#     post = paste(c("\n", rep(" ", sides), rep("-", nc + 6),
+#                    rep(" ", sides), "\n\n"), collapse = "")
+#   }
+#   sandwich = paste(c(rep(" ", sides), "** ", label, " **",
+#                      rep(" ", sides)), collapse = "")
+#   cat(paste(pre, sandwich, post, sep = ""))
+# }
+
+
+# 28560
+# > dim(preAgg.df)
+# [1] 28323   667
+# > s(preAgg.df$QV.NPCPV.CRPS.ID.SHP)
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+#   0.271  80.680 133.000 159.200 215.800 939.600   17860
+
+# 18034
+# > dim(preAgg.df)
+# [1] 17797   667
+# > s(preAgg.df$QV.NPCPV.CRPS.ID.SHP)
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+#   0.271  81.390 134.000 159.400 216.300 939.600   12464 
+
+# 28560
+# > dim(preAgg.df)
+# [1] 28323   667
+# > s(preAgg.df$QV.NPCPV.CRPS.ID.SHP)
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+#    0.22   78.14  132.40  159.30  215.80  901.50   17870 
+# > 
+
