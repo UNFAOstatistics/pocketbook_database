@@ -265,7 +265,7 @@ if (want_to_bulk){
     
     download.file("http://fenixservices.fao.org/faostat/static/bulkdownloads/FAOSTAT.zip", 
                   destfile = paste0("~/local_data/faostat/FAOSTAT",Sys.Date(),".zip"))
-    unzip(zipfile = "~/local_data/faostat/FAOSTAT2017-02-19.zip", exdir = "~/local_data/faostat/csv")
+    unzip(zipfile = "~/local_data/faostat/FAOSTAT2017-02-21.zip", exdir = "~/local_data/faostat/csv")
     zipps <- list.files("~/local_data/faostat/csv/", ".zip", full.names = TRUE)
     for (i in zipps){
       unzip(zipfile = i, exdir = "~/local_data/faostat/csv")
@@ -413,7 +413,7 @@ d %>% filter(indicator == "EMP_2EMP_SEX_AGE_NB",
   mutate(FAOST_CODE = countrycode::countrycode(ref_area, 
                                                origin = "iso3c", 
                                                destination = "fao")) %>% 
-  rename(Year = time,
+  dplyr::rename(Year = time,
          ILO_EMP_2EMP_SEX_AGE_NB = obs_value) %>% 
   select(-ref_area) -> ilo1
 
@@ -425,13 +425,23 @@ d %>% filter(indicator == "EMP_2EMP_SEX_ECO_NB",
   select(ref_area,classif1,time,obs_value) %>% 
   spread(., classif1, obs_value) %>% 
   mutate(ILO_female_emp_agri = ECO_SECTOR_AGR / ECO_SECTOR_TOTAL * 100,
-         FAOST_CODE = countrycode::countrycode(ref_area, 
-                                                            origin = "iso3c", 
-                                                            destination = "fao")) %>% 
-  rename(Year = time) %>% 
+         FAOST_CODE = countrycode::countrycode(ref_area, origin = "iso3c", destination = "fao")) %>% 
+  dplyr::rename(Year = time) %>% 
   select(FAOST_CODE,Year,ILO_female_emp_agri) -> ilo2
 
+d %>% filter(indicator == "EMP_2EMP_SEX_ECO_NB",
+             !grepl("^X", ref_area),
+             sex =="SEX_M",
+             classif1 %in% c("ECO_SECTOR_AGR","ECO_SECTOR_TOTAL")) %>% 
+  select(ref_area,classif1,time,obs_value) %>% 
+  spread(., classif1, obs_value) %>% 
+  mutate(ILO_male_emp_agri = ECO_SECTOR_AGR / ECO_SECTOR_TOTAL * 100,
+         FAOST_CODE = countrycode::countrycode(ref_area, origin = "iso3c", destination = "fao")) %>% 
+  dplyr::rename(Year = time) %>% 
+  select(FAOST_CODE,Year,ILO_male_emp_agri) -> ilo3
+
 ilo_data <- full_join(ilo1,ilo2)
+ilo_data <- full_join(ilo_data,ilo3)
 saveRDS(ilo_data, file="~/local_data/ilo/rds/ilo_data.RDS")
 
 }
@@ -658,7 +668,7 @@ saveRDS(WB.df, "~/local_data/wdi/rds/WB_tmp.RDS")
 
 
 ilo.df <- readRDS("~/local_data/ilo/rds/ilo_data.RDS")
-ilo.df <- ilo.df[c(3,1,2,4)]
+ilo.df <- ilo.df[c(3,1,2,4,5)]
 ilo.df <- na.omit(ilo.df)
 # lets add the ilo files to metadata
 
@@ -1064,6 +1074,15 @@ con.df <- con.df %>% filter(!grepl("CH$|CH1$", STS_ID))
 #                                     baseYear = 2000))
 
 tmpx <- con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "growth", "change", "index"),] # leave the manual construction outside
+# data = preConstr.df
+# origVar1 = tmpx$STS_ID_CONSTR1
+# origVar2 = tmpx$STS_ID_CONSTR2
+# newVarName = tmpx$STS_ID
+# constructType = tmpx$CONSTRUCTION_TYPE
+# grFreq = tmpx$GROWTH_RATE_FREQ
+# grType = tmpx$GROWTH_TYPE
+# baseYear = 2000
+
 postConstr.lst <- constructSYB(data = preConstr.df,
                                     origVar1 = tmpx$STS_ID_CONSTR1,
                                     origVar2 = tmpx$STS_ID_CONSTR2,
@@ -1098,8 +1117,8 @@ manScalVars <- subset(con.df, select = c("STS_ID", "SCALING"), subset = !is.na(S
 # }
 # rm(list = c("manScalVars", "i"))
 
-
-
+# s(preAgg.df$QV.NPCPV.CRPS.ID.SHP)
+# NA 17553
 
 # Aggregations ------------------------------------------------------------
 ## Country aggregation
