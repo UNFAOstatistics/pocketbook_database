@@ -3,11 +3,13 @@ library(stringr)
 library(dplyr)
 library(readr)
 
-download.file("http://faostat3.fao.org/faostat-bulkdownloads/Inputs_Fertilizers_E_All_Data_(Norm).zip",
-              destfile = "input_data/raw/Inputs_Fertilizers_E_All_Data_(Norm).zip")
-unzip(zipfile = "./input_data/raw/Inputs_Fertilizers_E_All_Data_(Norm).zip",
-      exdir = "./input_data/raw/")
-dat <- read_csv("./input_data/raw/Inputs_Fertilizers_E_All_Data_(Norm).csv")
+# download.file("http://faostat3.fao.org/faostat-bulkdownloads/Inputs_Fertilizers_E_All_Data_(Norm).zip",
+#               destfile = "input_data/raw/Inputs_Fertilizers_E_All_Data_(Norm).zip")
+# unzip(zipfile = "./input_data/raw/Inputs_Fertilizers_E_All_Data_(Norm).zip",
+#       exdir = "./input_data/raw/")
+# dat <- read_csv("./input_data/raw/Inputs_Fertilizers_E_All_Data_(Norm).csv")
+dat <- read_csv("~/local_data/faostat/csv/inputs_fertilizers_e_all_data_(normalized).csv")
+
 names(dat) <- str_replace_all(names(dat), " ", ".")
 
 dat <- dat[dat$Item %in% c("Phosphate Fertilizers (P205 total nutrients)",
@@ -15,7 +17,7 @@ dat <- dat[dat$Item %in% c("Phosphate Fertilizers (P205 total nutrients)",
                            "Nitrogen Fertilizers (N total nutrients)") &
              dat$Element == "Consumption in nutrients" &
              dat$Unit == "tonnes of nutrients",
-           c("Country.Code","Year","Value","Item")]
+           c("Area.Code","Year","Value","Item")]
 
 names(dat) <- c("FAOST_CODE","Year","value","Item")
 dat$Item <- as.character(dat$Item)

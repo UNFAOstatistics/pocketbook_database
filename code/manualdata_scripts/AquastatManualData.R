@@ -106,24 +106,24 @@ names(ip.df) <- c("FAOST_CODE", "Year", "AQ.WAT.IRRPOT.HA.NO")
 
 # AQ.WAT.EQIRR.HA.NO ---------------------------------------------------------
 
-xls1 <- read.xls("./input_data/raw/AquastatManualData/SYB_AQUASTAT_Water_Tables_20150304.xls", sheet = 1)
-var1 <- xls1[-1:-3,c(1,10)]
-names(var1) <- c("Country","y2012")
-var1l <- gather(var1,year,value,2)
-var1l$value <- as.factor(str_replace_all(var1l$value, "\\ ", ""))
-var1l$value <- as.numeric(levels(var1l$value))[var1l$value]
-var1l$year <- as.factor(str_replace_all(var1l$year, "y", ""))
-var1l$year <- as.numeric(levels(var1l$year))[var1l$year]
-dat1l <- fillCountryCode("Country", var1l)
-missFAOcode <- as.character(unique(dat1l[is.na(dat1l$FAOST_CODE), "Country"]))
-# Cape Verde, China, Laos and Sudan
-manualFAOcode <- c(35, 357, 120, 276,231)
-manual.df <- data.frame(Country = missFAOcode, NEW_FAOST_CODE = manualFAOcode)
-dat1l <- merge(dat1l, manual.df, by = "Country", all.x = TRUE)
-rm(list = c("missFAOcode", "manualFAOcode", "manual.df"))
-dat1l$FAOST_CODE <- ifelse(is.na(dat1l$FAOST_CODE), dat1l$NEW_FAOST_CODE, dat1l$FAOST_CODE)
-tae.df <- dat1l[, c("FAOST_CODE", "year", "value")]
-names(tae.df) <- c("FAOST_CODE", "Year", "AQ.WAT.EQIRR.HA.NO")
+# xls1 <- read.xls("./input_data/raw/AquastatManualData/SYB_AQUASTAT_Water_Tables_20150304.xls", sheet = 1)
+# var1 <- xls1[-1:-3,c(1,10)]
+# names(var1) <- c("Country","y2012")
+# var1l <- gather(var1,year,value,2)
+# var1l$value <- as.factor(str_replace_all(var1l$value, "\\ ", ""))
+# var1l$value <- as.numeric(levels(var1l$value))[var1l$value]
+# var1l$year <- as.factor(str_replace_all(var1l$year, "y", ""))
+# var1l$year <- as.numeric(levels(var1l$year))[var1l$year]
+# dat1l <- fillCountryCode("Country", var1l)
+# missFAOcode <- as.character(unique(dat1l[is.na(dat1l$FAOST_CODE), "Country"]))
+# # Cape Verde, China, Laos and Sudan
+# manualFAOcode <- c(35, 357, 120, 276,231)
+# manual.df <- data.frame(Country = missFAOcode, NEW_FAOST_CODE = manualFAOcode)
+# dat1l <- merge(dat1l, manual.df, by = "Country", all.x = TRUE)
+# rm(list = c("missFAOcode", "manualFAOcode", "manual.df"))
+# dat1l$FAOST_CODE <- ifelse(is.na(dat1l$FAOST_CODE), dat1l$NEW_FAOST_CODE, dat1l$FAOST_CODE)
+# tae.df <- dat1l[, c("FAOST_CODE", "year", "value")]
+# names(tae.df) <- c("FAOST_CODE", "Year", "AQ.WAT.EQIRR.HA.NO")
 
 # AQ.WAT.SHIRR.HA.SH ---------------------------------------------------------
 
@@ -192,7 +192,9 @@ wwr.df <- subset(wwr.df, subset = !is.na(Year))
 AquastatManualData.df <- data.frame()
 AquastatManualData.df <- 
   Reduce(function(x, y) merge(x, y, all = TRUE),
-         x = list(wrpc.df, ip.df, tae.df, peaai.df, wwr.df))
+         x = list(wrpc.df, ip.df, 
+                  #tae.df, 
+                  peaai.df, wwr.df))
 rm(list = c("wrpc.df", "ip.df", "tae.df", "peaai.df", "wwr.df"))
 str(AquastatManualData.df)
 AquastatManualData.df$Year <- as.integer(AquastatManualData.df$Year)
