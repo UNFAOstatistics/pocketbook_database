@@ -502,7 +502,8 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
   meta$elementcode <- as.character(meta$elementcode)
   meta$itemcode <- as.character(meta$itemcode)
   # For FAOST_CODEs
-  faostcodedata <- readRDS("~/local_data/faostat/rds/inputs_fertilizers_e_all_data_(normalized).RDS")
+  uniquefaocode <- unique(fao$countrycode)[unique(fao$countrycode) < 5000]
+  uniquefaoyear <- unique(fao$year)
   
   fao$subcat <- csv_data$subcat[match(fao$id, csv_data$id)]
   fao$subcat <- ifelse(grepl("emissions", fao$subcat), "emissions", fao$subcat)
@@ -556,8 +557,8 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
                            elementcode == elementCode,
                            subcat == subcat)
     if (nrow(tmpp) == 0){
-      tmpp <- data_frame(countrycode = unique(faostcodedata$countrycode),
-                         year = unique(faostcodedata$countrycode),
+      tmpp <- data_frame(countrycode = uniquefaocode,
+                         year = 2000,
                          value = NA)
     }
     tmpp <- tmpp[c("countrycode","year","value")]
@@ -567,6 +568,11 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
     #filter(Year >= 2010:2016)
     return(tmpp)
   }
+  
+  # name = vars$STS_ID[i]
+  # elementCode = vars$SQL_ELEMENT_CODE[i]
+  # itemCode = vars$SQL_ITEM_CODE[i]
+  # subcat= vars$subcat[i]
   
   # for (i in 1:6) {
   for (i in 1:100) {

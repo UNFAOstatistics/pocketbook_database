@@ -59,6 +59,9 @@ Aggregation =
     colnames(relationDF) = c("inCode", "outCode")
     
     ## Checks
+    ## Remove countries not avialable in relationDF
+    data <- data[data$FAOST_CODE %in% relationDF[, "inCode"],]
+    
     if(!all(unique(data[, inCode]) %in% relationDF[, "inCode"]))
       stop("Not all entries are matched with a relationship")
     if(!(inCode %in% colnames(data)))
