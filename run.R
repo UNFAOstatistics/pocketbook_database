@@ -495,6 +495,9 @@ replication_date <- "2016-12-15-20" # used to work
 
 if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
   
+  library(tidyverse)
+  library(stringr)
+  
   ## New bulk download function
   fao <- readRDS("~/local_data/faostat/rds/faostat.RDS")
   meta <- readRDS("~/faosync/syb_bulk_database/metadata/meta_faostat.RDS")
@@ -1228,12 +1231,50 @@ save(x = SYB.df, file = paste0(session_path,"/SYB",date,".RData"))
 flies <- list.files(session_path, full.names = TRUE)
 file.remove(flies[!grepl("SYB", flies)])
 
+writeLines(paste0(session_path,"/SYB",date,".RData"), con = "./input_data/syb_path.txt") # This is for the paraller aggregation scripts to read at the beginning
+
+# Multicode input
+system("~/faosync/pocketbooks/pocketbook_database/code/impute_syb/parallel_impute.sh")
+
+d1 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df1.RDS")
+d2 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df2.RDS")
+d3 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df3.RDS")
+d4 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df4.RDS")
+d5 <- bind_rows(d1,d2,d3,d4)
+d5 <- d5[!duplicated(d5[c("FAOST_CODE","Year")]),]
+
+
+saveRDS(d5, "~/faosync/pocketbooks/pocketbook/input/data/syb.df_d5.RDS")
+# saveRDS(syb.df, "./input/data/syb.df.RDS")
+
+full_meta <- readRDS("~/local_data/faostat/metadata/meta_faostat.RDS")
+csv_data <- readRDS("~/local_data/faostat/metadata/csv_data.RDS")
+fao_bulk <- readRDS("~/local_data/faostat/rds/faostat.RDS")
+fao_bulk$subcat <- csv_data$subcat[match(fao_bulk$id, csv_data$id)]
+fao_bulk$FAOST_CODE <- fao_bulk$countrycode
+fao_bulk$Year <- fao_bulk$year
+fao_bulk %>% 
+  filter(subcat %in% "production_crops_e_all_data_(normalized)") %>% 
+  saveRDS(., "~/local_data/faostat/temp/production.RDS")
+fao_bulk %>% 
+  filter(subcat %in% "production_livestock_e_all_data_(normalized)") %>% 
+  saveRDS(., "~/local_data/faostat/temp/livestockproduction.RDS")
+  
+
+
+
+
+
 # flies <- list.files("./output_data/", recursive = TRUE, full.names = TRUE)
 # file.remove(flies[!grepl("SYB", flies)])
 
 # save(x = SYB.df, file = paste0("./Data/Processed/SYB",date,".RData"))
 # save(x = SYB.df, file = "./Data/Processed/SYB.RData")
 load(file = paste0(session_path,"/SYB",date,".RData"))
+
+
+
+
 
 # Merge the FSI dataset ---------------------------------------------------
 

@@ -38,4 +38,7 @@ fertilizers.df <- fertilizers.df[!duplicated(fertilizers.df[c("FAOST_CODE","Year
 
 fertilizers.df <- fertilizers.df[fertilizers.df$FAOST_CODE < 5000,]
 
+# Many items have 0 instead of NA, i presume. Lets replace
+# fertilizers.df[fertilizers.df == 0] <- NA
+
 save(x = fertilizers.df, file = "./input_data/processed/fertilizers.RData")
