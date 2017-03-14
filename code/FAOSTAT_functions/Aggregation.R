@@ -46,6 +46,17 @@
 ##' ## relation.df = data.frame(FAOST_CODE = 1:3, NEW_CODE = c(1, 1, 2))
 ##'
 
+# data = preAgg.df
+# aggVar = con.df[,"STS_ID"]
+# thresholdProp = con.df[,"THRESHOLD_PROP"]
+# weightVar = con.df[,"STS_ID_WEIGHT"]
+# relationDF = na.omit(FAOcountryProfile[, c("FAOST_CODE", "M49_FAOST_CODE")])
+# aggMethod = con.df[,"AGGREGATION"]
+# applyRules = FALSE
+# keepUnspecified = FALSE
+# relationDF = FAOcountryProfile[, c("FAOST_CODE", "M49_FAOST_CODE")]
+# year = "Year"
+
 Aggregation = 
   function(data, aggVar, weightVar = rep(NA, length(aggVar)), year = "Year",
            relationDF = FAOcountryProfile[, c("FAOST_CODE", "M49_FAOST_CODE")], 
@@ -165,7 +176,7 @@ Aggregation =
       }
     } else {
       ## No rule is applied
-      # for(i in 1:38){
+      # for(i in 1:100){
       for(i in 1:n.var){
         if(aggMethod[i] == "discard"){
           ## In case the aggregation method is not specify, I just want
@@ -175,6 +186,10 @@ Aggregation =
           ## regional level
           tmp = subset(raw.dt, select = c("outCode", year, aggVar[i]),
                        subset = inCode == outCode)
+          # tmp <- tmp %>% as_tibble() %>% 
+          #   group_by(outCode,Year) %>%
+          #   summarise_all(.funs = "max", na.rm = TRUE) %>%
+          #   ungroup() %>% as.data.table()
         } else {
           tmp = 
             raw.dt[, foo(x = get(aggVar[i]), w = get(weightVar[i]), 
@@ -183,10 +198,13 @@ Aggregation =
           setnames(tmp, "V1", aggVar[i])
         }
         setkeyv(tmp, c("outCode", year))
-        tmp <- as.data.frame(tmp)
-        tmp <- tmp[!duplicated(tmp[c("outCode","Year")]),]
-        final = left_join(x = final, y = tmp)
-        # final = merge(x = final, y = tmp, all.x = TRUE)
+        # tmp <- as_data_frame(tmp)
+        # tmp <- tmp[!duplicated(tmp[c("outCode","Year")]),]
+        # tmp <- tmp %>% group_by(outCode,Year) %>%
+        #   summarise_all(.funs = "max", na.rm = TRUE) %>%
+        #   ungroup()
+        # final = left_join(x = final, y = tmp)
+        final = merge(x = final, y = tmp, all.x = TRUE)
         setTxtProgressBar(pb, i)
       }
     }
