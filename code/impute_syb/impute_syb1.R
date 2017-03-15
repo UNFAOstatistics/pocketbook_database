@@ -14,6 +14,9 @@ lapply(pkg_list, library, character.only = TRUE)
 
 load("~/faosync/pocketbooks/pocketbook_database/output_data/2017-02-25-14/SYB2017-02-25-14.RData")
 syb.dfo <- SYB.df;syb.df <- SYB.df[!SYB.df$FAOST_CODE %in% "",]; rm(SYB.df)
+
+syb.df %>% select(FAOST_CODE,FAO_TABLE_NAME,Year,QV.NPCPV.CRPS.ID.SHP) %>% filter(Year == 2013) %>%  distinct()
+
 # sum(colSums(is.na(syb.dfo)))
 load(syb_path)
 syb.df <- SYB.df;syb.df <- SYB.df[!SYB.df$FAOST_CODE %in% "",]; rm(SYB.df)

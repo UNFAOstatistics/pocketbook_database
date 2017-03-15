@@ -27,6 +27,16 @@
 ##' processed data and also a list indicating whether the construction
 ##' passed or failed.
 
+# data = preConstr.df
+# origVar1 = tmpx$STS_ID_CONSTR1
+# origVar2 = tmpx$STS_ID_CONSTR2
+# newVarName = tmpx$STS_ID
+# constructType = tmpx$CONSTRUCTION_TYPE
+# grFreq = tmpx$GROWTH_RATE_FREQ
+# grType = tmpx$GROWTH_TYPE
+# baseYear = 2000
+
+
 constructSYB = function(data, origVar1, origVar2, newVarName = NA,
     constructType = c("share", "growth", "change", "index"),
     grFreq = 1, grType = c("ls", "geo"), baseYear = 2000){

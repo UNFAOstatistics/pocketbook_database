@@ -57,6 +57,7 @@
 # relationDF = FAOcountryProfile[, c("FAOST_CODE", "M49_FAOST_CODE")]
 # year = "Year"
 
+
 Aggregation = 
   function(data, aggVar, weightVar = rep(NA, length(aggVar)), year = "Year",
            relationDF = FAOcountryProfile[, c("FAOST_CODE", "M49_FAOST_CODE")], 
@@ -70,9 +71,6 @@ Aggregation =
     colnames(relationDF) = c("inCode", "outCode")
     
     ## Checks
-    ## Remove countries not avialable in relationDF
-    data <- data[data$FAOST_CODE %in% relationDF[, "inCode"],]
-    
     if(!all(unique(data[, inCode]) %in% relationDF[, "inCode"]))
       stop("Not all entries are matched with a relationship")
     if(!(inCode %in% colnames(data)))
@@ -176,7 +174,6 @@ Aggregation =
       }
     } else {
       ## No rule is applied
-      # for(i in 1:100){
       for(i in 1:n.var){
         if(aggMethod[i] == "discard"){
           ## In case the aggregation method is not specify, I just want
@@ -186,10 +183,6 @@ Aggregation =
           ## regional level
           tmp = subset(raw.dt, select = c("outCode", year, aggVar[i]),
                        subset = inCode == outCode)
-          # tmp <- tmp %>% as_tibble() %>% 
-          #   group_by(outCode,Year) %>%
-          #   summarise_all(.funs = "max", na.rm = TRUE) %>%
-          #   ungroup() %>% as.data.table()
         } else {
           tmp = 
             raw.dt[, foo(x = get(aggVar[i]), w = get(weightVar[i]), 
@@ -198,12 +191,7 @@ Aggregation =
           setnames(tmp, "V1", aggVar[i])
         }
         setkeyv(tmp, c("outCode", year))
-        # tmp <- as_data_frame(tmp)
-        # tmp <- tmp[!duplicated(tmp[c("outCode","Year")]),]
-        # tmp <- tmp %>% group_by(outCode,Year) %>%
-        #   summarise_all(.funs = "max", na.rm = TRUE) %>%
-        #   ungroup()
-        # final = left_join(x = final, y = tmp)
+        # final = merge(x = final, y = tmp, all.x = TRUE, allow.cartesian=TRUE)
         final = merge(x = final, y = tmp, all.x = TRUE)
         setTxtProgressBar(pb, i)
       }
@@ -221,9 +209,3 @@ Aggregation =
   }
 
 utils::globalVariables(names = c("nc", "Year", "V1", "FAOcountryProfile"))
-
-
-
-# > dim(final)
-# [1] 49197    40
-
