@@ -715,45 +715,47 @@ if (!file.exists("./input_data/processed/wbManualData.RData"))     source(paste0
 
 # Merging -----------------------------------------------------------------
 
-initial.df = Reduce(function(x, y) merge(x, y, all = TRUE),
-                    x = list(# FAOoa.df, # FAOSTAT, Population - Annual population
-                      # FAOrl.df, # FAOSTAT, Resources - Land
-                      # FAOrf.df, # FAOSTAT, Resources - Fertilizers
-                      # FAOrp.df, # FAOSTAT, Resources - Pesticides
-                      # FAOcs.df, # FAOSTAT, Investments - Capital stock
-                      # FAOrm.df, # FAOSTAT, Investments - Machinery
-                      # FAOig.df, # FAOSTAT, Government expenditures
-                      # FAOa.df, # FAOSTAT, ASTI
-                      # FAOqc.df, # FAOSTAT, Production - Crops
-                      # FAOqa.df, # FAOSTAT, Production - Live animals
-                      # FAOqd.df, # FAOSTAT, Production - Crops processed
-                      # FAOql.df, # FAOSTAT, Production - Livestock primary
-                      # FAOqp.df, # FAOSTAT, Production - Livestock processed
-                      # FAOqv.df, # FAOSTAT, Production - Value of agricultural production
-                      # FAOqi.df, # FAOSTAT, Production - Production indices
-                      # FAOtp.df, # FAOSTAT, Trade - Crops and livestock products
-                      # FAOti.df, # FAOSTAT, Trade - Trade indices
-                      # FAOfo.df, # FAOSTAT, Forestry
-                      # FAOghg.df,# FAOSTAT, Greenhouse gases
-                      # # FAOfb.df, # FAOSTAT, Food balance sheets
-                      # FAOcof.df, # FAOSTAT, coffee
-                     ilo.df,
-                      faost_all.df,
-                      WBManualData.df, # not_update
-                      AquastatManualData.df, # updated 2015
-                      fra2015.df,
-                      regional1.df,
-                      prod_ind_2015.df,
-                      df_area_harvested.df,
-                      fish2015.df,
-                      fertilizers.df,
-                      prod_ind_weights.df,
-                      oda_brian_2015.df,
-                      # gfra.df, # not updated
-                      BiofuelProduction.df, # not update
-                      # Fishery.df, # not updated
-                      UNPopManualData.df), # added by Markus 20150401
-                    init = WB.df)
+# initial.df = Reduce(function(x, y) merge(x, y, all = TRUE),
+#                     x = list(
+#                       ilo.df,
+#                       faost_all.df,
+#                       WBManualData.df, # not_update
+#                       AquastatManualData.df, # updated 2015
+#                       fra2015.df,
+#                       regional1.df,
+#                       prod_ind_2015.df,
+#                       df_area_harvested.df,
+#                       fish2015.df,
+#                       fertilizers.df,
+#                       prod_ind_weights.df,
+#                       oda_brian_2015.df,
+#                       # gfra.df, # not updated
+#                       BiofuelProduction.df, # not update
+#                       # Fishery.df, # not updated
+#                       UNPopManualData.df), # added by Markus 20150401
+#                     init = WB.df)
+list(
+  ilo.df,
+  faost_all.df,
+  WBManualData.df, # not_update
+  AquastatManualData.df, # updated 2015
+  fra2015.df,
+  regional1.df,
+  # prod_ind_2015.df,
+  df_area_harvested.df,
+  fish2015.df,
+  fertilizers.df,
+  prod_ind_weights.df,
+  oda_brian_2015.df,
+  # gfra.df, # not updated
+  BiofuelProduction.df, # not update
+  # Fishery.df, # not updated
+  UNPopManualData.df,WB.df) %>%
+  Reduce(function(dtf1,dtf2) full_join(dtf1,dtf2), .) -> initial.df
+
+
+
+
 # rm(list = c("dwnldA", "dwnldCS", "dwnldFB", "dwnldFO", "dwnldGHG", "dwnldIG",
 #             "dwnldOA", "dwnldQA", "dwnldQC", "dwnldQD", "dwnldQI", "dwnldQL",
 #             "dwnldQP", "dwnldQV", "dwnldRF", "dwnldRL", "dwnldRM", "dwnldRP",
@@ -778,6 +780,7 @@ meta.lst[["UNIT_MULT"]][, "UNIT_MULT"] <- as.numeric(translateUnit(meta.lst[["UN
 
 preConstr.df <- scaleUnit(initial.df, meta.lst[["UNIT_MULT"]])
 # rm(initial.df)
+
 
 ## Manual Construction
 
@@ -1067,7 +1070,7 @@ preConstr.df[, "GN.UI.EA.TJPIN.NO"] <-
 ###########################################################################
 
 
-con.df <- con.df %>% filter(!grepl("CH$|CH1$", STS_ID))
+# con.df <- con.df %>% filter(!grepl("CH$|CH1$", STS_ID))
 # 
 # # View(con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "growth", "change", "index"),])
 # 
@@ -1081,6 +1084,8 @@ con.df <- con.df %>% filter(!grepl("CH$|CH1$", STS_ID))
 #                                     grFreq = GROWTH_RATE_FREQ,
 #                                     grType = GROWTH_TYPE, 
 #                                     baseYear = 2000))
+
+
 
 tmpx <- con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "growth", "change", "index"),] # leave the manual construction outside
 # data = preConstr.df
@@ -1112,6 +1117,13 @@ preAgg.df <- preAgg.df[preAgg.df$FAOST_CODE <= 351,]
 preAgg.df <- preAgg.df[!preAgg.df$FAOST_CODE %in% c(261,266,268,269,297,348),]
 
 # preAgg.df <- preAgg.df[!duplicated(preAgg.df[c("FAOST_CODE","Year")]),]
+
+
+# preAgg.df %>% select(FAOST_CODE,
+#                       Year,
+#                       QV.NPV.CRPS.ID.NO,QV.NPCPV.CRPS.ID.SHP) %>% 
+#   filter(FAOST_CODE == 185, Year >= 2010) 
+
 
 # Adjustment in scaling ---------------------------------------------------
 
@@ -1218,7 +1230,7 @@ postAgg.df <- rbind(country.df,
 postAgg.df <- CheckValues(dataset = postAgg.df, columns = colnames(postAgg.df)[
   -grep("FAOST_CODE|Year|Area|POU_DISTR|FAO_TABLE_NAME", colnames(postAgg.df))])
 
-SYB.df <- postAgg.df
+syb.df <- postAgg.df
 
 # debugging begins ---
 # SYB.df %>% filter(grepl("RNE",FAOST_CODE), Year %in% c(1998:2002,2010:2015))  %>%
@@ -1226,14 +1238,51 @@ SYB.df <- postAgg.df
 # debugging ends ---
 
 
-save(x = SYB.df, file = paste0(session_path,"/SYB",date,".RData"))
+save(x = syb.df, file = paste0(session_path,"/SYB",date,".RData"))
 # remove other files from output_data
 flies <- list.files(session_path, full.names = TRUE)
 file.remove(flies[!grepl("SYB", flies)])
 
+
+
+
+
+
+
 writeLines(paste0(session_path,"/SYB",date,".RData"), con = "./input_data/syb_path.txt") # This is for the paraller aggregation scripts to read at the beginning
 
 # Multicode input
+
+
+session_path <- readLines(con = "~/faosync/pocketbooks/pocketbook_database/input_data/session_path.txt")
+syb_path <- readLines(con = "~/faosync/pocketbooks/pocketbook_database/input_data/syb_path.txt")
+
+# Needed libraries --------------------------------------------------------
+pkg_list <- c("plyr","dplyr","reshape2","data.table","readr","RJSONIO","FAOSTAT")
+lapply(pkg_list, library, character.only = TRUE)
+
+load("~/faosync/pocketbooks/pocketbook_database/output_data/2017-02-25-14/SYB2017-02-25-14.RData")
+syb.dfo <- SYB.df;syb.df <- SYB.df[!SYB.df$FAOST_CODE %in% "",]; rm(SYB.df)
+# sum(colSums(is.na(syb.dfo)))
+# load(syb_path)
+load("~/faosync/pocketbooks/pocketbook_database/output_data/2017-03-13-00/SYB2017-03-13-00.RData")
+
+syb <- bind_rows(syb.dfo,syb.df)
+d5 <- syb %>% 
+  select(-Area) %>% 
+  group_by(FAOST_CODE,FAO_TABLE_NAME,Year) %>%
+  summarise_all(.funs = "max", na.rm = TRUE) %>% 
+  ungroup()
+saveRDS(d5, "~/faosync/pocketbooks/pocketbook/input/data/syb.df_d5.RDS")
+
+
+syb.df <- SYB.df;syb.df <- SYB.df[!SYB.df$FAOST_CODE %in% "",]; rm(SYB.df)
+# sum(colSums(is.na(syb.df)))
+
+
+
+
+
 system("~/faosync/pocketbooks/pocketbook_database/code/impute_syb/parallel_impute.sh")
 
 d1 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df1.RDS")
