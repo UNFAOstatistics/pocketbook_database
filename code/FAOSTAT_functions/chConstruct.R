@@ -16,8 +16,13 @@
 
 chConstruct = function(data, origVar, country = "FAOST_CODE", year = "Year",
     newVarName = NA, n = 1){
-  tmp = arrange(subset(data, select = c(country, year, origVar)),
-                 get(country), get(year))
+  # tmp = arrange(subset(data, select = c(country, year, origVar)),
+  #                get(country), get(year))
+  tmp = data[c("FAOST_CODE", "Year", origVar)] %>% 
+    arrange(FAOST_CODE,Year)
+
+  
+  
   unqCountry = unique(tmp[, country])
   chVar = double()
   for(i in 1:length(unqCountry)){
