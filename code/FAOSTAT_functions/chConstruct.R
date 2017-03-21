@@ -14,6 +14,15 @@
 ##' rate.
 ##' @export
 
+
+# data = data
+# origVar = origVar1[i]
+# newVarName = newVarName[i]
+# n = grFreq[i] 
+# silent = TRUE
+# country = "FAOST_CODE"
+# year = "Year"
+
 chConstruct = function(data, origVar, country = "FAOST_CODE", year = "Year",
     newVarName = NA, n = 1){
   # tmp = arrange(subset(data, select = c(country, year, origVar)),
@@ -26,7 +35,7 @@ chConstruct = function(data, origVar, country = "FAOST_CODE", year = "Year",
   unqCountry = unique(tmp[, country])
   chVar = double()
   for(i in 1:length(unqCountry)){
-    tmpgr = chgr(as.numeric(unlist(subset(tmp, select = origVar,
+    tmpgr = chgr(x = as.numeric(unlist(subset(tmp, select = origVar,
         subset = get(country) == unqCountry[i]))), n)
     chVar = c(chVar, tmpgr)
   }

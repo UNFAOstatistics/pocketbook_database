@@ -19,6 +19,12 @@
 ##' geogr(test.ts, 1)
 ##' geogr(test.ts, 3)
 ##' geogr(test.ts, 10)
+##' 
+
+# x = as.numeric(unlist(subset(tmp,
+#                              select = origVar,
+#                              subset = FAOST_CODE == unqCountry[i])))
+
 geogr = function(x, n = 1){
   T = length(x)
   if(sum(is.na(x)) == T){
@@ -38,3 +44,5 @@ geogr = function(x, n = 1){
   }
   geogr
 }
+
+geogr(x = x, n = 10)

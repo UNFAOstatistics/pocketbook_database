@@ -265,7 +265,8 @@ if (want_to_bulk){
     
     download.file("http://fenixservices.fao.org/faostat/static/bulkdownloads/FAOSTAT.zip", 
                   destfile = paste0("~/local_data/faostat/FAOSTAT",Sys.Date(),".zip"))
-    unzip(zipfile = "~/local_data/faostat/FAOSTAT2017-02-21.zip", exdir = "~/local_data/faostat/csv")
+    # unzip(zipfile = "~/local_data/faostat/FAOSTAT2017-02-19.zip", exdir = "~/local_data/faostat/csv")
+    unzip(zipfile = "~/local_data/faostat/FAOSTAT2017-03-18.zip", exdir = "~/local_data/faostat/csv")
     zipps <- list.files("~/local_data/faostat/csv/", ".zip", full.names = TRUE)
     for (i in zipps){
       unzip(zipfile = i, exdir = "~/local_data/faostat/csv")
@@ -1088,14 +1089,17 @@ preConstr.df[, "GN.UI.EA.TJPIN.NO"] <-
 
 
 tmpx <- con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "growth", "change", "index"),] # leave the manual construction outside
-# data = preConstr.df
-# origVar1 = tmpx$STS_ID_CONSTR1
-# origVar2 = tmpx$STS_ID_CONSTR2
-# newVarName = tmpx$STS_ID
-# constructType = tmpx$CONSTRUCTION_TYPE
-# grFreq = tmpx$GROWTH_RATE_FREQ
-# grType = tmpx$GROWTH_TYPE
-# baseYear = 2000
+
+tmpx <- tmpx[tmpx$STS_ID == "OA.TPBS.POP.PPL.GR10",]
+
+data = preConstr.df
+origVar1 = tmpx$STS_ID_CONSTR1
+origVar2 = tmpx$STS_ID_CONSTR2
+newVarName = tmpx$STS_ID
+constructType = tmpx$CONSTRUCTION_TYPE
+grFreq = tmpx$GROWTH_RATE_FREQ
+grType = tmpx$GROWTH_TYPE
+baseYear = 2000
 
 postConstr.lst <- constructSYB(data = preConstr.df,
                                     origVar1 = tmpx$STS_ID_CONSTR1,
