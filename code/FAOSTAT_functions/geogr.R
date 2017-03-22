@@ -45,4 +45,4 @@ geogr = function(x, n = 1){
   geogr
 }
 
-geogr(x = x, n = 10)
+# geogr(x = x, n = 10)
