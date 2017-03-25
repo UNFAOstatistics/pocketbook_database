@@ -1045,16 +1045,16 @@ preConstr.df[, "GN.UI.EA.TJPIN.NO"] <-
 
 tmpx <- con.df[con.df[, "CONSTRUCTION_TYPE"] %in% c("share", "growth", "change", "index"),] # leave the manual construction outside
 
-tmpx <- tmpx[tmpx$STS_ID == "OA.TPBS.POP.PPL.GR10",]
+# tmpx <- tmpx[tmpx$STS_ID == "OA.TPBS.POP.PPL.GR10",]
 
-data = preConstr.df
-origVar1 = tmpx$STS_ID_CONSTR1
-origVar2 = tmpx$STS_ID_CONSTR2
-newVarName = tmpx$STS_ID
-constructType = tmpx$CONSTRUCTION_TYPE
-grFreq = tmpx$GROWTH_RATE_FREQ
-grType = tmpx$GROWTH_TYPE
-baseYear = 2000
+# data = preConstr.df
+# origVar1 = tmpx$STS_ID_CONSTR1
+# origVar2 = tmpx$STS_ID_CONSTR2
+# newVarName = tmpx$STS_ID
+# constructType = tmpx$CONSTRUCTION_TYPE
+# grFreq = tmpx$GROWTH_RATE_FREQ
+# grType = tmpx$GROWTH_TYPE
+# baseYear = 2000
 
 postConstr.lst <- constructSYB(data = preConstr.df,
                                     origVar1 = tmpx$STS_ID_CONSTR1,

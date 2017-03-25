@@ -22,6 +22,8 @@ apt-get install libgdal1-dev libproj-dev -y
 apt install libssl-dev
 apt install libssh2-1-dev
 apt install libcurl4-openssl-dev
+apt install libxml2-dev
+apt install texlive-full -y
 ```
 
 **install R-packages in console**
