@@ -17,43 +17,6 @@ lapply(pkg_list, library, character.only = TRUE)
 ## Settings
 ###########################################################################
 
-# temptemp
-addnewmetavars <- FALSE
-if (addnewmetavars){
-  mm <- read_csv("./input_data/Metadata2015.csv")
-  mm <- mm %>% filter(!STS_ID %in% c("ILO_EMP_2EMP_SEX_AGE_NB","ILO_female_emp_agri")) %>% select(-OWNED)
-  cc <- read_csv("./input_data/Construction2015.csv")
-  cc <- cc %>% filter(!STS_ID %in% c("ILO_EMP_2EMP_SEX_AGE_NB","ILO_female_emp_agri"))
-
-  ilorow <- data_frame(STS_ID = c("ILO_EMP_2EMP_SEX_AGE_NB","ILO_female_emp_agri"),
-                       TITLE_STS = c("Employed people in 1000","Share of femele employment in agriculture of total female employment"),
-                       UNIT_MULT  = c("NA","NA"),
-                       UNIT_MEASURE = c("people","percent"),
-                       OWNER = c("ILO","ILO"),
-                       SOURCE = c("ILO","ILO"),
-                       DATA_TYPE = c("processed","processed"),
-                       TOPIC = c("demography","demography")
-  )
-  
-  mm %>% 
-    bind_rows(.,ilorow) %>%
-    write.csv(., "./input_data/Metadata2015.csv", row.names = FALSE)
-  
-  # Employment by sex and age -- ILO estimates and projections, Nov. 2016 (thousands)
-  # Employment by sex and economic activity -- ILO estimates and projections, Nov. 2016 (thousands)
-  
-  ilorow <- data_frame(STS_ID = c("ILO_EMP_2EMP_SEX_AGE_NB","ILO_female_emp_agri"),
-                       STS_ID_WEIGHT = c(NA,"OA.TPBS.POP.PPL.NO"),
-                       AGGREGATION = c("sum","weighted.mean"))
-
-  cc %>% 
-    bind_rows(.,ilorow) %>%
-    write.csv(., "./input_data/Construction2015.csv", row.names = FALSE)
-}
-
-
-
-
 
 # Source functions --------------------------------------------------------
 source("./code/misc_functions/CheckLogical.R")
@@ -95,14 +58,6 @@ source("./code/FAOSTAT_functions/indConstruct.R")
 source("./code/FAOSTAT_functions/lsgr.R")
 source("./code/FAOSTAT_functions/mergeSYB.R")
 source("./code/FAOSTAT_functions/overlap.R")
-# 
-# 
-# library(RJSONIO)
-# library(MASS)
-# library(classInt)
-# library(labeling)
-# library(scales)
-
 
 
 ## -- Sourcings FAOSYBpackage from SYBdatabase folder. These used to sourced from Filippos github repo
