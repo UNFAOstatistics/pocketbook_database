@@ -58,6 +58,8 @@
 # year = "Year"
 
 
+
+
 Aggregation = 
   function(data, aggVar, weightVar = rep(NA, length(aggVar)), year = "Year",
            relationDF = FAOcountryProfile[, c("FAOST_CODE", "M49_FAOST_CODE")], 
@@ -65,11 +67,16 @@ Aggregation =
            keepUnspecified = TRUE, unspecifiedCode = 0, 
            thresholdProp = rep(0.65, length(aggVar))) {
     
+
     ## Obtain the name of the relationships
     inCode = colnames(relationDF)[1]
     outCode = colnames(relationDF)[2]
     colnames(relationDF) = c("inCode", "outCode")
     
+    ## Couple of new FAOST_CODEs from new FAOSTATdata, removing them not to mess the aggregation
+    data <- data[data[, inCode] %in% relationDF[, "inCode"],]
+
+
     ## Checks
     if(!all(unique(data[, inCode]) %in% relationDF[, "inCode"]))
       stop("Not all entries are matched with a relationship")

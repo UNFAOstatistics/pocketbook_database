@@ -221,7 +221,8 @@ if (want_to_bulk){
     download.file("http://fenixservices.fao.org/faostat/static/bulkdownloads/FAOSTAT.zip", 
                   destfile = paste0("~/local_data/faostat/FAOSTAT",Sys.Date(),".zip"))
     # unzip(zipfile = "~/local_data/faostat/FAOSTAT2017-02-19.zip", exdir = "~/local_data/faostat/csv")
-    unzip(zipfile = "~/local_data/faostat/FAOSTAT2017-03-18.zip", exdir = "~/local_data/faostat/csv")
+    # unzip(zipfile = "~/local_data/faostat/FAOSTAT2017-03-26.zip", exdir = "~/local_data/faostat/csv")
+    unzip(zipfile = "~/local_data/faostat/FAOSTAT2017-03-30.zip", exdir = "~/local_data/faostat/csv")
     zipps <- list.files("~/local_data/faostat/csv/", ".zip", full.names = TRUE)
     for (i in zipps){
       unzip(zipfile = i, exdir = "~/local_data/faostat/csv")
@@ -273,7 +274,9 @@ if (want_to_bulk){
   dat <- data_frame()
   meta_base <- data_frame()
   # for(i in 60:nrow(csv_data)){
-  for(i in 1:nrow(csv_data)){
+  
+  ## DATAS from 1:40
+  for(i in 1:40){
     if (i %in% c(36 # excange rate
                  )) next()
     df <- read_csv(csv_data$filepath[i])
@@ -300,11 +303,47 @@ if (want_to_bulk){
       mutate(id = as.integer(id))
     dat <- bind_rows(dat,df)
   }
-  dat %>% mutate(year = as.integer(year)) -> dat
+  dat1 <- dat
+  meta_base1 <- meta_base
+  
+  ## DATAS from 41:nrow(csv_data)
+  dat <- data_frame()
+  meta_base <- data_frame()
+  for(i in 41:nrow(csv_data)){
+    if (i %in% c(36 # excange rate
+    )) next()
+    df <- read_csv(csv_data$filepath[i])
+    names(df) <- tolower(gsub(" |\\.", "", names(df)))
+    names(df) <- ifelse(names(df) %in% vardata$old, 
+                        vardata$new[match(names(df), vardata$old)],names(df))
+    if (any(grepl("-",df$year))) df$year <- as.character(as.integer(gsub("-.+$", "", df$year)) + 1)
+    df %>% 
+      select(-contains("year"), -contains("country"),-contains("flag")) %>% 
+      distinct() %>% 
+      mutate(unit = as.character(unit)) %>% 
+      bind_rows(meta_base, .) -> meta_base
+    
+    if ("year" %in% names(df)){
+      df <- df %>% select(ends_with("code"),year,value,unit)
+    } else {
+      df <- df %>% select(ends_with("code"),value,unit)
+    }
+    df %>% 
+      mutate(value = as.numeric(value),
+             id = csv_data$id[i]) %>% 
+      mutate_if(is.integer, as.character) -> df
+    df <- df %>% mutate_if(grepl("code", names(.)), as.integer) %>% 
+      mutate(id = as.integer(id))
+    dat <- bind_rows(dat,df)
+  }
+  dat2 <- dat
+  meta_base2 <- meta_base
+  
+  bind_rows(dat1,dat2) %>% mutate(year = as.integer(year)) -> dat
   saveRDS(dat, "~/local_data/faostat/rds/faostat.RDS")
   
   #' there are many not necessary variables, get rid of them and find the distinctive cases
-  meta_base %>% 
+  bind_rows(meta_base1,meta_base2) %>% 
     select(-value,-note,-reportercountries,-partnercountries,-survey,-breakdownvariablecode,-breakdownvariable,-breadownbysexofthehouseholdheadcode,-breadownbysexofthehouseholdhead,-measurecode,-measure) %>% 
     distinct() %>% saveRDS(., "~/local_data/faostat/metadata/meta_faostat.RDS")
   
@@ -320,7 +359,7 @@ if (want_to_bulk){
     download.file("http://databank.worldbank.org/data/download/WDI_csv.zip",
                   destfile = paste0("~/local_data/wdi/WDI_csv",Sys.Date(),".zip"))
 
-    unzip("~/local_data/wdi/WDI_csv2017-02-19.zip", 
+    unzip("~/local_data/wdi/WDI_csv2017-03-30.zip", 
           exdir = "~/local_data/wdi/csv/")
 
   # read WDI
@@ -456,8 +495,8 @@ if (!file.exists("~/local_data/faostat/rds/faostat_dat3.RDS")){
   
   ## New bulk download function
   fao <- readRDS("~/local_data/faostat/rds/faostat.RDS")
-  meta <- readRDS("~/faosync/syb_bulk_database/metadata/meta_faostat.RDS")
-  csv_data <- readRDS("~/faosync/syb_bulk_database/metadata/csv_data.RDS")
+  meta <- readRDS("~/local_data/faostat/metadata/meta_faostat.RDS")
+  csv_data <- readRDS("~/local_data/faostat/metadata/csv_data.RDS")
   meta$elementcode <- as.character(meta$elementcode)
   meta$itemcode <- as.character(meta$itemcode)
   # For FAOST_CODEs
@@ -1202,203 +1241,203 @@ save(x = syb.df, file = paste0(session_path,"/SYB",date,".RData"))
 flies <- list.files(session_path, full.names = TRUE)
 file.remove(flies[!grepl("SYB", flies)])
 
-
-
-
-
-
-
-writeLines(paste0(session_path,"/SYB",date,".RData"), con = "./input_data/syb_path.txt") # This is for the paraller aggregation scripts to read at the beginning
-
-# Multicode input
-
-
-session_path <- readLines(con = "~/faosync/pocketbooks/pocketbook_database/input_data/session_path.txt")
-syb_path <- readLines(con = "~/faosync/pocketbooks/pocketbook_database/input_data/syb_path.txt")
-
-# Needed libraries --------------------------------------------------------
-pkg_list <- c("plyr","dplyr","reshape2","data.table","readr","RJSONIO","FAOSTAT")
-lapply(pkg_list, library, character.only = TRUE)
-
-load("~/faosync/pocketbooks/pocketbook_database/output_data/2017-02-25-14/SYB2017-02-25-14.RData")
-syb.dfo <- SYB.df;syb.df <- SYB.df[!SYB.df$FAOST_CODE %in% "",]; rm(SYB.df)
-# sum(colSums(is.na(syb.dfo)))
-# load(syb_path)
-load("~/faosync/pocketbooks/pocketbook_database/output_data/2017-03-13-00/SYB2017-03-13-00.RData")
-
-syb <- bind_rows(syb.dfo,syb.df)
-d5 <- syb %>% 
-  select(-Area) %>% 
-  group_by(FAOST_CODE,FAO_TABLE_NAME,Year) %>%
-  summarise_all(.funs = "max", na.rm = TRUE) %>% 
-  ungroup()
-saveRDS(d5, "~/faosync/pocketbooks/pocketbook/input/data/syb.df_d5.RDS")
-
-
-syb.df <- SYB.df;syb.df <- SYB.df[!SYB.df$FAOST_CODE %in% "",]; rm(SYB.df)
-# sum(colSums(is.na(syb.df)))
-
-
-
-
-
-system("~/faosync/pocketbooks/pocketbook_database/code/impute_syb/parallel_impute.sh")
-
-d1 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df1.RDS")
-d2 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df2.RDS")
-d3 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df3.RDS")
-d4 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df4.RDS")
-d5 <- bind_rows(d1,d2,d3,d4)
-d5 <- d5[!duplicated(d5[c("FAOST_CODE","Year")]),]
-
-
-saveRDS(d5, "~/faosync/pocketbooks/pocketbook/input/data/syb.df_d5.RDS")
-# saveRDS(syb.df, "./input/data/syb.df.RDS")
-
-full_meta <- readRDS("~/local_data/faostat/metadata/meta_faostat.RDS")
-csv_data <- readRDS("~/local_data/faostat/metadata/csv_data.RDS")
-fao_bulk <- readRDS("~/local_data/faostat/rds/faostat.RDS")
-fao_bulk$subcat <- csv_data$subcat[match(fao_bulk$id, csv_data$id)]
-fao_bulk$FAOST_CODE <- fao_bulk$countrycode
-fao_bulk$Year <- fao_bulk$year
-fao_bulk %>% 
-  filter(subcat %in% "production_crops_e_all_data_(normalized)") %>% 
-  saveRDS(., "~/local_data/faostat/temp/production.RDS")
-fao_bulk %>% 
-  filter(subcat %in% "production_livestock_e_all_data_(normalized)") %>% 
-  saveRDS(., "~/local_data/faostat/temp/livestockproduction.RDS")
-  
-
-
-
-
-
-# flies <- list.files("./output_data/", recursive = TRUE, full.names = TRUE)
-# file.remove(flies[!grepl("SYB", flies)])
-
-# save(x = SYB.df, file = paste0("./Data/Processed/SYB",date,".RData"))
-# save(x = SYB.df, file = "./Data/Processed/SYB.RData")
-load(file = paste0(session_path,"/SYB",date,".RData"))
-
-
-
-
-
-# Merge the FSI dataset ---------------------------------------------------
-
-## Merge the dataset
-# load(file = "./Data/Processed/fsi.RData")
-# fsiVar <- c("FAOST_CODE", "Year",
-#             "AV3YADESA.DISS", "QV.NPV.FOOD.ID.AV3YSHP.DISS", "FB.SDES.CRLSSR.KCD.AV3Y.DISS",
-#             "FB.PSQ.GT.GCD.AV3Y.DISS", "FB.PSQ.AO.GCD.AV3Y.DISS", "FB.FSQ.GT.GCD.AV3Y.DISS",
-#             "IS.ROD.PAVE.ZS.DISS", "IS.ROD.DNST.K2.DISS", "IS.RRS.DNST.K2.DISS",
-#             "DFPLI.IN.NO.DISS", "SH.H2O.SAFE.ZS", "SH.STA.ACSN",
-#             "FB.CIDR.CRLS.TN.AV3Y.DISS", "RL.AREA.EQIRR.HA.SHLAV3Y.DISS",
-#             "TI.IV.FEFTMT.USD.AV3Y.DISS", "SFEP.NO", "WGI.PSAVT.IN.NO",  
-#             "PCFPV.IN.NO.DISS", "PCFSV.IN.NO.DISS", "DFPLIV.IN.NO.DISS",
-#             "SH.ANM.CHLD.ZS", "VITAMINA", "IODINE", "SH.PRG.ANEM",
-#             "SH.STA.WAST.ZS", "SH.STA.STNT.ZS", "SH.STA.MALN.ZS", "SH.STA.AMALN.ZS",
-#             "AV3YMDER_1.55.DISS", "AV3YADER_1.85.DISS", "AV3YMDER_1.75.DISS", "CV.DISS", "SK.DISS",
-#             "LOSS.DISS", "AV3YDES.DISS", "AV3YPOU.DISS", "AV3YNOU.DISS", 
-#             "AV3YPOU", "AV3YNOU", "AV3YDoFD.DISS", "AV3YPoFI.DISS", "AV3YPOP")
-# fsi.df <- fsi.df[, fsiVar]
-# SYB.df <- merge(SYB.df, fsi.df, all = FALSE, by = c("FAOST_CODE", "Year"))
-# rm(fsi.df)
-# save(x = SYB.df, file = paste0("./Data/Processed/SYB",date,".RData"))
 # 
-# ## Merge metadata and construction file
-# fsicon.df <- ReadConstruction(file = "FSIconstruction15.csv", 
-#                               encoding = "UTF-8", nrows = 287)
-# fsimeta.lst <- ReadMetadata(file = "FSImetadata15.csv", 
-#                             encoding = "UTF-8", nrows = 287)
-# fsimeta.df <- fsimeta.lst[["FULL"]]
 # 
-# fsicon.df <- fsicon.df[fsicon.df[, "STS_ID"] %in% fsiVar,]
-# fsimeta.df <- fsimeta.df[fsimeta.df[, "STS_ID"] %in% fsiVar,]
 # 
-# meta.lst[["FULL"]][["X"]] <- NULL
-# meta.lst[["FULL"]] <- rbind(meta.lst[["FULL"]], fsimeta.df)
-# con.df <- rbind(con.df, 
-#                 fsicon.df[, -grep("MODULE_FSI|MODULE_POU|MODULE_DES", 
-#                                   colnames(fsicon.df))])
 # 
-# save(x = con.df, file = "./Data/Processed/Construction.RData")
-# save(x = meta.lst, file = "./Data/Processed/Metadata.RData")
-
-###########################################################################
-## End
-###########################################################################
-# load("/home/aurelius/faosync/pocketbooks/pocketbook_database/output_data/2015-11-28-01/SYB2015-11-28-01.RData")
-meta.lst <- ReadMetadata(file = "./input_data/Metadata2015.csv", 
-                         encoding = "UTF-8")
-###########################################################################
-## cumulative
-all_missing_datas <- list.files(path = "./output_data",pattern = "missing_data.csv", recursive = T,full.names = T)
-check <- meta.lst$FULL[1:2]
-check2 <- meta.lst$FULL[1:2]
-for (i in all_missing_datas){
-  d <- read.csv(i, stringsAsFactors = FALSE)
-  varname <- stringr::str_replace_all(i, "/missing_data.csv", "")
-  varname <- stringr::str_replace_all(varname, "./output_data/", "")
-  varname <- stringr::str_replace_all(varname, "-", "")
-  d$X <- NULL
-  names(d)[3] <- paste0("D",varname)
-  check <- left_join(check,d[1:3], by = c("STS_ID" = "STS_ID",
-                                          "TITLE_STS" = "TITLE_STS"))
-}
-
-ff <- apply(SYB.df[,3:ncol(SYB.df)-1], 2, function(x) tail(table(x, useNA="ifany"),1)/nrow(SYB.df)*100)
-fff <- as.data.frame(ff)
-varname <- paste0("D",stringr::str_replace_all(date, "-", ""))
-names(fff) <- varname
-fff$STS_ID <- row.names(fff)
-gg <- left_join(check2,fff)
-write.csv(gg, file=paste0(session_path,"/missing_data.csv"))
-d <- left_join(check,fff)
-
-colorize_syb <- function(x){
-  
-  d$col_1 <- 'background-color: #fff7f3'
-  d$col_2 <- 'background-color: #fff7f3'
-  d[x] <- round(d[x],2)
-  d[[ paste0("col_",x) ]][d[x] <    5]  <- 'background-color: #00FF00'
-  d[[ paste0("col_",x) ]][d[x] >=  10]  <- 'background-color: #0DF200'
-  d[[ paste0("col_",x) ]][d[x] >=  15]  <- 'background-color: #1AE600'
-  d[[ paste0("col_",x) ]][d[x] >=  20]  <- 'background-color: #26D900'
-  d[[ paste0("col_",x) ]][d[x] >=  25]  <- 'background-color: #33CC00'
-  d[[ paste0("col_",x) ]][d[x] >=  30]  <- 'background-color: #40BF00'
-  d[[ paste0("col_",x) ]][d[x] >=  35]  <- 'background-color: #4CB200'
-  d[[ paste0("col_",x) ]][d[x] >=  40]  <- 'background-color: #59A600'
-  d[[ paste0("col_",x) ]][d[x] >=  45]  <- 'background-color: #669900'
-  d[[ paste0("col_",x) ]][d[x] >=  50]  <- 'background-color: #738C00'
-  d[[ paste0("col_",x) ]][d[x] >=  55]  <- 'background-color: #808000'
-  d[[ paste0("col_",x) ]][d[x] >=  60]  <- 'background-color: #8C7300'
-  d[[ paste0("col_",x) ]][d[x] >=  65]  <- 'background-color: #996600'
-  d[[ paste0("col_",x) ]][d[x] >=  70]  <- 'background-color: #A65900'
-  d[[ paste0("col_",x) ]][d[x] >=  75]  <- 'background-color: #B24D00'
-  d[[ paste0("col_",x) ]][d[x] >=  80]  <- 'background-color: #BF4000'
-  d[[ paste0("col_",x) ]][d[x] >=  85]  <- 'background-color: #CC3300'
-  d[[ paste0("col_",x) ]][d[x] >=  90]  <- 'background-color: #D92600'
-  d[[ paste0("col_",x) ]][d[x] >=  95]  <- 'background-color: #E61900'
-  d[[ paste0("col_",x) ]][is.na(d[x])] <- 'background-color: #696969;'
-  return(d)
-}
-
-for (i in names(d[-1:-2])){
-  d <- colorize_syb(i)
-}
-
-library(htmlTable)
-ncolcols <- length(names(d)[grepl("col_", names(d))])
-print(htmlTable(as.matrix(d[1:ncolcols]), css.cell = as.matrix(d[(ncolcols+1):(2*ncolcols)])),
-      file=paste0(session_path,"/missing_data.html"))
-
-
-# End timing!
-t2 <- Sys.time()
-duration <- t2 - t1
-writeLines(format(duration), con = paste0(session_path,"/duration.txt"))
-
-
-
-
+# 
+# 
+# writeLines(paste0(session_path,"/SYB",date,".RData"), con = "./input_data/syb_path.txt") # This is for the paraller aggregation scripts to read at the beginning
+# 
+# # Multicode input
+# 
+# 
+# session_path <- readLines(con = "~/faosync/pocketbooks/pocketbook_database/input_data/session_path.txt")
+# syb_path <- readLines(con = "~/faosync/pocketbooks/pocketbook_database/input_data/syb_path.txt")
+# 
+# # Needed libraries --------------------------------------------------------
+# pkg_list <- c("plyr","dplyr","reshape2","data.table","readr","RJSONIO","FAOSTAT")
+# lapply(pkg_list, library, character.only = TRUE)
+# 
+# load("~/faosync/pocketbooks/pocketbook_database/output_data/2017-02-25-14/SYB2017-02-25-14.RData")
+# syb.dfo <- SYB.df;syb.df <- SYB.df[!SYB.df$FAOST_CODE %in% "",]; rm(SYB.df)
+# # sum(colSums(is.na(syb.dfo)))
+# # load(syb_path)
+# load("~/faosync/pocketbooks/pocketbook_database/output_data/2017-03-13-00/SYB2017-03-13-00.RData")
+# 
+# syb <- bind_rows(syb.dfo,syb.df)
+# d5 <- syb %>% 
+#   select(-Area) %>% 
+#   group_by(FAOST_CODE,FAO_TABLE_NAME,Year) %>%
+#   summarise_all(.funs = "max", na.rm = TRUE) %>% 
+#   ungroup()
+# saveRDS(d5, "~/faosync/pocketbooks/pocketbook/input/data/syb.df_d5.RDS")
+# 
+# 
+# syb.df <- SYB.df;syb.df <- SYB.df[!SYB.df$FAOST_CODE %in% "",]; rm(SYB.df)
+# # sum(colSums(is.na(syb.df)))
+# 
+# 
+# 
+# 
+# 
+# system("~/faosync/pocketbooks/pocketbook_database/code/impute_syb/parallel_impute.sh")
+# 
+# d1 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df1.RDS")
+# d2 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df2.RDS")
+# d3 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df3.RDS")
+# d4 <- readRDS("~/faosync/pocketbooks/pocketbook/input/data/syb.df4.RDS")
+# d5 <- bind_rows(d1,d2,d3,d4)
+# d5 <- d5[!duplicated(d5[c("FAOST_CODE","Year")]),]
+# 
+# 
+# saveRDS(d5, "~/faosync/pocketbooks/pocketbook/input/data/syb.df_d5.RDS")
+# # saveRDS(syb.df, "./input/data/syb.df.RDS")
+# 
+# full_meta <- readRDS("~/local_data/faostat/metadata/meta_faostat.RDS")
+# csv_data <- readRDS("~/local_data/faostat/metadata/csv_data.RDS")
+# fao_bulk <- readRDS("~/local_data/faostat/rds/faostat.RDS")
+# fao_bulk$subcat <- csv_data$subcat[match(fao_bulk$id, csv_data$id)]
+# fao_bulk$FAOST_CODE <- fao_bulk$countrycode
+# fao_bulk$Year <- fao_bulk$year
+# fao_bulk %>% 
+#   filter(subcat %in% "production_crops_e_all_data_(normalized)") %>% 
+#   saveRDS(., "~/local_data/faostat/temp/production.RDS")
+# fao_bulk %>% 
+#   filter(subcat %in% "production_livestock_e_all_data_(normalized)") %>% 
+#   saveRDS(., "~/local_data/faostat/temp/livestockproduction.RDS")
+#   
+# 
+# 
+# 
+# 
+# 
+# # flies <- list.files("./output_data/", recursive = TRUE, full.names = TRUE)
+# # file.remove(flies[!grepl("SYB", flies)])
+# 
+# # save(x = SYB.df, file = paste0("./Data/Processed/SYB",date,".RData"))
+# # save(x = SYB.df, file = "./Data/Processed/SYB.RData")
+# load(file = paste0(session_path,"/SYB",date,".RData"))
+# 
+# 
+# 
+# 
+# 
+# # Merge the FSI dataset ---------------------------------------------------
+# 
+# ## Merge the dataset
+# # load(file = "./Data/Processed/fsi.RData")
+# # fsiVar <- c("FAOST_CODE", "Year",
+# #             "AV3YADESA.DISS", "QV.NPV.FOOD.ID.AV3YSHP.DISS", "FB.SDES.CRLSSR.KCD.AV3Y.DISS",
+# #             "FB.PSQ.GT.GCD.AV3Y.DISS", "FB.PSQ.AO.GCD.AV3Y.DISS", "FB.FSQ.GT.GCD.AV3Y.DISS",
+# #             "IS.ROD.PAVE.ZS.DISS", "IS.ROD.DNST.K2.DISS", "IS.RRS.DNST.K2.DISS",
+# #             "DFPLI.IN.NO.DISS", "SH.H2O.SAFE.ZS", "SH.STA.ACSN",
+# #             "FB.CIDR.CRLS.TN.AV3Y.DISS", "RL.AREA.EQIRR.HA.SHLAV3Y.DISS",
+# #             "TI.IV.FEFTMT.USD.AV3Y.DISS", "SFEP.NO", "WGI.PSAVT.IN.NO",  
+# #             "PCFPV.IN.NO.DISS", "PCFSV.IN.NO.DISS", "DFPLIV.IN.NO.DISS",
+# #             "SH.ANM.CHLD.ZS", "VITAMINA", "IODINE", "SH.PRG.ANEM",
+# #             "SH.STA.WAST.ZS", "SH.STA.STNT.ZS", "SH.STA.MALN.ZS", "SH.STA.AMALN.ZS",
+# #             "AV3YMDER_1.55.DISS", "AV3YADER_1.85.DISS", "AV3YMDER_1.75.DISS", "CV.DISS", "SK.DISS",
+# #             "LOSS.DISS", "AV3YDES.DISS", "AV3YPOU.DISS", "AV3YNOU.DISS", 
+# #             "AV3YPOU", "AV3YNOU", "AV3YDoFD.DISS", "AV3YPoFI.DISS", "AV3YPOP")
+# # fsi.df <- fsi.df[, fsiVar]
+# # SYB.df <- merge(SYB.df, fsi.df, all = FALSE, by = c("FAOST_CODE", "Year"))
+# # rm(fsi.df)
+# # save(x = SYB.df, file = paste0("./Data/Processed/SYB",date,".RData"))
+# # 
+# # ## Merge metadata and construction file
+# # fsicon.df <- ReadConstruction(file = "FSIconstruction15.csv", 
+# #                               encoding = "UTF-8", nrows = 287)
+# # fsimeta.lst <- ReadMetadata(file = "FSImetadata15.csv", 
+# #                             encoding = "UTF-8", nrows = 287)
+# # fsimeta.df <- fsimeta.lst[["FULL"]]
+# # 
+# # fsicon.df <- fsicon.df[fsicon.df[, "STS_ID"] %in% fsiVar,]
+# # fsimeta.df <- fsimeta.df[fsimeta.df[, "STS_ID"] %in% fsiVar,]
+# # 
+# # meta.lst[["FULL"]][["X"]] <- NULL
+# # meta.lst[["FULL"]] <- rbind(meta.lst[["FULL"]], fsimeta.df)
+# # con.df <- rbind(con.df, 
+# #                 fsicon.df[, -grep("MODULE_FSI|MODULE_POU|MODULE_DES", 
+# #                                   colnames(fsicon.df))])
+# # 
+# # save(x = con.df, file = "./Data/Processed/Construction.RData")
+# # save(x = meta.lst, file = "./Data/Processed/Metadata.RData")
+# 
+# ###########################################################################
+# ## End
+# ###########################################################################
+# # load("/home/aurelius/faosync/pocketbooks/pocketbook_database/output_data/2015-11-28-01/SYB2015-11-28-01.RData")
+# meta.lst <- ReadMetadata(file = "./input_data/Metadata2015.csv", 
+#                          encoding = "UTF-8")
+# ###########################################################################
+# ## cumulative
+# all_missing_datas <- list.files(path = "./output_data",pattern = "missing_data.csv", recursive = T,full.names = T)
+# check <- meta.lst$FULL[1:2]
+# check2 <- meta.lst$FULL[1:2]
+# for (i in all_missing_datas){
+#   d <- read.csv(i, stringsAsFactors = FALSE)
+#   varname <- stringr::str_replace_all(i, "/missing_data.csv", "")
+#   varname <- stringr::str_replace_all(varname, "./output_data/", "")
+#   varname <- stringr::str_replace_all(varname, "-", "")
+#   d$X <- NULL
+#   names(d)[3] <- paste0("D",varname)
+#   check <- left_join(check,d[1:3], by = c("STS_ID" = "STS_ID",
+#                                           "TITLE_STS" = "TITLE_STS"))
+# }
+# 
+# ff <- apply(SYB.df[,3:ncol(SYB.df)-1], 2, function(x) tail(table(x, useNA="ifany"),1)/nrow(SYB.df)*100)
+# fff <- as.data.frame(ff)
+# varname <- paste0("D",stringr::str_replace_all(date, "-", ""))
+# names(fff) <- varname
+# fff$STS_ID <- row.names(fff)
+# gg <- left_join(check2,fff)
+# write.csv(gg, file=paste0(session_path,"/missing_data.csv"))
+# d <- left_join(check,fff)
+# 
+# colorize_syb <- function(x){
+#   
+#   d$col_1 <- 'background-color: #fff7f3'
+#   d$col_2 <- 'background-color: #fff7f3'
+#   d[x] <- round(d[x],2)
+#   d[[ paste0("col_",x) ]][d[x] <    5]  <- 'background-color: #00FF00'
+#   d[[ paste0("col_",x) ]][d[x] >=  10]  <- 'background-color: #0DF200'
+#   d[[ paste0("col_",x) ]][d[x] >=  15]  <- 'background-color: #1AE600'
+#   d[[ paste0("col_",x) ]][d[x] >=  20]  <- 'background-color: #26D900'
+#   d[[ paste0("col_",x) ]][d[x] >=  25]  <- 'background-color: #33CC00'
+#   d[[ paste0("col_",x) ]][d[x] >=  30]  <- 'background-color: #40BF00'
+#   d[[ paste0("col_",x) ]][d[x] >=  35]  <- 'background-color: #4CB200'
+#   d[[ paste0("col_",x) ]][d[x] >=  40]  <- 'background-color: #59A600'
+#   d[[ paste0("col_",x) ]][d[x] >=  45]  <- 'background-color: #669900'
+#   d[[ paste0("col_",x) ]][d[x] >=  50]  <- 'background-color: #738C00'
+#   d[[ paste0("col_",x) ]][d[x] >=  55]  <- 'background-color: #808000'
+#   d[[ paste0("col_",x) ]][d[x] >=  60]  <- 'background-color: #8C7300'
+#   d[[ paste0("col_",x) ]][d[x] >=  65]  <- 'background-color: #996600'
+#   d[[ paste0("col_",x) ]][d[x] >=  70]  <- 'background-color: #A65900'
+#   d[[ paste0("col_",x) ]][d[x] >=  75]  <- 'background-color: #B24D00'
+#   d[[ paste0("col_",x) ]][d[x] >=  80]  <- 'background-color: #BF4000'
+#   d[[ paste0("col_",x) ]][d[x] >=  85]  <- 'background-color: #CC3300'
+#   d[[ paste0("col_",x) ]][d[x] >=  90]  <- 'background-color: #D92600'
+#   d[[ paste0("col_",x) ]][d[x] >=  95]  <- 'background-color: #E61900'
+#   d[[ paste0("col_",x) ]][is.na(d[x])] <- 'background-color: #696969;'
+#   return(d)
+# }
+# 
+# for (i in names(d[-1:-2])){
+#   d <- colorize_syb(i)
+# }
+# 
+# library(htmlTable)
+# ncolcols <- length(names(d)[grepl("col_", names(d))])
+# print(htmlTable(as.matrix(d[1:ncolcols]), css.cell = as.matrix(d[(ncolcols+1):(2*ncolcols)])),
+#       file=paste0(session_path,"/missing_data.html"))
+# 
+# 
+# # End timing!
+# t2 <- Sys.time()
+# duration <- t2 - t1
+# writeLines(format(duration), con = paste0(session_path,"/duration.txt"))
+# 
+# 
+# 
+# 

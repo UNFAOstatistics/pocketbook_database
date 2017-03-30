@@ -22,11 +22,11 @@
 ##' grConstruct(test.df2, origVar = "a", type = "geo", n = 5)
 
 
-data = data
-origVar = origVar1[i]
-newVarName = newVarName[i]
-type = grType[i]
-n = grFreq[i]
+# data = data
+# origVar = origVar1[i]
+# newVarName = newVarName[i]
+# type = grType[i]
+# n = grFreq[i]
 
 
 grConstruct = function(data, origVar, newVarName = NA,
