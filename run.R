@@ -1,8 +1,12 @@
 #!/usr/bin/env r
 # IF you want to download and process fresh copies of FAOSTAT, WDI and ILO bulk downloads
-# source ./run_bulk.R. If you are happy with what exists in ~/local_data, do not
-if (TRUE) source("./code/process_bulk.R"); rm(list = ls(all = TRUE)) #; .rs.restartR()
-if (TRUE) source("./code/slice_faostat.R"); rm(list = ls(all = TRUE)) #; .rs.restartR()
+# source ./code/process_bulk.R with bulk=TRUE. 
+# If you are happy with what exists in ~/local_data, but have added new indicators into 
+# ./input_data/Construction2015.csv and ./input_data/Metadata2015.csv, source ./code/process_bulk.R with bulk=FALSE
+# If you only want to rerun the aggregation for new new country groups for instance, do not source
+# ./code/process_bulk.R!
+bulk = FALSE
+source("./code/process_bulk.R"); rm(list = ls(all = TRUE)) #; .rs.restartR()
 
 ###########################################################################
 ## This script generates the dataset for the Statistical Yearbooks
@@ -21,7 +25,7 @@ faostatData.df <- meta.lst[["FAOSTAT"]]
 meta_full <- meta.lst[["FULL"]]
 
 # Needed libraries --------------------------------------------------------
-pkg_list <- c("plyr","dplyr","reshape2","data.table","readr","RJSONIO","FAOSTAT")
+pkg_list <- c("dplyr","plyr","reshape2","data.table","readr","RJSONIO","FAOSTAT")
 lapply(pkg_list, library, character.only = TRUE)
 
 # Create a new folder for today
@@ -74,7 +78,7 @@ source("./code/FAOSTAT_functions/overlap.R")
 
 # Country profile ---------------------------------------------------------
 
-FAOcountryProfile <- read.csv("~/faosync/pocketbooks/pocketbook/input/data/FAOcountryProfile.csv", stringsAsFactors = FALSE)
+FAOcountryProfile <- read.csv("~/faosync/pocketbooks/pocketbook_database/input_data/FAOcountryProfile.csv", stringsAsFactors = FALSE)
 
 
 # Recode the Short Name Variables

@@ -50,8 +50,10 @@ if (length(need) > 0) install.packages(PACKAGES[need])
 
 **Open Rstudio**
 
-1. Create folder `~/faosync/pocketbooks/`
+1. Create folder `~/faosync/pocketbooks/` with `dir.create(path = "~/faosync/pocketbooks/", recursive = TRUE)`
 2. start two new projects from version control (git) into directory above with following urls
-3. pocketbook_database: `https://github.com/UNFAOstatistics/pocketbook_database´
-4. pocketbook: `https://github.com/UNFAOstatistics/pocketbook´
-4. edit ´run.R` in pocketbook_database and start executing it row by row
+    3. pocketbook_database: `https://github.com/UNFAOstatistics/pocketbook_database`
+    4. pocketbook: `https://github.com/UNFAOstatistics/pocketbook`
+4. sun `source("run.R")` or execute `run.R` interactively.
+
+You need to re-run the `./code/process_bulk.R` and `./code/slice_faostat.R` only when you want to update the  
