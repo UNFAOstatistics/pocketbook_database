@@ -34,10 +34,10 @@ d %>%
 
 # # rur_pop_share_male_female
 ## Excel is this: http://www.un.org/en/development/desa/population/publications/dataset/urban/URPAS_2014_ALL.xlsx
-if (!file.exists("~/Lataukset/URPAS_2014_ALL.xlsx")){
-  download.file("http://www.un.org/en/development/desa/population/publications/dataset/urban/URPAS_2014_ALL.xlsx", destfile = "~/Lataukset/URPAS_2014_ALL.xlsx")
+if (!file.exists("~/local_data/URPAS_2014_ALL.xlsx")){
+  download.file("http://www.un.org/en/development/desa/population/publications/dataset/urban/URPAS_2014_ALL.xlsx", destfile = "~/local_data/URPAS_2014_ALL.xlsx")
 }
-d <- readxl::read_excel("~/Lataukset/URPAS_2014_ALL.xlsx")
+d <- readxl::read_excel("~/local_data/URPAS_2014_ALL.xlsx")
 d %>% 
    # filter(LocationName %in% c("Serbia","Italy","Finland")) %>% 
   select(LocationName,Year,Sex,AreaType,Total) %>%
