@@ -6,7 +6,7 @@
 # If you only want to rerun the aggregation for new new country groups for instance, do not source
 # ./code/process_bulk.R!
 bulk = FALSE
-source("./code/process_bulk.R"); rm(list = ls(all = TRUE)) #; .rs.restartR()
+if (FALSE) source("./code/process_bulk.R")
 
 ###########################################################################
 ## This script generates the dataset for the Statistical Yearbooks

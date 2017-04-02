@@ -32,7 +32,6 @@ library(stringr)
 
 
 #' Download the zipfile from FAOSTAT
-
 if (bulk){
   # remove all local fao data, but not the previous bulk zipps if you want to revert.
   unlink("~/local_data/faostat/csv/", recursive = TRUE, force = TRUE)
@@ -43,8 +42,8 @@ if (bulk){
   download.file("http://fenixservices.fao.org/faostat/static/bulkdownloads/FAOSTAT.zip", 
                 destfile = paste0("~/local_data/faostat/FAOSTAT",bulk_date,".zip"))
   file.copy(from = paste0("~/local_data/faostat/FAOSTAT",bulk_date,".zip"), 
-            to = "~/local_data/faostat/FAOSTAT/faostatbulk.zip")
-  unzip(zipfile = paste0("~/local_data/faostat/FAOSTAT",bulk_date,".zip"), 
+            to = "~/local_data/faostat/FAOSTAT_bulk.zip")
+  unzip(zipfile = "~/local_data/faostat/FAOSTAT_bulk.zip", 
         exdir = "~/local_data/faostat/csv")
   zipps <- list.files("~/local_data/faostat/csv/", ".zip", full.names = TRUE)
   for (i in zipps){
@@ -172,7 +171,8 @@ if (bulk){
     distinct() %>% saveRDS(., "~/local_data/faostat/metadata/meta_faostat.RDS")
 
 }
-
+# clean environment
+rm(list=setdiff(ls(), c("bulk","bulk_date")))
 #  ____  _ _            _____ _    ___  ____ _____  _  _____ 
 # / ___|| (_) ___ ___  |  ___/ \  / _ \/ ___|_   _|/ \|_   _|
 # \___ \| | |/ __/ _ \ | |_ / _ \| | | \___ \ | | / _ \ | |  
@@ -425,3 +425,6 @@ d %>% filter(indicator == "EMP_2EMP_SEX_ECO_NB",
 ilo_data <- full_join(ilo1,ilo2)
 ilo_data <- full_join(ilo_data,ilo3)
 saveRDS(ilo_data, file="~/local_data/ilo/rds/ilo_data.RDS")
+
+##
+rm(list = ls(all = TRUE))
