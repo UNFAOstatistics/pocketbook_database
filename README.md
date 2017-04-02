@@ -32,7 +32,8 @@ apt install texlive-full -y
 R -e 'install.packages("devtools", repos = "https://cloud.r-project.org")' 
 R -e 'devtools::install_github("unfaostatistics/gisfao")' 
 R -e 'devtools::install_github("rstudio/flexdashboard")' 
-R -e 'devtools::install_github("rstudio/rmarkdown")' 
+R -e 'devtools::install_github("rstudio/rmarkdown")'
+R -e 'devtools::install_github("muuankarski/countrycode.multilang")'
 ```
 
 **Open R and run the following code**
@@ -52,8 +53,6 @@ if (length(need) > 0) install.packages(PACKAGES[need])
 
 1. Create folder `~/faosync/pocketbooks/` with `dir.create(path = "~/faosync/pocketbooks/", recursive = TRUE)`
 2. start two new projects from version control (git) into directory above with following urls
-    3. pocketbook_database: `https://github.com/UNFAOstatistics/pocketbook_database`
-    4. pocketbook: `https://github.com/UNFAOstatistics/pocketbook`
-4. sun `source("run.R")` or execute `run.R` interactively.
-
-You need to re-run the `./code/process_bulk.R` and `./code/slice_faostat.R` only when you want to update the  
+    - pocketbook_database: `https://github.com/UNFAOstatistics/pocketbook_database`
+    -  pocketbook: `https://github.com/UNFAOstatistics/pocketbook`
+4. sun `source("run.R")` or execute `run.R` interactively. Follow the instructions at the top of the script.
