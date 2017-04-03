@@ -24,6 +24,7 @@ apt install libssh2-1-dev
 apt install libcurl4-openssl-dev
 apt install libxml2-dev
 apt install texlive-full -y
+apt install dtrx
 ```
 
 **install R-packages in console**
