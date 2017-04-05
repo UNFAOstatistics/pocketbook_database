@@ -14,7 +14,8 @@ d %>%
   select(-COUNTRY) %>% 
   rename(overweight_FMLE = FMLE,
          overweight_MLE = MLE,
-         Year = YEAR) -> overweight
+         Year = YEAR) %>% 
+  mutate(overweight_BOTH = (overweight_FMLE + overweight_MLE)/2) -> overweight
 
 
 # Obesity
@@ -29,7 +30,8 @@ d %>%
   select(-COUNTRY) %>% 
   rename(obesity_FMLE = FMLE,
          obesity_MLE = MLE,
-         Year = YEAR) -> obesity
+         Year = YEAR) %>% 
+  mutate(obesity_BOTH = (obesity_FMLE + obesity_MLE)/2) -> obesity
 
 
 # # rur_pop_share_male_female
