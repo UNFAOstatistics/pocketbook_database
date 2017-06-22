@@ -181,7 +181,8 @@ FAOcountryProfile$FAO_RNE_SUB_REG <- ifelse(FAOcountryProfile$FAOST_CODE %in% re
 library(tidyverse)
 readRDS("~/local_data/faostat/rds/faostat_dat1.RDS") %>% 
   full_join(.,readRDS("~/local_data/faostat/rds/faostat_dat2.RDS")) %>% 
-  full_join(.,readRDS("~/local_data/faostat/rds/faostat_dat3.RDS")) -> faost_all.df
+  full_join(.,readRDS("~/local_data/faostat/rds/faostat_dat3.RDS")) %>% 
+  full_join(.,readRDS("~/local_data/faostat/rds/faostat_dat4.RDS"))-> faost_all.df
 
 
 #   ____                          _                    _  __        __ ____  
@@ -327,9 +328,9 @@ initial.df <- initial.df[initial.df[, "FAOST_CODE"] <= 400,]
 meta.lst[["UNIT_MULT"]][, "UNIT_MULT"] <- as.numeric(translateUnit(meta.lst[["UNIT_MULT"]]$UNIT_MULT))
 
 
-preConstr.df <- scaleUnit(initial.df, meta.lst[["UNIT_MULT"]])
+preConstr.df <- scaleUnit(df = initial.df, multiplier = meta.lst[["UNIT_MULT"]])
 # rm(initial.df)
-
+# preConstr.df <- initial.df
 
 ## Manual Construction
 

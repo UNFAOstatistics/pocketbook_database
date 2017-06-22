@@ -51,6 +51,9 @@ scaleUnit = function(df, multiplier){
   n = NROW(df)
   multiplierVec.mat = matrix(rep(multiplierVec[inIndex], n), nrow = n,
     byrow = TRUE)
+  
+  # adding this row to make variables compatible with computation on next row
+  df[, names(multiplierVec[inIndex])] <- sapply(X = df[, names(multiplierVec[inIndex])], as.numeric)
   df[, names(multiplierVec[inIndex])] = df[, names(multiplierVec[inIndex])] *
     multiplierVec.mat
   df

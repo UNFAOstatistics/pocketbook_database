@@ -42,7 +42,7 @@ if (bulk){
   download.file("http://fenixservices.fao.org/faostat/static/bulkdownloads/FAOSTAT.zip", 
                 destfile = paste0("~/local_data/faostat/FAOSTAT",bulk_date,".zip"))
   file.copy(from = paste0("~/local_data/faostat/FAOSTAT",bulk_date,".zip"), 
-            to = "~/local_data/faostat/FAOSTAT_bulk.zip")
+            to = "~/local_data/faostat/FAOSTAT_bulk.zip", overwrite = TRUE)
   unzip(zipfile = "~/local_data/faostat/FAOSTAT_bulk.zip", 
         exdir = "~/local_data/faostat/csv")
   zipps <- list.files("~/local_data/faostat/csv/", ".zip", full.names = TRUE)
@@ -100,10 +100,15 @@ if (bulk){
   
   ## DATAS from 1:40
   for(i in 1:40){
-    if (i %in% c(36 # excange rate
+    if (i %in% c(36 # exchange rate
     )) next()
     df <- read_csv(csv_data$filepath[i])
     names(df) <- tolower(gsub(" |\\.", "", names(df)))
+    # go to next file if data has months columsn as causes problelms with 
+    # prices_monthly_e_all_data_(normalized).csv -data 
+    # That has both months- and element variables by default
+    # not needed in yearbook
+    if ("months" %in% names(df)) next()
     names(df) <- ifelse(names(df) %in% vardata$old, 
                         vardata$new[match(names(df), vardata$old)],names(df))
     if (any(grepl("-",df$year))) df$year <- as.character(as.integer(gsub("-.+$", "", df$year)) + 1)
@@ -133,10 +138,9 @@ if (bulk){
   dat <- data_frame()
   meta_base <- data_frame()
   for(i in 41:nrow(csv_data)){
-    if (i %in% c(36 # excange rate
-    )) next()
     df <- read_csv(csv_data$filepath[i])
     names(df) <- tolower(gsub(" |\\.", "", names(df)))
+    if (any(grepl("month", names(df)))) next() # if there is variable month, lets ignore the data for now!
     names(df) <- ifelse(names(df) %in% vardata$old, 
                         vardata$new[match(names(df), vardata$old)],names(df))
     if (any(grepl("-",df$year))) df$year <- as.character(as.integer(gsub("-.+$", "", df$year)) + 1)
@@ -167,7 +171,7 @@ if (bulk){
   
   #' there are many not necessary variables, get rid of them and find the distinctive cases
   bind_rows(meta_base1,meta_base2) %>% 
-    select(-value,-note,-reportercountries,-partnercountries,-survey,-breakdownvariablecode,-breakdownvariable,-breadownbysexofthehouseholdheadcode,-breadownbysexofthehouseholdhead,-measurecode,-measure) %>% 
+    select(-value,-reportercountries,-partnercountries,-survey,-breakdownvariablecode,-breakdownvariable,-breadownbysexofthehouseholdheadcode,-breadownbysexofthehouseholdhead,-measurecode,-measure) %>% 
     distinct() %>% saveRDS(., "~/local_data/faostat/metadata/meta_faostat.RDS")
 
 }
@@ -288,7 +292,7 @@ for (i in 1:100) {
 dat <- dat[!duplicated(dat[c("FAOST_CODE","Year")]),]
 saveRDS(dat, "~/local_data/faostat/rds/faostat_dat1.RDS")
 # for (i in 101:105) {
-for (i in 101:200) {
+for (i in 101:150) {
   new <- slice_fao(name = vars$STS_ID[i],
                    elementCode = vars$SQL_ELEMENT_CODE[i], 
                    itemCode = vars$SQL_ITEM_CODE[i],
@@ -303,6 +307,24 @@ for (i in 101:200) {
 }
 dat <- dat[!duplicated(dat[c("FAOST_CODE","Year")]),]
 saveRDS(dat, "~/local_data/faostat/rds/faostat_dat2.RDS")
+
+for (i in 151:200) {
+  new <- slice_fao(name = vars$STS_ID[i],
+                   elementCode = vars$SQL_ELEMENT_CODE[i], 
+                   itemCode = vars$SQL_ITEM_CODE[i],
+                   subcat= vars$subcat[i])
+  if (any(new$FAOST_CODE %in% new$Year)) next()
+  # meta[meta$itemcode %in% vars$SQL_ITEM_CODE[1] & meta$elementcode %in% vars$SQL_ELEMENT_CODE[1],]
+  if (i == 151) {
+    dat <- new
+  } else {
+    dat <- full_join(dat,new,by = c("FAOST_CODE" = "FAOST_CODE","Year" = "Year"))  
+  }
+}
+dat <- dat[!duplicated(dat[c("FAOST_CODE","Year")]),]
+saveRDS(dat, "~/local_data/faostat/rds/faostat_dat3.RDS")
+
+
 for (i in 201:nrow(vars)) {
   new <- slice_fao(name = vars$STS_ID[i],
                    elementCode = vars$SQL_ELEMENT_CODE[i], 
@@ -317,7 +339,7 @@ for (i in 201:nrow(vars)) {
   }
 }
 dat <- dat[!duplicated(dat[c("FAOST_CODE","Year")]),]
-saveRDS(dat, "~/local_data/faostat/rds/faostat_dat3.RDS")
+saveRDS(dat, "~/local_data/faostat/rds/faostat_dat4.RDS")
 
 
 
@@ -337,13 +359,13 @@ if (bulk){
   download.file("http://databank.worldbank.org/data/download/WDI_csv.zip",
                 destfile = paste0("~/local_data/wdi/WDI_csv",bulk_date,".zip"))
   file.copy(from = paste0("~/local_data/wdi/WDI_csv",bulk_date,".zip"),
-            to = "~/local_data/wdi/WDI_csv_bulk.zip")
+            to = "~/local_data/wdi/WDI_csv_bulk.zip", overwrite = TRUE)
   unzip(paste0("~/local_data/wdi/WDI_csv_bulk.zip"), 
         exdir = "~/local_data/wdi/csv/")
 }
 
 # read WDI
-wdi_raw <- read_csv("~/local_data/wdi/csv/WDI_Data.csv")
+wdi_raw <- read_csv("~/local_data/wdi/csv/WDIData.csv")
 names(wdi_raw) <- tolower(names(wdi_raw))
 names(wdi_raw) <- str_replace_all(names(wdi_raw), " ", ".")
 wdi_raw$indicator.name <- NULL
