@@ -5,7 +5,7 @@
 # ./input_data/Construction2015.csv and ./input_data/Metadata2015.csv, source ./code/process_bulk.R with bulk=FALSE
 # If you only want to rerun the aggregation for new new country groups for instance, do not source
 # ./code/process_bulk.R!
-bulk = FALSE
+bulk = TRUE
 if (FALSE) source("./code/process_bulk.R")
 
 ###########################################################################
@@ -197,7 +197,7 @@ readRDS("~/local_data/faostat/rds/faostat_dat1.RDS") %>%
 wdi_df <- readRDS("~/local_data/wdi/rds/WDI_Data.RDS")
 wdi_vars <- meta.lst[["WDI"]]
 
-wdi_vars %>% filter(!WDINAME %in% c('SP.POP.1564.FE.IN', 'SP.POP.65UP.FE.IN', 'SP.POP.1564.MA.IN', 'SP.POP.65UP.MA.IN','EE.BOD.TOTL.KG')) -> wdi_vars
+wdi_vars %>% filter(!WDINAME %in% c('VC.IDP.TOTL.LE','SP.POP.1564.FE.IN', 'SP.POP.65UP.FE.IN', 'SP.POP.1564.MA.IN', 'SP.POP.65UP.MA.IN','EE.BOD.TOTL.KG')) -> wdi_vars
 
 wdi_df[c("country.code","Year",wdi_vars$WDINAME[1:40])] -> tmp1
 wdi_df[c("country.code","Year",wdi_vars$WDINAME[41:nrow(wdi_vars)])] -> tmp2
