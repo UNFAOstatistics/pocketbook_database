@@ -98,10 +98,8 @@ if (bulk){
   meta_base <- data_frame()
   # for(i in 60:nrow(csv_data)){
   
-  ## DATAS from 1:40
-  for(i in 1:40){
-    if (i %in% c(36 # exchange rate
-    )) next()
+  ## DATAS from 1:39 # eclude the enxchange rate as 40
+  for(i in 1:39){
     df <- read_csv(csv_data$filepath[i])
     names(df) <- tolower(gsub(" |\\.", "", names(df)))
     # go to next file if data has months columsn as causes problelms with 
@@ -112,11 +110,11 @@ if (bulk){
     names(df) <- ifelse(names(df) %in% vardata$old, 
                         vardata$new[match(names(df), vardata$old)],names(df))
     if (any(grepl("-",df$year))) df$year <- as.character(as.integer(gsub("-.+$", "", df$year)) + 1)
-    df %>% 
-      select(-contains("year"), -contains("country"),-contains("flag")) %>% 
+    meta_base <- df %>% 
+      select(-contains("year"), -contains("country"),-contains("flag"), -contains("value")) %>% 
       distinct() %>% 
       mutate(unit = as.character(unit)) %>% 
-      bind_rows(meta_base, .) -> meta_base
+      bind_rows(meta_base, .)
     
     if ("year" %in% names(df)){
       df <- df %>% select(ends_with("code"),year,value,unit)
@@ -132,7 +130,7 @@ if (bulk){
     dat <- bind_rows(dat,df)
   }
   dat1 <- dat
-  meta_base1 <- meta_base
+  meta_base1 <- meta_base %>% distinct(itemcode, elementcode, unit, .keep_all = TRUE)
   
   ## DATAS from 41:nrow(csv_data)
   dat <- data_frame()
@@ -145,7 +143,7 @@ if (bulk){
                         vardata$new[match(names(df), vardata$old)],names(df))
     if (any(grepl("-",df$year))) df$year <- as.character(as.integer(gsub("-.+$", "", df$year)) + 1)
     df %>% 
-      select(-contains("year"), -contains("country"),-contains("flag")) %>% 
+      select(-contains("year"), -contains("country"),-contains("flag"), -contains("value")) %>% 
       distinct() %>% 
       mutate(unit = as.character(unit)) %>% 
       bind_rows(meta_base, .) -> meta_base
@@ -164,19 +162,21 @@ if (bulk){
     dat <- bind_rows(dat,df)
   }
   dat2 <- dat
-  meta_base2 <- meta_base
+  meta_base2 <- meta_base %>% distinct(itemcode, elementcode, unit, .keep_all = TRUE)
   
-  bind_rows(dat1,dat2) %>% mutate(year = as.integer(year)) -> dat
+  dat <- bind_rows(dat1,dat2) %>% 
+    mutate(year = as.integer(year))
   saveRDS(dat, "~/local_data/faostat/rds/faostat.RDS")
   
   #' there are many not necessary variables, get rid of them and find the distinctive cases
   bind_rows(meta_base1,meta_base2) %>% 
-    select(-value,-reportercountries,-partnercountries,-survey,-breakdownvariablecode,-breakdownvariable,-breadownbysexofthehouseholdheadcode,-breadownbysexofthehouseholdhead,-measurecode,-measure) %>% 
-    distinct() %>% saveRDS(., "~/local_data/faostat/metadata/meta_faostat.RDS")
+    select(-reportercountries,-partnercountries,-survey,-breakdownvariablecode,-breakdownvariable,-breadownbysexofthehouseholdheadcode,-breadownbysexofthehouseholdhead,-measurecode,-measure) %>% 
+    distinct() %>% 
+    saveRDS(., "~/local_data/faostat/metadata/meta_faostat.RDS")
 
 }
 # clean environment
-rm(list=setdiff(ls(), c("bulk","bulk_date")))
+rm(list = setdiff(ls(), c("bulk","bulk_date")))
 #  ____  _ _            _____ _    ___  ____ _____  _  _____ 
 # / ___|| (_) ___ ___  |  ___/ \  / _ \/ ___|_   _|/ \|_   _|
 # \___ \| | |/ __/ _ \ | |_ / _ \| | | \___ \ | | / _ \ | |  
@@ -406,7 +406,12 @@ if (bulk){
 
 # PROCESS ILO
 
-d <- read_csv("~/local_data/ilo/csv/bulk_ILOEST_EN.csv")
+# PROCESS ILO
+
+# d <- read_csv("~/local_data/ilo/csv/bulk_ILOEST_EN.csv")
+download.file("http://www.ilo.org/ilostat-files/WEB_bulk_download/indicator/EMP_2EMP_SEX_AGE_NB_A.csv.gz", 
+              destfile = "~/local_data/ilo/EMP_2EMP_SEX_AGE_NB_A.csv.gz") 
+d <- read.csv(gzfile("~/local_data/ilo/EMP_2EMP_SEX_AGE_NB_A.csv.gz"))
 # "Employment by sex and age -- ILO estimates and projections, Nov. 2016 (thousands)"
 d %>% filter(indicator == "EMP_2EMP_SEX_AGE_NB",
              !grepl("^X", ref_area),
@@ -422,6 +427,9 @@ d %>% filter(indicator == "EMP_2EMP_SEX_AGE_NB",
   select(-ref_area) -> ilo1
 
 # Employment by sex and economic activity -- ILO estimates and projections, Nov. 2016 (thousands)
+download.file("http://www.ilo.org/ilostat-files/WEB_bulk_download/indicator/EMP_2EMP_SEX_ECO_NB_A.csv.gz", 
+              destfile = "~/local_data/ilo/EMP_2EMP_SEX_ECO_NB_A.csv.gz") 
+d <- read.csv(gzfile("~/local_data/ilo/EMP_2EMP_SEX_ECO_NB_A.csv.gz"))
 d %>% filter(indicator == "EMP_2EMP_SEX_ECO_NB",
              !grepl("^X", ref_area),
              sex =="SEX_F",
